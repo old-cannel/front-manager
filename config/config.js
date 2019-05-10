@@ -60,6 +60,11 @@ if (ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === 'site') {
 }
 
 export default {
+	base: 'admin',
+	publicPath: '/admin/',
+	exportStatic: {},
+  //outputPath: './admin',
+
   // add for transfer to umi
   plugins,
   define: {
