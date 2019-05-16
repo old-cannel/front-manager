@@ -60,9 +60,9 @@ if (ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === 'site') {
 }
 
 export default {
-	base: 'admin',
-	publicPath: '/admin/',
-	exportStatic: {},
+  base: 'admin',
+  publicPath: '/admin/',
+  exportStatic: {},
   //outputPath: './admin',
 
   // add for transfer to umi
@@ -83,13 +83,13 @@ export default {
   theme: {
     'primary-color': primaryColor,
   },
-  // proxy: {
-  //   '/server/api/': {
-  //     target: 'https://preview.pro.ant.design/',
-  //     changeOrigin: true,
-  //     pathRewrite: { '^/server': '' },
-  //   },
-  // },
+  proxy: {
+    '/pipe-gallery': {
+      target: 'http://localhost:67',
+      changeOrigin: true,
+      pathRewrite: { '^/pipe-gallery': '/pipe-gallery' },
+    },
+  },
   ignoreMomentLocale: true,
   lessLoaderOptions: {
     javascriptEnabled: true,

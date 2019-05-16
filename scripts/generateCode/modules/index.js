@@ -1,0 +1,374 @@
+const bashPath = 'E:/something/work/simpo/front-manager';
+
+//组件页面位置 和 models
+const pagesPath = `${bashPath}/src/pages`;
+//service 文件位置
+const serverPath = `${bashPath}/src/services`;
+
+const fs = require('fs');
+const utils = require('./utils.js');
+const filterTemp = './scripts/generateCode/modules/template/filterTemp.js';
+const listTemp = './scripts/generateCode/modules/template/listTemp.js';
+const editTemp = './scripts/generateCode/modules/template/editTemp.js';
+const detailsTemp = './scripts/generateCode/modules/template/detailsTemp.js';
+const indexTemp = './scripts/generateCode/modules/template/indexTemp.js';
+const serverTemp = './scripts/generateCode/modules/template/serverTemp.js';
+const modelsTemp = './scripts/generateCode/modules/template/modelsTemp.js';
+const modelsApiTemp = './src/services/url.js';
+
+const generateCodeHandle = param => {
+  //生成 filter
+  generateFactory(param, 'filter');
+  //生成list
+  generateFactory(param, 'list');
+  //生成编辑页面
+  generateFactory(param, 'edit');
+  //生成详情页面
+  generateFactory(param, 'details');
+  //生成入口文件 index.js
+  generateFactory(param, 'index');
+  //生成入service service.js
+  generateFactory(param, 'service');
+  //生成models
+  generateFactory(param, 'models');
+
+  // generateRouter(param, namespace);
+};
+
+//Filter.js  过滤(create)
+//List.js 列表(create)
+//Edit.js  新增修改(create)
+//Details.js 详情(create)
+//index.js 入口(create)
+//service.js (update)
+//models 页面models(create)
+//api.js api (update)
+//router.config.js (update)
+
+const generateFactory = (param, type) => {
+  const namespace = param.tableName.replace(/_/g, '');
+
+  //1.按照生成的文件不同选择相应生成的策略
+  let switchStrategy = null;
+  switch (type) {
+    case 'filter':
+      switchStrategy = generateFilter;
+      break;
+    case 'list':
+      switchStrategy = generateList;
+      break;
+    case 'edit':
+      switchStrategy = generateEdit;
+      break;
+    case 'details':
+      switchStrategy = generateDetails;
+      break;
+    case 'index':
+      switchStrategy = generateIndex;
+      break;
+    case 'service':
+      switchStrategy = generateService;
+      break;
+    case 'models':
+      switchStrategy = generateModels;
+      break;
+    default:
+      break;
+  }
+  //2.生成要生成的代码 result[0]:文件路径 result[1]:文件名 result[2]:写入内容
+  const result = switchStrategy(param, namespace);
+
+  //3.写入文件
+  const path = utils.resetPath(result[0]);
+  const fullPath = `${path}${result[1]}`;
+  utils.writer(utils.formatPath(path), fullPath, result[2]);
+
+  //4.格式化代码 selint 效验
+  utils.formatCode(fullPath);
+};
+
+// 生成Filter.js
+const generateFilter = (param, namespace) => {
+  let result = fs.readFileSync(filterTemp, 'utf8');
+
+  //时间筛选放在后面
+  let tableInfo = [];
+  let tableInfoDate = [];
+  param.tableInfo.forEach(item => {
+    if (item.queryFlag === '1') {
+      if (
+        item.component.type === 'DatePicker_datetime' ||
+        item.component.type === 'DatePicker_date'
+      ) {
+        tableInfoDate.push(item);
+      } else {
+        tableInfo.push(item);
+      }
+    }
+  });
+  const row = tableInfo.concat(tableInfoDate);
+  //生成筛选页面表单
+  let formItemStr = '';
+  let dateHandle = '';
+  row.forEach(item => {
+    if (item.queryFlag === '1') {
+      const createRes = utils.renderFilterFormItem(item);
+      formItemStr += createRes[0];
+      dateHandle += createRes[1];
+    }
+  });
+
+  //模板替换
+  result = result
+    .replace(' #{DATEHANDLE}', dateHandle)
+    .replace('#{IMPORTFILTERITEM}', formItemStr)
+    .replace(/#{NAMESPACE}/g, namespace);
+
+  //动态import antd 模块
+  const importAd = utils.importAD(result);
+  result = result.replace('#{IMPORTANTD}', importAd);
+  //动态import dynamicImport 模块
+  const importDyn = utils.dynamicImport(result);
+  result = result.replace('#{IMPORTDYNAMIC}', importDyn);
+  //动态常量引入
+  const dynamicConstant = utils.dynamicConstant(result);
+  result = result.replace('#{CONSTANT}', dynamicConstant);
+
+  const path = `${pagesPath}${param.fileUrl}`;
+  const fileName = 'Filter.js';
+  return [path, fileName, result];
+};
+
+//生成列表
+const generateList = (param, namespace) => {
+  let result = fs.readFileSync(listTemp, 'utf8');
+  let columns = '[';
+  param.tableInfo.forEach(item => {
+    if (item.listFlag === '1') {
+      columns += `{
+          title: '${item.columnName}',
+          dataIndex:'${item.javaName}',
+          key: '${item.javaName}',
+        },`;
+    }
+  });
+  columns += `{
+          title: '操作',
+          render:(text,record)=>{
+              return <span>
+                <a  href="javascript:void(0)"  onClick={()=>{this.details(record)}}>详情</a> <Divider type="vertical" />
+                <a  href="javascript:void(0)"  onClick={()=>{this.edit(record)}}>修改</a> <Divider 
+                type="vertical" />
+                <Popconfirm
+                    title="您确认删除吗？"
+                    onConfirm={()=>{this.confirmDel(record.id)}}
+                    okText="确认" cancelText="取消" >
+                      <a  href="javascript:void(0)">删除</a>
+                 </Popconfirm>
+                 
+              </span>
+          }
+        },`;
+
+  columns += ']';
+  result = result.replace('#{COLUMNS}', columns).replace(/#{NAMESPACE}/g, namespace);
+  //动态import antd 模块
+  const importAd = utils.importAD(result);
+  result = result.replace('#{IMPORTANTD}', importAd);
+  //动态import dynamicImport 模块
+  const importDyn = utils.dynamicImport(result);
+  result = result.replace('#{IMPORTDYNAMIC}', importDyn);
+  const path = `${pagesPath}${param.fileUrl}`;
+  const fileName = 'List.js';
+  return [path, fileName, result];
+};
+
+//生成编辑页面 注：编辑页面可能存在其他页面调用情况 生成模板不绑定namespace
+const generateEdit = (param, namespace) => {
+  let result = fs.readFileSync(editTemp, 'utf8');
+  //react 引入
+  let importTemp = '';
+
+  //其他模块引入
+  let importDynamic = '';
+  //定义常量
+  let constant = '';
+
+  //FilterItem
+  let importFilterItem = '';
+
+  //如果编辑框小于6个 一行一个 大于一行2个显示
+  const editLength = param.tableInfo.filter(editItem => editItem.editFlag === '1').length;
+  const drawerWidth = editLength < 6 ? 550 : 740;
+
+  //生成编辑页面表单
+  let formItemStr = '';
+  let dateHandle = '';
+  param.tableInfo.forEach(item => {
+    if (item.editFlag === '1') {
+      const createRes = utils.renderEditFormItem(item, editLength);
+      formItemStr += createRes[0];
+      dateHandle += createRes[1];
+    }
+  });
+
+  //模板替换
+  result = result
+    .replace('#{DRAWERWIDTH}', drawerWidth)
+    .replace('#{IMPORTFILTERITEM}', formItemStr)
+    .replace('#{DATEHANDLE}', dateHandle)
+    .replace(/#{NAMESPACE}/g, namespace);
+  //动态import antd 模块
+  const importAd = utils.importAD(result);
+  result = result.replace('#{IMPORTANTD}', importAd);
+  //动态import dynamicImport 模块
+  const importDyn = utils.dynamicImport(result);
+  result = result.replace('#{IMPORTDYNAMIC}', importDyn);
+  //动态常量引入
+  const dynamicConstant = utils.dynamicConstant(result);
+  result = result.replace('#{CONSTANT}', dynamicConstant);
+
+  const path = `${pagesPath}${param.fileUrl}`;
+  const fileName = 'Edit.js';
+  return [path, fileName, result];
+};
+
+//生成详情页面
+const generateDetails = param => {
+  let result = fs.readFileSync(detailsTemp, 'utf8');
+  let detailsItems = '<DescriptionList size="large" style={{ marginBottom: 32 }}>\r\n';
+  const editLength = param.tableInfo.filter(editItem => editItem.editFlag === '1').length;
+  const drawerWidth = editLength < 6 ? 550 : 740;
+  param.tableInfo.forEach(item => {
+    if (item.editFlag === '1') {
+      detailsItems += utils.renderDetailsItem(item, editLength);
+    }
+  });
+  detailsItems += `</DescriptionList>`;
+  //模板替换
+  result = result.replace('#{DETAILSITEM}', detailsItems).replace('#{DRAWERWIDTH}', drawerWidth);
+  //动态import antd 模块
+  const importAd = utils.importAD(result);
+  result = result.replace('#{IMPORTANTD}', importAd);
+  //动态import dynamicImport 模块
+  const importDyn = utils.dynamicImport(result);
+  result = result.replace('#{IMPORTDYNAMIC}', importDyn);
+
+  const path = `${pagesPath}${param.fileUrl}`;
+  const fileName = 'Details.js';
+  return [path, fileName, result];
+};
+
+//生成入口页面
+const generateIndex = (param, namespace) => {
+  let result = fs.readFileSync(indexTemp, 'utf8');
+  //模板替换
+  result = result.replace(/#{NAMESPACE}/g, namespace);
+  //动态import antd 模块
+  const importAd = utils.importAD(result);
+  result = result.replace('#{IMPORTANTD}', importAd);
+  //动态import dynamicImport 模块
+  const importDyn = utils.dynamicImport(result);
+  result = result.replace('#{IMPORTDYNAMIC}', importDyn);
+  const path = `${pagesPath}${param.fileUrl}`;
+  const fileName = 'index.js';
+  return [path, fileName, result];
+};
+
+//生成service页面
+const generateService = (param, namespace) => {
+  let result = fs.readFileSync(serverTemp, 'utf8');
+
+  const queryListUrl =
+    '`${APIPREX}/' +
+    namespace +
+    '/list' +
+    '?size=${params.size}&current=${params.current}&limit=${params.limit?params.limit:10}`';
+  const saveUrl = '`${APIPREX}/' + namespace + '/save`';
+  const updateUrl = '`${APIPREX}/' + namespace + '/update`';
+  const getUrl = '`${APIPREX}/' + namespace + '/get/${params.id}`';
+  const delUrl = '`${APIPREX}/' + namespace + '/del`';
+
+  //模板替换
+  result = result
+    .replace('#{QUERYLISTURL}', queryListUrl)
+    .replace('#{SAVEURL}', saveUrl)
+    .replace('#{UPDATEURL}', updateUrl)
+    .replace('#{GETURL}', getUrl)
+    .replace('#{DELETEURL}', delUrl);
+  const path = `${serverPath}${param.fileUrl}`;
+  const fileName = 'service.js';
+  return [path, fileName, result];
+};
+
+//生成 models 页面
+const generateModels = (param, namespace) => {
+  let result = fs.readFileSync(modelsTemp, 'utf8');
+  const importServer = `import {queryList,save,update,get,del} from '@/services${
+    param.fileUrl
+  }/service';`;
+  const router = `${param.fileUrl}`;
+  //模板替换
+  result = result
+    .replace('#{IMPORTSERVER}', importServer)
+    .replace('#{ROUTER}', router)
+    .replace(/#{NAMESPACE}/g, namespace);
+  const path = `${pagesPath}${param.fileUrl}/models`;
+  const fileName = `${namespace}.js`;
+  return [path, fileName, result];
+};
+
+//生成 router 页面
+const generateRouter = (param, namespace) => {
+  //默认传入的结构为 xxx/xxx
+  const menuUrls = param.fileUrl.split('/');
+
+  console.log(param.router);
+  let routerTemp = JSON.parse(param.router);
+
+  if (routerTemp.filter(item => item.path === `/${menuUrls[0]}`).length < 0) {
+    //没有父菜单
+    routerTemp.push({
+      path: `/${menuUrls[0]}`,
+      name: `${menuUrls[0]}`,
+      routes: [
+        {
+          path: `/${param.fileUrl}`,
+          name: `${param.fileUrl.replace(/_/g, '.')}`,
+          component: `./${param.fileUrl}/index`,
+        },
+      ],
+    });
+  } else {
+    //存在父级菜单，自己在父级菜单下添加
+    routerTemp.forEach(item => {
+      if (item.path === `/${menuUrls}`) {
+        if (!item.routes) {
+          item.routes = [];
+        }
+        item.routes.push({
+          path: `/${param.fileUrl}`,
+          name: `${param.fileUrl.replace(/_/g, '.')}`,
+          component: `./${param.fileUrl}/index`,
+        });
+      }
+    });
+  }
+  const result = 'export default ' + JSON.stringify(routerTemp);
+  const path = `./config/`;
+  const fileName = `router.config.js`;
+  utils.writer(path, fileName, result);
+};
+
+const myReplace = (content, replaceStr) => {
+  content = content.replace(replaceStr, '');
+  if (content.indexOf(replaceStr) > -1) {
+    return myReplace(content, replaceStr);
+  } else {
+    return content;
+  }
+};
+
+module.exports = {
+  generateCodeHandle,
+};

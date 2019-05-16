@@ -1,4 +1,5 @@
 module.exports = {
+  root: false,
   parser: 'babel-eslint',
   extends: ['airbnb', 'prettier', 'plugin:compat/recommended'],
   env: {
@@ -33,6 +34,7 @@ module.exports = {
     'jsx-a11y/no-static-element-interactions': 0,
     'jsx-a11y/anchor-is-valid': 0,
     'linebreak-style': 0,
+    'no-empty-pattern': 0, //可以使用{}对象
   },
   settings: {
     polyfills: ['fetch', 'promises', 'url', 'object-assign'],
