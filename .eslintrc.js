@@ -1,5 +1,4 @@
 module.exports = {
-  root: false,
   parser: 'babel-eslint',
   extends: ['airbnb', 'prettier', 'plugin:compat/recommended'],
   env: {
