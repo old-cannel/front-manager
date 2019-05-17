@@ -1,67 +1,63 @@
-export default [
-  {
-    path: '/user',
-    component: '../layouts/UserLayout',
-    routes: [
-      { path: '/user', redirect: '/user/login' },
-      { path: '/user/login', name: 'login', component: './User/Login' },
-      {
-        component: '404',
-      },
-    ],
+export default [{
+  'path': '/user',
+  'component': '../layouts/UserLayout',
+  'routes': [{
+    'path': '/user',
+    'redirect': '/user/login',
   },
+    {
+      'path': '/user/login',
+      'name': 'login',
+      'component': './User/Login',
+    },
+    { 'component': '404' }],
+},
   {
-    path: '/',
-    component: '../layouts/BasicLayout',
-    Routes: ['src/pages/Authorized'],
-    routes: [
-      { path: '/', redirect: '/' },
+    'path': '/',
+    'component': '../layouts/BasicLayout',
+    'Routes': ['src/pages/Authorized'],
+    'routes': [{
+      'path': '/',
+      'redirect': '/',
+    },
       {
-        path: '/sys',
-        name: '系统管理',
-        routes: [
-          {
-            path: '/sys/user',
-            name: '用户管理',
-            component: './Sys/User/index',
-          },
-        ],
+        'path': '/sys',
+        'name': 'sys',
+        'routes': [{
+          'path': '/sys/test',
+          'name': 'test',
+          'component': './Sys/Test/index',
+        }],
       },
       {
-        name: 'exception',
-        icon: 'warning',
-        path: '/exception',
-        hideInMenu: true,
-        routes: [
+        'name': 'exception',
+        'icon': 'warning',
+        'path': '/exception',
+        'hideInMenu': false,
+        'routes': [{
+          'path': '/exception/403',
+          'name': 'not-permission',
+          'hideInMenu': false,
+          'component': './Exception/403',
+        },
           {
-            path: '/exception/403',
-            name: 'not-permission',
-            hideInMenu: true,
-            component: './Exception/403',
+            'path': '/exception/404',
+            'name': 'not-find',
+            'hideInMenu': false,
+            'component': './Exception/404',
           },
           {
-            path: '/exception/404',
-            name: 'not-find',
-            hideInMenu: true,
-            component: './Exception/404',
+            'path': '/exception/500',
+            'name': 'server-error',
+            'hideInMenu': true,
+            'component': './Exception/500',
           },
           {
-            path: '/exception/500',
-            name: 'server-error',
-            hideInMenu: true,
-            component: './Exception/500',
-          },
-          {
-            path: '/exception/trigger',
-            name: 'trigger',
-            hideInMenu: true,
-            component: './Exception/TriggerException',
-          },
-        ],
+            'path': '/exception/trigger',
+            'name': 'trigger',
+            'hideInMenu': true,
+            'component': './Exception/TriggerException',
+          }],
       },
-      {
-        component: '404',
-      },
-    ],
-  },
-];
+      { 'component': '404' }],
+  }];

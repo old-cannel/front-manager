@@ -8,6 +8,16 @@ const data = {
   tableName: 'sys_test',
   tableComment: '用户基表',
   fileUrl: '/sys/user',
+  parentRouter: '/sys',
+  router: '/test',
+  hasPage: '1',
+  menuName:[{
+    type:"zh-CN",
+    name:"用户管理"
+  },{
+    type:"en-US",
+    name:"userManager"
+  }],
   tableInfo: [
     {
       id: '1',

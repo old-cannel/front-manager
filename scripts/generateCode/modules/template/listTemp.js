@@ -105,7 +105,7 @@ class List extends Component {
 
 
     return (
-      <div>
+      <div className="container">
         <Filter ref={this.filterRef}/>
         <div style={{ marginTop: 10 }}>
           <Button

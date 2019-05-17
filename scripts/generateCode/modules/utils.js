@@ -350,6 +350,15 @@ const resetPath = paths => {
   return path;
 };
 
+const getDataFile = (path, callBack) => {
+  fs.readFile(path, function(err, data) {
+    if (err) {
+      console.log(err);
+    }
+    callBack(data);
+  });
+};
+
 module.exports = {
   writer,
   formatCode,
@@ -361,4 +370,5 @@ module.exports = {
   dynamicConstant,
   renderFilterFormItem,
   renderDetailsItem,
+  getDataFile,
 };

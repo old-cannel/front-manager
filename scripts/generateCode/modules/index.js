@@ -5,6 +5,20 @@ const pagesPath = `${bashPath}/src/pages`;
 //service 文件位置
 const serverPath = `${bashPath}/src/services`;
 
+const routerPath = 'E:/something/work/simpo/front-manager/config';
+
+//菜单名称 国际化处理
+const menuLocales = [
+  {
+    type: 'zh-CN',
+    path: 'E:/something/work/simpo/front-manager/src/locales/zh-CN',
+  }, {
+    type: 'en-US',
+    path: 'E:/something/work/simpo/front-manager/src/locales/en-US',
+  },
+];
+
+
 const fs = require('fs');
 const utils = require('./utils.js');
 const filterTemp = './scripts/generateCode/modules/template/filterTemp.js';
@@ -16,6 +30,15 @@ const serverTemp = './scripts/generateCode/modules/template/serverTemp.js';
 const modelsTemp = './scripts/generateCode/modules/template/modelsTemp.js';
 const modelsApiTemp = './src/services/url.js';
 
+//Filter.js  过滤(create)
+//List.js 列表(create)
+//Edit.js  新增修改(create)
+//Details.js 详情(create)
+//index.js 入口(create)
+//service.js (update)
+//models 页面models(create)
+//api.js api (update)
+//router.config.js (update)
 const generateCodeHandle = param => {
   //生成 filter
   generateFactory(param, 'filter');
@@ -31,60 +54,55 @@ const generateCodeHandle = param => {
   generateFactory(param, 'service');
   //生成models
   generateFactory(param, 'models');
-
-  // generateRouter(param, namespace);
+  //生成路由
+  generateRouter(param);
+  //生成菜单名称（带国际化）
+  generateLocalesMenus(param);
 };
 
-//Filter.js  过滤(create)
-//List.js 列表(create)
-//Edit.js  新增修改(create)
-//Details.js 详情(create)
-//index.js 入口(create)
-//service.js (update)
-//models 页面models(create)
-//api.js api (update)
-//router.config.js (update)
 
 const generateFactory = (param, type) => {
-  const namespace = param.tableName.replace(/_/g, '');
+  //生成页面
+  if (param.hasPage === '1') {
+    const namespace = param.tableName.replace(/_/g, '');
+    //1.按照生成的文件不同选择相应生成的策略
+    let switchStrategy = null;
+    switch (type) {
+      case 'filter':
+        switchStrategy = generateFilter;
+        break;
+      case 'list':
+        switchStrategy = generateList;
+        break;
+      case 'edit':
+        switchStrategy = generateEdit;
+        break;
+      case 'details':
+        switchStrategy = generateDetails;
+        break;
+      case 'index':
+        switchStrategy = generateIndex;
+        break;
+      case 'service':
+        switchStrategy = generateService;
+        break;
+      case 'models':
+        switchStrategy = generateModels;
+        break;
+      default:
+        break;
+    }
+    //2.生成要生成的代码 result[0]:文件路径 result[1]:文件名 result[2]:写入内容
+    const result = switchStrategy(param, namespace);
 
-  //1.按照生成的文件不同选择相应生成的策略
-  let switchStrategy = null;
-  switch (type) {
-    case 'filter':
-      switchStrategy = generateFilter;
-      break;
-    case 'list':
-      switchStrategy = generateList;
-      break;
-    case 'edit':
-      switchStrategy = generateEdit;
-      break;
-    case 'details':
-      switchStrategy = generateDetails;
-      break;
-    case 'index':
-      switchStrategy = generateIndex;
-      break;
-    case 'service':
-      switchStrategy = generateService;
-      break;
-    case 'models':
-      switchStrategy = generateModels;
-      break;
-    default:
-      break;
+    //3.写入文件
+    const path = utils.resetPath(result[0]);
+    const fullPath = `${path}${result[1]}`;
+    utils.writer(utils.formatPath(path), fullPath, result[2]);
+
+    //4.格式化代码 selint 效验
+    utils.formatCode(fullPath);
   }
-  //2.生成要生成的代码 result[0]:文件路径 result[1]:文件名 result[2]:写入内容
-  const result = switchStrategy(param, namespace);
-
-  //3.写入文件
-  const path = utils.resetPath(result[0]);
-  const fullPath = `${path}${result[1]}`;
-  utils.writer(utils.formatPath(path), fullPath, result[2]);
-
-  //4.格式化代码 selint 效验
-  utils.formatCode(fullPath);
 };
 
 // 生成Filter.js
@@ -134,7 +152,7 @@ const generateFilter = (param, namespace) => {
   const dynamicConstant = utils.dynamicConstant(result);
   result = result.replace('#{CONSTANT}', dynamicConstant);
 
-  const path = `${pagesPath}${param.fileUrl}`;
+  const path = `${pagesPath}${param.parentRouter}${param.router}`;
   const fileName = 'Filter.js';
   return [path, fileName, result];
 };
@@ -178,7 +196,7 @@ const generateList = (param, namespace) => {
   //动态import dynamicImport 模块
   const importDyn = utils.dynamicImport(result);
   result = result.replace('#{IMPORTDYNAMIC}', importDyn);
-  const path = `${pagesPath}${param.fileUrl}`;
+  const path = `${pagesPath}${param.parentRouter}${param.router}`;
   const fileName = 'List.js';
   return [path, fileName, result];
 };
@@ -228,7 +246,7 @@ const generateEdit = (param, namespace) => {
   const dynamicConstant = utils.dynamicConstant(result);
   result = result.replace('#{CONSTANT}', dynamicConstant);
 
-  const path = `${pagesPath}${param.fileUrl}`;
+  const path = `${pagesPath}${param.parentRouter}${param.router}`;
   const fileName = 'Edit.js';
   return [path, fileName, result];
 };
@@ -254,7 +272,7 @@ const generateDetails = param => {
   const importDyn = utils.dynamicImport(result);
   result = result.replace('#{IMPORTDYNAMIC}', importDyn);
 
-  const path = `${pagesPath}${param.fileUrl}`;
+  const path = `${pagesPath}${param.parentRouter}${param.router}`;
   const fileName = 'Details.js';
   return [path, fileName, result];
 };
@@ -270,7 +288,7 @@ const generateIndex = (param, namespace) => {
   //动态import dynamicImport 模块
   const importDyn = utils.dynamicImport(result);
   result = result.replace('#{IMPORTDYNAMIC}', importDyn);
-  const path = `${pagesPath}${param.fileUrl}`;
+  const path = `${pagesPath}${param.parentRouter}${param.router}`;
   const fileName = 'index.js';
   return [path, fileName, result];
 };
@@ -296,7 +314,7 @@ const generateService = (param, namespace) => {
     .replace('#{UPDATEURL}', updateUrl)
     .replace('#{GETURL}', getUrl)
     .replace('#{DELETEURL}', delUrl);
-  const path = `${serverPath}${param.fileUrl}`;
+  const path = `${serverPath}${param.parentRouter}${param.router}`;
   const fileName = 'service.js';
   return [path, fileName, result];
 };
@@ -305,59 +323,88 @@ const generateService = (param, namespace) => {
 const generateModels = (param, namespace) => {
   let result = fs.readFileSync(modelsTemp, 'utf8');
   const importServer = `import {queryList,save,update,get,del} from '@/services${
-    param.fileUrl
-  }/service';`;
-  const router = `${param.fileUrl}`;
+    param.parentRouter
+    }${param.router}/service';`;
+  const router = `${param.parentRouter}${param.router}`;
   //模板替换
   result = result
     .replace('#{IMPORTSERVER}', importServer)
     .replace('#{ROUTER}', router)
     .replace(/#{NAMESPACE}/g, namespace);
-  const path = `${pagesPath}${param.fileUrl}/models`;
+  const path = `${pagesPath}${param.parentRouter}${param.router}/models`;
   const fileName = `${namespace}.js`;
   return [path, fileName, result];
 };
 
 //生成 router 页面
-const generateRouter = (param, namespace) => {
-  //默认传入的结构为 xxx/xxx
-  const menuUrls = param.fileUrl.split('/');
+const generateRouter = (param) => {
+  const parentRouter = param.parentRouter;
+  const currentRouter = param.router;
+  const fullRouter = `${parentRouter}${currentRouter}`;
+  let componentPath = '';
+  if (param.hasPage === '1') {
+    componentPath = '.' + utils.resetPath(`pages${fullRouter}`).replace('pages', '') + 'index';
+  }
+  const routerName = fullRouter.substring(1, fullRouter.length).replace(/\//g, '.');
 
-  console.log(param.router);
-  let routerTemp = JSON.parse(param.router);
+  utils.getDataFile(`${routerPath}/router.config.js`, data => {
+    let router= eval((data || '')
+      .toString()
+      .replace('export', '')
+      .replace('default', '')
+      .replace(';', ''));
+    routerHelp(router);
+    const fullPath = `${routerPath}/router.config.js`;
+    let result = 'export default ' + JSON.stringify(eval(router));
+    result = result.replace(/,/g, ',\r\n');
 
-  if (routerTemp.filter(item => item.path === `/${menuUrls[0]}`).length < 0) {
-    //没有父菜单
-    routerTemp.push({
-      path: `/${menuUrls[0]}`,
-      name: `${menuUrls[0]}`,
-      routes: [
-        {
-          path: `/${param.fileUrl}`,
-          name: `${param.fileUrl.replace(/_/g, '.')}`,
-          component: `./${param.fileUrl}/index`,
-        },
-      ],
-    });
-  } else {
-    //存在父级菜单，自己在父级菜单下添加
-    routerTemp.forEach(item => {
-      if (item.path === `/${menuUrls}`) {
-        if (!item.routes) {
-          item.routes = [];
+    utils.writer(utils.formatPath(routerPath), fullPath, result);
+    //格式化代码 selint 效验
+    utils.formatCode(fullPath);
+  });
+
+  const routerHelp = router => {
+    router.forEach(item => {
+      //需要在该节点下生成子路由
+      if (item.path === parentRouter) {
+        item.routes = item.routes || [];
+        //存在该路由是不创建
+        const existRouter = item.routes.filter(item => item.path === fullRouter).length <= 0;
+        if (item.routes && existRouter) {
+          const componentItem = componentPath ? { component: componentPath } : {};
+          item.routes.push({
+            ...{
+              path: fullRouter,
+              name: routerName,
+            },
+            ...componentItem,
+          });
         }
-        item.routes.push({
-          path: `/${param.fileUrl}`,
-          name: `${param.fileUrl.replace(/_/g, '.')}`,
-          component: `./${param.fileUrl}/index`,
+      } else if (item.routes) {
+        routerHelp(item.routes);
+      }
+    });
+  };
+};
+
+//菜单名称国际化处理
+const generateLocalesMenus = (param) => {
+  const fullRouter = `${param.parentRouter}${param.router}`;
+  const routerName = fullRouter.substring(1, fullRouter.length).replace(/\//g, '.');
+  param.menuName.forEach(item => {
+    menuLocales.forEach(itemLocale => {
+      if (item.type === itemLocale.type) {
+        const fullPath = `${itemLocale.path}/menu.js`;
+        utils.getDataFile(fullPath, (data) => {
+          if(data.toString().indexOf(routerName)===-1){
+            data=data.toString().replace("}","").replace(";","");
+            const result=`${data}'menu.${routerName}':'${item.name}',}`
+            utils.writer(utils.formatPath(itemLocale.path), fullPath, result);
+          }
         });
       }
     });
-  }
-  const result = 'export default ' + JSON.stringify(routerTemp);
-  const path = `./config/`;
-  const fileName = `router.config.js`;
-  utils.writer(path, fileName, result);
+  });
 };
 
 const myReplace = (content, replaceStr) => {
