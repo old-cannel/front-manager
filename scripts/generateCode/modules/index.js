@@ -12,12 +12,12 @@ const menuLocales = [
   {
     type: 'zh-CN',
     path: 'E:/something/work/simpo/front-manager/src/locales/zh-CN',
-  }, {
+  },
+  {
     type: 'en-US',
     path: 'E:/something/work/simpo/front-manager/src/locales/en-US',
   },
 ];
-
 
 const fs = require('fs');
 const utils = require('./utils.js');
@@ -59,7 +59,6 @@ const generateCodeHandle = param => {
   //生成菜单名称（带国际化）
   generateLocalesMenus(param);
 };
-
 
 const generateFactory = (param, type) => {
   //生成页面
@@ -254,9 +253,10 @@ const generateEdit = (param, namespace) => {
 //生成详情页面
 const generateDetails = param => {
   let result = fs.readFileSync(detailsTemp, 'utf8');
-  let detailsItems = '<DescriptionList size="large" style={{ marginBottom: 32 }}>\r\n';
   const editLength = param.tableInfo.filter(editItem => editItem.editFlag === '1').length;
   const drawerWidth = editLength < 6 ? 550 : 740;
+  const col = editLength < 6 ? 1 : 2;
+  let detailsItems = `<DescriptionList col="${col}" size="large" style={{ marginBottom: 32,paddingBottom:20 }}>\r\n`;
   param.tableInfo.forEach(item => {
     if (item.editFlag === '1') {
       detailsItems += utils.renderDetailsItem(item, editLength);
@@ -337,7 +337,7 @@ const generateModels = (param, namespace) => {
 };
 
 //生成 router 页面
-const generateRouter = (param) => {
+const generateRouter = param => {
   const parentRouter = param.parentRouter;
   const currentRouter = param.router;
   const fullRouter = `${parentRouter}${currentRouter}`;
@@ -348,11 +348,13 @@ const generateRouter = (param) => {
   const routerName = fullRouter.substring(1, fullRouter.length).replace(/\//g, '.');
 
   utils.getDataFile(`${routerPath}/router.config.js`, data => {
-    let router= eval((data || '')
-      .toString()
-      .replace('export', '')
-      .replace('default', '')
-      .replace(';', ''));
+    let router = eval(
+      (data || '')
+        .toString()
+        .replace('export', '')
+        .replace('default', '')
+        .replace(';', ''),
+    );
     routerHelp(router);
     const fullPath = `${routerPath}/router.config.js`;
     let result = 'export default ' + JSON.stringify(eval(router));
@@ -388,17 +390,20 @@ const generateRouter = (param) => {
 };
 
 //菜单名称国际化处理
-const generateLocalesMenus = (param) => {
+const generateLocalesMenus = param => {
   const fullRouter = `${param.parentRouter}${param.router}`;
   const routerName = fullRouter.substring(1, fullRouter.length).replace(/\//g, '.');
   param.menuName.forEach(item => {
     menuLocales.forEach(itemLocale => {
       if (item.type === itemLocale.type) {
         const fullPath = `${itemLocale.path}/menu.js`;
-        utils.getDataFile(fullPath, (data) => {
-          if(data.toString().indexOf(routerName)===-1){
-            data=data.toString().replace("}","").replace(";","");
-            const result=`${data}'menu.${routerName}':'${item.name}',}`
+        utils.getDataFile(fullPath, data => {
+          if (data.toString().indexOf(routerName) === -1) {
+            data = data
+              .toString()
+              .replace('}', '')
+              .replace(';', '');
+            const result = `${data}'menu.${routerName}':'${item.name}',}`;
             utils.writer(utils.formatPath(itemLocale.path), fullPath, result);
           }
         });

@@ -40,23 +40,14 @@ class Detail extends Component {
           onClose={this.cancel}
           visible={detailVisible}
         >
-          <Spin spinning={loading}>
+          <Spin  spinning={loading}>
               #{DETAILSITEM}
-            <div style={{
-              position: 'absolute',
-              left: 0,
-              bottom: 0,
-              width: '100%',
-              borderTop: '1px solid #e9e9e9',
-              padding: '10px 16px',
-              background: '#fff',
-              textAlign: 'right',
-            }}>
-              <Button onClick={this.cancel} style={{ marginRight: 8 }}>
-                返回
-              </Button>
-            </div>
           </Spin>
+          <div  className="drawerFooter">
+            <Button onClick={this.cancel} style={{ marginRight: 8 }}>
+              返回
+            </Button>
+          </div>
         </Drawer>
       </div>
     );

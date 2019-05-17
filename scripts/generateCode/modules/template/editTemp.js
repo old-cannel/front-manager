@@ -5,13 +5,13 @@ import React, { Component } from 'react';
 
 #{CONSTANT}
 
-
+let saveLoading=false
 const formItemLayout = {
   labelCol: {
-    span: 6,
+    span: 8,
   },
   wrapperCol: {
-    span: 18,
+    span: 16,
   },
 };
 
@@ -34,6 +34,8 @@ class Edit extends Component {
 
   //保存
   submitForm = () => {
+    saveLoading=true
+    setTimeout(()=>{saveLoading=false},1000)
     const { form: { validateFields, resetFields }, onOk } = this.props;
     validateFields((err, values) => {
       let data=values
@@ -68,7 +70,7 @@ class Edit extends Component {
           visible={editVisible}
         >
           <Spin spinning={loading}>
-            <Form>
+            <Form style={{paddingBottom:15}}>
               <Row>
                 <FormItem style={{ display: 'none' }}>
                   {getFieldDecorator('id', {
@@ -79,20 +81,11 @@ class Edit extends Component {
               </Row>
             </Form>
           </Spin>
-          <div style={{
-            position: 'absolute',
-            left: 0,
-            bottom: 0,
-            width: '100%',
-            borderTop: '1px solid #e9e9e9',
-            padding: '10px 16px',
-            background: '#fff',
-            textAlign: 'right',
-          }}>
+          <div className="drawerFooter">
             <Button onClick={this.cancel} style={{ marginRight: 8 }}>
               取消
             </Button>
-            <Button onClick={this.submitForm} type="primary">
+            <Button loading={loading || saveLoading} onClick={this.submitForm} type="primary">
               保存
             </Button>
           </div>

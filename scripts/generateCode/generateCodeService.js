@@ -11,13 +11,16 @@ const data = {
   parentRouter: '/sys',
   router: '/test',
   hasPage: '1',
-  menuName:[{
-    type:"zh-CN",
-    name:"用户管理"
-  },{
-    type:"en-US",
-    name:"userManager"
-  }],
+  menuName: [
+    {
+      type: 'zh-CN',
+      name: '用户管理',
+    },
+    {
+      type: 'en-US',
+      name: 'userManager',
+    },
+  ],
   tableInfo: [
     {
       id: '1',
@@ -51,7 +54,7 @@ const data = {
       queryFlag: '1',
       sort: '10',
       component: {
-        type: 'input',
+        type: 'Input',
       },
     },
     {
@@ -70,7 +73,7 @@ const data = {
       queryFlag: '1',
       sort: '10',
       component: {
-        type: 'input',
+        type: 'Input',
       },
     },
     {
@@ -146,7 +149,7 @@ const data = {
       queryFlag: '1',
       sort: '10',
       component: {
-        type: 'input',
+        type: 'Input',
       },
     },
     {
@@ -165,7 +168,7 @@ const data = {
       queryFlag: '1',
       sort: '10',
       component: {
-        type: 'input',
+        type: 'Input',
       },
     },
     {
@@ -184,7 +187,7 @@ const data = {
       queryFlag: '1',
       sort: '10',
       component: {
-        type: 'input',
+        type: 'Input',
       },
     },
   ],

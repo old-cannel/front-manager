@@ -75,14 +75,14 @@ class List extends Component {
     dispatch({type:'#{NAMESPACE}/updateState',payload:{editLoading:true}})
     const url = values.id ? '#{NAMESPACE}/update' : '#{NAMESPACE}/save';
     dispatch({ type: url, payload: values }).then((result) => {
-      dispatch({type:'#{NAMESPACE}/updateState',payload:{editLoading:false}})
       if (result && result.code === 10000) {
         message.success(result.msg);
-        resetFields();
         this.setState({ editTitle: '', editVisible: false });
-        dispatch({type:'#{NAMESPACE}/updateState',payload:{current:{}}})
+        dispatch({type:'#{NAMESPACE}/updateState',payload:{current:{},editLoading:false}})
         dispatch({ type: '#{NAMESPACE}/queryList' });
+        resetFields();
       } else {
+        dispatch({type:'#{NAMESPACE}/updateState',payload:{editLoading:false}})
         message.error(result.msg);
       }
     });

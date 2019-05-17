@@ -200,9 +200,10 @@ const renderEditFormItem = (item, editLength) => {
   if (editLength < 6) {
     colTemp = `<Col span="24">`;
   }
-  //input  输入框
-  if (item.component.type === 'input') {
-    formItem = `${colTemp}
+  const componentType=item.component.type;
+  switch (componentType) {
+    case 'Input':
+      formItem = `${colTemp}
          <FormItem label="${item.columnName}:" {...formItemLayout}>
             {getFieldDecorator('${item.javaName}', {
                 initialValue:current.${item.javaName},
@@ -210,48 +211,54 @@ const renderEditFormItem = (item, editLength) => {
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
              })(<Input ${
-               checkLength ? (maxLength = { length }) : ''
-             } style={{ maxWidth: 220 }} placeholder='请输入${item.columnName}'/>)}
+        checkLength ? (maxLength = { length }) : ''
+        } style={{ maxWidth: 220 }} placeholder='请输入${item.columnName}'/>)}
          </FormItem>
       </Col>\r\n`;
-  } else if (item.component.type === 'DatePicker_date') {
-    formItem = `${colTemp}
+      break;
+    case "DatePicker_date":
+      formItem = `${colTemp}
          <FormItem label="${item.columnName}:" {...formItemLayout}>
             {getFieldDecorator('${item.javaName}', {
                 initialValue:current.${item.javaName}? moment(current.${
-      item.javaName
-    }, 'YYYY-MM-DD') : '',
+        item.javaName
+        }, 'YYYY-MM-DD') : '',
                    rules:[
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
              })(<DatePicker format="YYYY-MM-DD" style={{ width: 220 }} placeholder='请选择${
-               item.columnName
-             }'/>)}
+        item.columnName
+        }'/>)}
          </FormItem>
       </Col>\r\n`;
-    dataHandle += ` if (data.${item.javaName}) {
+      dataHandle += ` if (data.${item.javaName}) {
             data.${item.javaName} = moment(data.${item.javaName}).format('YYYY-MM-DD');
           }\r\n`;
-  } else if (item.component.type === 'DatePicker_datetime') {
-    formItem = `${colTemp}
+      break;
+    case "DatePicker_datetime":
+      formItem = `${colTemp}
          <FormItem label="${item.columnName}:" {...formItemLayout}>
             {getFieldDecorator('${item.javaName}', {
                 initialValue:current.${item.javaName}? moment(current.${
-      item.javaName
-    }, 'YYYY-MM-DD HH:mm:ss') : '',
+        item.javaName
+        }, 'YYYY-MM-DD HH:mm:ss') : '',
                    rules:[
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
              })(<DatePicker showTime format="YYYY-MM-DD HH:mm:ss" style={{ width: 220 }} placeholder='请选择${
-               item.columnName
-             }'/>)}
+        item.columnName
+        }'/>)}
          </FormItem>
       </Col>\r\n`;
-    dataHandle += ` if (data.${item.javaName}) {
+      dataHandle += ` if (data.${item.javaName}) {
             data.${item.javaName} = moment(data.${item.javaName}).format('YYYY-MM-DD HH:mm:ss');
           }\r\n`;
+      break;
+    default:
+      break;
   }
   return [formItem, dataHandle];
+
 };
 
 /**
@@ -282,49 +289,52 @@ const renderFilterFormItem = (item, editLength) => {
   const message = `${item.columnName}不能为空`;
   let formItem = '';
   let dataHandle = '';
-
-  //input  输入框
-  if (item.component.type === 'input') {
-    formItem = `<Col xxl={{ span: 7 }} md={{ span: 7 }}>
+  const componentType=item.component.type
+  switch (componentType) {
+    case "Input":
+      formItem = `<Col xxl={{ span: 7 }} md={{ span: 7 }}>
          <FilterItem label="${item.columnName}:" >
             {getFieldDecorator('${item.javaName}', {
              })(<Input  style={{ maxWidth: 240 }} placeholder='请输入${item.columnName}'/>)}
          </FilterItem>
       </Col>\r\n`;
-  } else if (item.component.type === 'DatePicker_date') {
-    formItem = `<Col xxl={{ span: 9 }} md={{ span: 9 }}>
+      break;
+    case "DatePicker_date":
+      formItem = `<Col xxl={{ span: 9 }} md={{ span: 9 }}>
         <FilterItem label="${item.columnName}:">
                 {getFieldDecorator('${item.javaName}', {
                 })(<RangePicker  format="YYYY-MM-DD HH:mm:ss" showTime style={{ maxWidth: 350 }} />)}
         </FilterItem>
       </Col>\r\n`;
-    dataHandle += ` if (searchParam.${item.javaName} && searchParam.${item.javaName}.length===2) {
+      dataHandle += ` if (searchParam.${item.javaName} && searchParam.${item.javaName}.length===2) {
         searchParam.${item.javaName}Search=[]
         searchParam.${item.javaName}Search[0] = moment(searchParam.${
-      item.javaName
-    }[0]).format('YYYY-MM-DD');
+        item.javaName
+        }[0]).format('YYYY-MM-DD');
         searchParam.${item.javaName}Search[1] = moment(searchParam.${
-      item.javaName
-    }[1]).format('YYYY-MM-DD');
+        item.javaName
+        }[1]).format('YYYY-MM-DD');
         searchParam.${item.javaName}=''
       }\r\n`;
-  } else if (item.component.type === 'DatePicker_datetime') {
-    formItem = `<Col xxl={{ span: 9 }} md={{ span: 9 }}>
+      break;
+    case "DatePicker_datetime":
+      formItem = `<Col xxl={{ span: 9 }} md={{ span: 9 }}>
          <FilterItem label="${item.columnName}:">
                 {getFieldDecorator('${item.javaName}', {
                 })(<RangePicker  format="YYYY-MM-DD HH:mm:ss" showTime style={{ maxWidth: 350 }} />)}
          </FilterItem>
       </Col>\r\n`;
-    dataHandle += `if (searchParam.${item.javaName} && searchParam.${item.javaName}.length===2) {
+      dataHandle += `if (searchParam.${item.javaName} && searchParam.${item.javaName}.length===2) {
         searchParam.${item.javaName}Search=[]
         searchParam.${item.javaName}Search[0] = moment(searchParam.${
-      item.javaName
-    }[0]).format('YYYY-MM-DD HH:mm:ss');
+        item.javaName
+        }[0]).format('YYYY-MM-DD HH:mm:ss');
         searchParam.${item.javaName}Search[1] = moment(searchParam.${
-      item.javaName
-    }[1]).format('YYYY-MM-DD HH:mm:ss');
+        item.javaName
+        }[1]).format('YYYY-MM-DD HH:mm:ss');
         searchParam.${item.javaName}=''
       }\r\n`;
+      break;
   }
   return [formItem, dataHandle];
 };
