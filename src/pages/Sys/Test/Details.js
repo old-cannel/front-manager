@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import DescriptionList from '@/components/DescriptionList';
-import { Button,Drawer,Spin, } from 'antd';
+import { Button, Drawer, Spin } from 'antd';
 
 const { Description } = DescriptionList;
-
 
 class Detail extends Component {
   constructor(props) {
@@ -11,25 +10,18 @@ class Detail extends Component {
     this.state = {};
   }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   // 返回关闭
   cancel = () => {
-    const {onCancel } = this.props;
-    if(onCancel){
-      onCancel()
+    const { onCancel } = this.props;
+    if (onCancel) {
+      onCancel();
     }
   };
 
-
   render() {
-    const {
-      detailVisible,
-      current,
-      loading
-    } = this.props;
-
+    const { detailVisible, current, loading } = this.props;
 
     return (
       <div>
@@ -41,7 +33,7 @@ class Detail extends Component {
           visible={detailVisible}
         >
           <Spin spinning={loading}>
-            <DescriptionList col="2" size="large" style={{ marginBottom: 32,paddingBottom:20 }}>
+            <DescriptionList col="2" size="large" style={{ marginBottom: 32, paddingBottom: 20 }}>
               <Description term="编码">{current.code}</Description>
               <Description term="用户名">{current.name}</Description>
               <Description term="创建时间">{current.addTime}</Description>

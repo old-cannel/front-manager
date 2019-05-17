@@ -1,20 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Button,Divider,Popconfirm,Table,message, } from 'antd';
+import { Button, Divider, Popconfirm, Table, message } from 'antd';
 
 import Filter from './Filter';
 import Edit from './Edit';
 import Details from './Details';
 
-@connect(({ loading,systest }) => ({
+@connect(({ loading, systest }) => ({
   pagination: systest.pagination,
   list: systest.list,
   current: systest.current,
-  detailsLoading:loading.effects['systest/get'],
+  detailsLoading: loading.effects['systest/get'],
   loading: loading.effects['systest/queryList'],
-  editLoading:systest.editLoading,
+  editLoading: systest.editLoading,
 }))
-
 class List extends Component {
   constructor(props) {
     super(props);
@@ -44,11 +43,10 @@ class List extends Component {
   };
 
   // 删除
-  confirmDel=(id)=>{
+  confirmDel = id => {
     const { dispatch } = this.props;
-    dispatch({type:'systest/delete',payload:{id}})
-  }
-
+    dispatch({ type: 'systest/delete', payload: { id } });
+  };
 
   // 详情
   details = record => {
@@ -72,28 +70,31 @@ class List extends Component {
   // 保存
   saveForm = (values, resetFields) => {
     const { dispatch } = this.props;
-    dispatch({type:'systest/updateState',payload:{editLoading:true}})
+    dispatch({ type: 'systest/updateState', payload: { editLoading: true } });
     const url = values.id ? 'systest/update' : 'systest/save';
-    dispatch({ type: url, payload: values }).then((result) => {
+    dispatch({ type: url, payload: values }).then(result => {
       if (result && result.code === 10000) {
         message.success(result.msg);
         this.setState({ editTitle: '', editVisible: false });
-        dispatch({type:'systest/updateState',payload:{current:{},editLoading:false}})
+        dispatch({ type: 'systest/updateState', payload: { current: {}, editLoading: false } });
         dispatch({ type: 'systest/queryList' });
         resetFields();
       } else {
-        dispatch({type:'systest/updateState',payload:{editLoading:false}})
+        dispatch({ type: 'systest/updateState', payload: { editLoading: false } });
         message.error(result.msg);
       }
     });
   };
 
-
-
   render() {
     const {
-      list, loading, pagination, dispatch, current,
-      detailsLoading, editLoading,
+      list,
+      loading,
+      pagination,
+      dispatch,
+      current,
+      detailsLoading,
+      editLoading,
     } = this.props;
     const { editTitle, editVisible, detailVisible } = this.state;
     const paginationProps = {
@@ -101,59 +102,85 @@ class List extends Component {
       showQuickJumper: true,
       ...pagination,
     };
-    const columns = [{
-          title: '编码',
-          dataIndex:'code',
-          key: 'code',
-        },{
-          title: '用户名',
-          dataIndex:'name',
-          key: 'name',
-        },{
-          title: '创建时间',
-          dataIndex:'addTime',
-          key: 'addTime',
-        },{
-          title: '修改时间',
-          dataIndex:'updTime',
-          key: 'updTime',
-        },{
-          title: '创建者',
-          dataIndex:'addUserCode',
-          key: 'addUserCode',
-        },{
-          title: '新增备注',
-          dataIndex:'addMark',
-          key: 'addMark',
-        },{
-          title: '更新者',
-          dataIndex:'updUserCode',
-          key: 'updUserCode',
-        },{
-          title: '更新备注',
-          dataIndex:'updMark',
-          key: 'updMark',
-        },{
-          title: '操作',
-          render:(text,record)=>{
-              return <span>
-                <a href="javascript:void(0)" onClick={()=>{this.details(record)}}>详情</a> <Divider type="vertical" />
-                <a href="javascript:void(0)" onClick={()=>{this.edit(record)}}>修改</a> <Divider 
-                  type="vertical"
-                />
-                <Popconfirm
-                  title="您确认删除吗？"
-                  onConfirm={()=>{this.confirmDel(record.id)}}
-                  okText="确认"
-                  cancelText="取消"
-                >
-                  <a href="javascript:void(0)">删除</a>
-                </Popconfirm>
-                 
-              </span>
-          }
-        },]
-
+    const columns = [
+      {
+        title: '编码',
+        dataIndex: 'code',
+        key: 'code',
+      },
+      {
+        title: '用户名',
+        dataIndex: 'name',
+        key: 'name',
+      },
+      {
+        title: '创建时间',
+        dataIndex: 'addTime',
+        key: 'addTime',
+      },
+      {
+        title: '修改时间',
+        dataIndex: 'updTime',
+        key: 'updTime',
+      },
+      {
+        title: '创建者',
+        dataIndex: 'addUserCode',
+        key: 'addUserCode',
+      },
+      {
+        title: '新增备注',
+        dataIndex: 'addMark',
+        key: 'addMark',
+      },
+      {
+        title: '更新者',
+        dataIndex: 'updUserCode',
+        key: 'updUserCode',
+      },
+      {
+        title: '更新备注',
+        dataIndex: 'updMark',
+        key: 'updMark',
+      },
+      {
+        title: '操作',
+        render: (text, record) => {
+          return (
+            <span>
+              <a
+                href="javascript:void(0)"
+                onClick={() => {
+                  this.details(record);
+                }}
+              >
+                详情
+              </a>{' '}
+              <Divider type="vertical" />
+              <a
+                href="javascript:void(0)"
+                onClick={() => {
+                  this.edit(record);
+                }}
+              >
+                修改
+              </a>{' '}
+              <Divider type="vertical" />
+              <Popconfirm
+                title="您确认删除吗？"
+                onConfirm={() => {
+                  this.confirmDel(record.id);
+                }}
+                okText="确认"
+                cancelText="取消"
+              >
+                <a href="javascript:void(0)">删除</a>
+              </Popconfirm>
+            </span>
+          );
+        },
+      },
+    ];
 
     return (
       <div className="container">

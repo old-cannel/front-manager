@@ -324,7 +324,7 @@ const generateModels = (param, namespace) => {
   let result = fs.readFileSync(modelsTemp, 'utf8');
   const importServer = `import {queryList,save,update,get,del} from '@/services${
     param.parentRouter
-    }${param.router}/service';`;
+  }${param.router}/service';`;
   const router = `${param.parentRouter}${param.router}`;
   //模板替换
   result = result
@@ -353,7 +353,7 @@ const generateRouter = param => {
         .toString()
         .replace('export', '')
         .replace('default', '')
-        .replace(';', ''),
+        .replace(';', '')
     );
     routerHelp(router);
     const fullPath = `${routerPath}/router.config.js`;

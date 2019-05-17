@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
-import { Input,Row,Col,Form,DatePicker,Button,Drawer,Spin, } from 'antd';
+import { Input, Row, Col, Form, DatePicker, Button, Drawer, Spin } from 'antd';
 import moment from 'moment';
-
-
 
 const FormItem = Form.Item;
 
-
-let saveLoading=false
+let saveLoading = false;
 const formItemLayout = {
   labelCol: {
     span: 8,
@@ -23,30 +20,36 @@ class Edit extends Component {
     this.state = {};
   }
 
-
   // 取消
   cancel = () => {
-    const { form: { resetFields }, onCancel } = this.props;
+    const {
+      form: { resetFields },
+      onCancel,
+    } = this.props;
     resetFields();
     if (onCancel) {
       onCancel();
     }
-
   };
 
   // 保存
   submitForm = () => {
-    saveLoading=true
-    setTimeout(()=>{saveLoading=false},1000)
-    const { form: { validateFields, resetFields }, onOk } = this.props;
+    saveLoading = true;
+    setTimeout(() => {
+      saveLoading = false;
+    }, 1000);
+    const {
+      form: { validateFields, resetFields },
+      onOk,
+    } = this.props;
     validateFields((err, values) => {
-      const data=values
+      const data = values;
       if (!err) {
         if (onOk) {
-           if (data.addTime) {
+          if (data.addTime) {
             data.addTime = moment(data.addTime).format('YYYY-MM-DD HH:mm:ss');
           }
- if (data.updTime) {
+          if (data.updTime) {
             data.updTime = moment(data.updTime).format('YYYY-MM-DD HH:mm:ss');
           }
 
@@ -56,7 +59,6 @@ class Edit extends Component {
     });
   };
 
-
   render() {
     const {
       editVisible,
@@ -65,7 +67,6 @@ class Edit extends Component {
       current,
       form: { getFieldDecorator },
     } = this.props;
-
 
     return (
       <div>
@@ -78,7 +79,7 @@ class Edit extends Component {
           visible={editVisible}
         >
           <Spin spinning={loading}>
-            <Form style={{paddingBottom:15}}>
+            <Form style={{ paddingBottom: 15 }}>
               <Row>
                 <FormItem style={{ display: 'none' }}>
                   {getFieldDecorator('id', {
@@ -88,84 +89,85 @@ class Edit extends Component {
                 <Col span="12">
                   <FormItem label="编码:" {...formItemLayout}>
                     {getFieldDecorator('code', {
-                initialValue:current.code,
-                   rules:[
-                      {"required":true,"message":"编码不能为空"}
-                   ]
-             })(<Input style={{ maxWidth: 220 }} placeholder='请输入编码' />)}
+                      initialValue: current.code,
+                      rules: [{ required: true, message: '编码不能为空' }],
+                    })(<Input style={{ maxWidth: 220 }} placeholder="请输入编码" />)}
                   </FormItem>
                 </Col>
                 <Col span="12">
                   <FormItem label="用户名:" {...formItemLayout}>
                     {getFieldDecorator('name', {
-                initialValue:current.name,
-                   rules:[
-                      {"required":true,"message":"用户名不能为空"}
-                   ]
-             })(<Input style={{ maxWidth: 220 }} placeholder='请输入用户名' />)}
+                      initialValue: current.name,
+                      rules: [{ required: true, message: '用户名不能为空' }],
+                    })(<Input style={{ maxWidth: 220 }} placeholder="请输入用户名" />)}
                   </FormItem>
                 </Col>
                 <Col span="12">
                   <FormItem label="创建时间:" {...formItemLayout}>
                     {getFieldDecorator('addTime', {
-                initialValue:current.addTime? moment(current.addTime, 'YYYY-MM-DD HH:mm:ss') : '',
-                   rules:[
-                      {"required":true,"message":"创建时间不能为空"}
-                   ]
-             })(<DatePicker showTime format="YYYY-MM-DD HH:mm:ss" style={{ width: 220 }} placeholder='请选择创建时间' />)}
+                      initialValue: current.addTime
+                        ? moment(current.addTime, 'YYYY-MM-DD HH:mm:ss')
+                        : '',
+                      rules: [{ required: true, message: '创建时间不能为空' }],
+                    })(
+                      <DatePicker
+                        showTime
+                        format="YYYY-MM-DD HH:mm:ss"
+                        style={{ width: 220 }}
+                        placeholder="请选择创建时间"
+                      />
+                    )}
                   </FormItem>
                 </Col>
                 <Col span="12">
                   <FormItem label="修改时间:" {...formItemLayout}>
                     {getFieldDecorator('updTime', {
-                initialValue:current.updTime? moment(current.updTime, 'YYYY-MM-DD HH:mm:ss') : '',
-                   rules:[
-                      {"required":true,"message":"修改时间不能为空"}
-                   ]
-             })(<DatePicker showTime format="YYYY-MM-DD HH:mm:ss" style={{ width: 220 }} placeholder='请选择修改时间' />)}
+                      initialValue: current.updTime
+                        ? moment(current.updTime, 'YYYY-MM-DD HH:mm:ss')
+                        : '',
+                      rules: [{ required: true, message: '修改时间不能为空' }],
+                    })(
+                      <DatePicker
+                        showTime
+                        format="YYYY-MM-DD HH:mm:ss"
+                        style={{ width: 220 }}
+                        placeholder="请选择修改时间"
+                      />
+                    )}
                   </FormItem>
                 </Col>
                 <Col span="12">
                   <FormItem label="创建者:" {...formItemLayout}>
                     {getFieldDecorator('addUserCode', {
-                initialValue:current.addUserCode,
-                   rules:[
-                      {"required":true,"message":"创建者不能为空"}
-                   ]
-             })(<Input style={{ maxWidth: 220 }} placeholder='请输入创建者' />)}
+                      initialValue: current.addUserCode,
+                      rules: [{ required: true, message: '创建者不能为空' }],
+                    })(<Input style={{ maxWidth: 220 }} placeholder="请输入创建者" />)}
                   </FormItem>
                 </Col>
                 <Col span="12">
                   <FormItem label="新增备注:" {...formItemLayout}>
                     {getFieldDecorator('addMark', {
-                initialValue:current.addMark,
-                   rules:[
-                      {"required":true,"message":"新增备注不能为空"}
-                   ]
-             })(<Input style={{ maxWidth: 220 }} placeholder='请输入新增备注' />)}
+                      initialValue: current.addMark,
+                      rules: [{ required: true, message: '新增备注不能为空' }],
+                    })(<Input style={{ maxWidth: 220 }} placeholder="请输入新增备注" />)}
                   </FormItem>
                 </Col>
                 <Col span="12">
                   <FormItem label="更新者:" {...formItemLayout}>
                     {getFieldDecorator('updUserCode', {
-                initialValue:current.updUserCode,
-                   rules:[
-                      {"required":true,"message":"更新者不能为空"}
-                   ]
-             })(<Input style={{ maxWidth: 220 }} placeholder='请输入更新者' />)}
+                      initialValue: current.updUserCode,
+                      rules: [{ required: true, message: '更新者不能为空' }],
+                    })(<Input style={{ maxWidth: 220 }} placeholder="请输入更新者" />)}
                   </FormItem>
                 </Col>
                 <Col span="12">
                   <FormItem label="更新备注:" {...formItemLayout}>
                     {getFieldDecorator('updMark', {
-                initialValue:current.updMark,
-                   rules:[
-                      {"required":true,"message":"更新备注不能为空"}
-                   ]
-             })(<Input style={{ maxWidth: 220 }} placeholder='请输入更新备注' />)}
+                      initialValue: current.updMark,
+                      rules: [{ required: true, message: '更新备注不能为空' }],
+                    })(<Input style={{ maxWidth: 220 }} placeholder="请输入更新备注" />)}
                   </FormItem>
                 </Col>
-
               </Row>
             </Form>
           </Spin>

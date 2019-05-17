@@ -1,6 +1,5 @@
 import { Component } from 'react';
 
-
 import { connect } from 'dva';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import List from './List';
@@ -9,8 +8,7 @@ import List from './List';
   pageKey: systest.pageKey,
 }))
 class Ledger extends Component {
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   render() {
     const { pageKey } = this.props;

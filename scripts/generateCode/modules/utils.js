@@ -200,7 +200,7 @@ const renderEditFormItem = (item, editLength) => {
   if (editLength < 6) {
     colTemp = `<Col span="24">`;
   }
-  const componentType=item.component.type;
+  const componentType = item.component.type;
   switch (componentType) {
     case 'Input':
       formItem = `${colTemp}
@@ -211,43 +211,43 @@ const renderEditFormItem = (item, editLength) => {
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
              })(<Input ${
-        checkLength ? (maxLength = { length }) : ''
-        } style={{ maxWidth: 220 }} placeholder='请输入${item.columnName}'/>)}
+               checkLength ? (maxLength = { length }) : ''
+             } style={{ maxWidth: 220 }} placeholder='请输入${item.columnName}'/>)}
          </FormItem>
       </Col>\r\n`;
       break;
-    case "DatePicker_date":
+    case 'DatePicker_date':
       formItem = `${colTemp}
          <FormItem label="${item.columnName}:" {...formItemLayout}>
             {getFieldDecorator('${item.javaName}', {
                 initialValue:current.${item.javaName}? moment(current.${
         item.javaName
-        }, 'YYYY-MM-DD') : '',
+      }, 'YYYY-MM-DD') : '',
                    rules:[
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
              })(<DatePicker format="YYYY-MM-DD" style={{ width: 220 }} placeholder='请选择${
-        item.columnName
-        }'/>)}
+               item.columnName
+             }'/>)}
          </FormItem>
       </Col>\r\n`;
       dataHandle += ` if (data.${item.javaName}) {
             data.${item.javaName} = moment(data.${item.javaName}).format('YYYY-MM-DD');
           }\r\n`;
       break;
-    case "DatePicker_datetime":
+    case 'DatePicker_datetime':
       formItem = `${colTemp}
          <FormItem label="${item.columnName}:" {...formItemLayout}>
             {getFieldDecorator('${item.javaName}', {
                 initialValue:current.${item.javaName}? moment(current.${
         item.javaName
-        }, 'YYYY-MM-DD HH:mm:ss') : '',
+      }, 'YYYY-MM-DD HH:mm:ss') : '',
                    rules:[
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
              })(<DatePicker showTime format="YYYY-MM-DD HH:mm:ss" style={{ width: 220 }} placeholder='请选择${
-        item.columnName
-        }'/>)}
+               item.columnName
+             }'/>)}
          </FormItem>
       </Col>\r\n`;
       dataHandle += ` if (data.${item.javaName}) {
@@ -258,7 +258,6 @@ const renderEditFormItem = (item, editLength) => {
       break;
   }
   return [formItem, dataHandle];
-
 };
 
 /**
@@ -289,9 +288,9 @@ const renderFilterFormItem = (item, editLength) => {
   const message = `${item.columnName}不能为空`;
   let formItem = '';
   let dataHandle = '';
-  const componentType=item.component.type
+  const componentType = item.component.type;
   switch (componentType) {
-    case "Input":
+    case 'Input':
       formItem = `<Col xxl={{ span: 7 }} md={{ span: 7 }}>
          <FilterItem label="${item.columnName}:" >
             {getFieldDecorator('${item.javaName}', {
@@ -299,7 +298,7 @@ const renderFilterFormItem = (item, editLength) => {
          </FilterItem>
       </Col>\r\n`;
       break;
-    case "DatePicker_date":
+    case 'DatePicker_date':
       formItem = `<Col xxl={{ span: 9 }} md={{ span: 9 }}>
         <FilterItem label="${item.columnName}:">
                 {getFieldDecorator('${item.javaName}', {
@@ -310,14 +309,14 @@ const renderFilterFormItem = (item, editLength) => {
         searchParam.${item.javaName}Search=[]
         searchParam.${item.javaName}Search[0] = moment(searchParam.${
         item.javaName
-        }[0]).format('YYYY-MM-DD');
+      }[0]).format('YYYY-MM-DD');
         searchParam.${item.javaName}Search[1] = moment(searchParam.${
         item.javaName
-        }[1]).format('YYYY-MM-DD');
+      }[1]).format('YYYY-MM-DD');
         searchParam.${item.javaName}=''
       }\r\n`;
       break;
-    case "DatePicker_datetime":
+    case 'DatePicker_datetime':
       formItem = `<Col xxl={{ span: 9 }} md={{ span: 9 }}>
          <FilterItem label="${item.columnName}:">
                 {getFieldDecorator('${item.javaName}', {
@@ -328,10 +327,10 @@ const renderFilterFormItem = (item, editLength) => {
         searchParam.${item.javaName}Search=[]
         searchParam.${item.javaName}Search[0] = moment(searchParam.${
         item.javaName
-        }[0]).format('YYYY-MM-DD HH:mm:ss');
+      }[0]).format('YYYY-MM-DD HH:mm:ss');
         searchParam.${item.javaName}Search[1] = moment(searchParam.${
         item.javaName
-        }[1]).format('YYYY-MM-DD HH:mm:ss');
+      }[1]).format('YYYY-MM-DD HH:mm:ss');
         searchParam.${item.javaName}=''
       }\r\n`;
       break;
