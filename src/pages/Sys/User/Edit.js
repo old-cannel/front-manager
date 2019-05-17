@@ -70,7 +70,6 @@ class Edit extends Component {
           width={740}
           title={editTitle}
           placement="right"
-          closable={false}
           onClose={this.cancel}
           visible={editVisible}
         >
