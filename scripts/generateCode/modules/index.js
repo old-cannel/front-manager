@@ -297,15 +297,24 @@ const generateIndex = (param, namespace) => {
 const generateService = (param, namespace) => {
   let result = fs.readFileSync(serverTemp, 'utf8');
 
+  // const queryListUrl =
+  //   '`${APIPREX}/' +
+  //   namespace +
+  //   '/list' +
+  //   '?size=${params.size}&current=${params.current}&limit=${params.limit?params.limit:10}`';
+  // const saveUrl = '`${APIPREX}/' + namespace + '/save`';
+  // const updateUrl = '`${APIPREX}/' + namespace + '/update`';
+  // const getUrl = '`${APIPREX}/' + namespace + '/get/${params.id}`';
+  // const delUrl = '`${APIPREX}/' + namespace + '/del`';
+
   const queryListUrl =
     '`${APIPREX}/' +
     namespace +
-    '/list' +
     '?size=${params.size}&current=${params.current}&limit=${params.limit?params.limit:10}`';
-  const saveUrl = '`${APIPREX}/' + namespace + '/save`';
+  const saveUrl = '`${APIPREX}/' + namespace + '/add`';
   const updateUrl = '`${APIPREX}/' + namespace + '/update`';
-  const getUrl = '`${APIPREX}/' + namespace + '/get/${params.id}`';
-  const delUrl = '`${APIPREX}/' + namespace + '/del`';
+  const getUrl = '`${APIPREX}/' + namespace + '/${params.id}`';
+  const delUrl = '`${APIPREX}/' + namespace + '`';
 
   //模板替换
   result = result
