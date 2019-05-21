@@ -63,7 +63,7 @@ class StandardTable extends PureComponent {
 
   render() {
     const { selectedRowKeys, needTotalList } = this.state;
-    const { data = {}, rowKey, ...rest } = this.props;
+    const { data = {}, rowKey,selecter = true, ...rest } = this.props;
     const { list = [], pagination } = data;
 
     const paginationProps = {
@@ -82,6 +82,7 @@ class StandardTable extends PureComponent {
 
     return (
       <div className={styles.standardTable}>
+        {selecter && (
         <div className={styles.tableAlert}>
           <Alert
             message={
@@ -105,6 +106,7 @@ class StandardTable extends PureComponent {
             showIcon
           />
         </div>
+        )}
         <Table
           rowKey={rowKey || 'key'}
           rowSelection={rowSelection}

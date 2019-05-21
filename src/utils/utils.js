@@ -199,6 +199,7 @@ export const importCDN = (url, name) =>
  * @param data 代码生成数据
  */
 export const generateCode = data => {
+  debugger
   const url = 'http://localhost:9229/createFile';
   return umiRequest(url, {
     method: 'post',
