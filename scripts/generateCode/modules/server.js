@@ -25,7 +25,6 @@ const generateService = param => {
     str += item;
   });
   const path = `../../src/services/${tableName}/${tableName}.js`;
-  debugger;
   return [path, str];
 };
 

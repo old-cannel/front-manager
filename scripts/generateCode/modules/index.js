@@ -1,26 +1,29 @@
-const bashPath = 'E:/something/work/simpo/front-manager';
+const fs = require('fs');
+const process = require('process');
+const utils = require('./utils.js');
+
+//项目跟路径
+const bashPath = process.cwd();
 
 //组件页面位置 和 models
 const pagesPath = `${bashPath}/src/pages`;
 //service 文件位置
 const serverPath = `${bashPath}/src/services`;
 
-const routerPath = 'E:/something/work/simpo/front-manager/config';
+const routerPath = `${bashPath}/config`;
 
 //菜单名称 国际化处理
 const menuLocales = [
   {
     type: 'zh-CN',
-    path: 'E:/something/work/simpo/front-manager/src/locales/zh-CN',
+    path: `${bashPath}/src/locales/zh-CN`,
   },
   {
     type: 'en-US',
-    path: 'E:/something/work/simpo/front-manager/src/locales/en-US',
+    path: `${bashPath}/src/locales/en-US`,
   },
 ];
 
-const fs = require('fs');
-const utils = require('./utils.js');
 const filterTemp = './scripts/generateCode/modules/template/filterTemp.js';
 const listTemp = './scripts/generateCode/modules/template/listTemp.js';
 const editTemp = './scripts/generateCode/modules/template/editTemp.js';
@@ -354,7 +357,7 @@ const generateRouter = param => {
   if (param.hasPage === '1') {
     componentPath = '.' + utils.resetPath(`pages${fullRouter}`).replace('pages', '') + 'index';
   }
-  const routerName = fullRouter.substring(1, fullRouter.length).replace(/\//g, '.');
+  const routerName = currentRouter.substring(1, fullRouter.length).replace(/\//g, '.');
 
   utils.getDataFile(`${routerPath}/router.config.js`, data => {
     let router = eval(
