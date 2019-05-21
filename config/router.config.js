@@ -3,8 +3,15 @@ export default [
     path: '/user',
     component: '../layouts/UserLayout',
     routes: [
-      { path: '/user', redirect: '/user/login' },
-      { path: '/user/login', name: 'login', component: './User/Login' },
+      {
+        path: '/user',
+        redirect: '/user/login',
+      },
+      {
+        path: '/user/login',
+        name: 'login',
+        component: './User/Login',
+      },
       { component: '404' },
     ],
   },
@@ -13,11 +20,20 @@ export default [
     component: '../layouts/BasicLayout',
     Routes: ['src/pages/Authorized'],
     routes: [
-      { path: '/', redirect: '/' },
+      {
+        path: '/',
+        redirect: '/',
+      },
       {
         path: '/sys',
         name: 'sys',
-        routes: [{ path: '/sys/test', name: 'test', component: './Sys/Test/index' }],
+        routes: [
+          {
+            path: '/sys/test',
+            name: 'test',
+            component: './Sys/Test/index',
+          },
+        ],
       },
       {
         name: 'exception',

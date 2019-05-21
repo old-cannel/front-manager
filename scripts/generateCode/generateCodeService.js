@@ -198,22 +198,21 @@ http
     try {
       const pathName = url.parse(request.url).pathname;
       if (pathName === '/createFile') {
-        generate.generateCodeHandle(data);
+        //generate.generateCodeHandle(data);
 
-        // let data=""
-        // request.on('data',  (chunk)=>{
-        //   data += chunk;
-        //   generateCodeHandle(JSON.parse(data));
-        // });
+        let data = '';
+        request.on('data', chunk => {
+          data += chunk;
+          generate.generateCodeHandle(JSON.parse(data));
+          response.writeHead(200, { 'Content-Type': 'text/plain' });
+          response.write('successful');
+          response.end();
+        });
       }
-
-      // chrome-devtools://devtools/bundled/inspector.html?experiments=true&v8only=true&ws=127.0.0.1:9229/6d9718e6-f366-4675-aff0-826def458b08
-
-      response.writeHead(200, { 'Content-Type': 'text/plain' });
-      response.write('Hello World');
-      response.end();
     } catch (e) {
       console.log(e);
     }
   })
   .listen(9229);
+
+// chrome-devtools://devtools/bundled/inspector.html?experiments=true&v8only=true&ws=127.0.0.1:9229/6d9718e6-f366-4675-aff0-826def458b08

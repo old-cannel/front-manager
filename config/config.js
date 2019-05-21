@@ -89,6 +89,12 @@ export default {
       changeOrigin: true,
       pathRewrite: { '^/pipe-gallery': '/pipe-gallery' },
     },
+    //代码生成代理
+    '/createFile': {
+      target: 'http://localhost:9229',
+      changeOrigin: true,
+      pathRewrite: { '^/createFile': '/createFile' },
+    },
   },
   ignoreMomentLocale: true,
   lessLoaderOptions: {

@@ -2,6 +2,7 @@ import moment from 'moment';
 import React from 'react';
 import nzh from 'nzh/cn';
 import { parse, stringify } from 'qs';
+import umiRequest from 'umi-request';
 
 export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
@@ -192,3 +193,16 @@ export const importCDN = (url, name) =>
     };
     document.head.appendChild(dom);
   });
+
+/**
+ * 生成代码调用
+ * @param data 代码生成数据
+ */
+export const generateCode = data => {
+  const url = 'http://localhost:9229/createFile';
+  return umiRequest(url, {
+    method: 'post',
+    data: JSON.stringify(data),
+    requestType: 'json',
+  });
+};
