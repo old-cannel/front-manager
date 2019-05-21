@@ -203,6 +203,7 @@ const renderEditFormItem = (item, editLength) => {
   const componentType = item.component.type;
   switch (componentType) {
     case 'Input':
+      const lengthStr = checkLength ? `maxLength={${length}}` : '';
       formItem = `${colTemp}
          <FormItem label="${item.columnName}:" {...formItemLayout}>
             {getFieldDecorator('${item.javaName}', {
@@ -210,9 +211,9 @@ const renderEditFormItem = (item, editLength) => {
                    rules:[
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
-             })(<Input ${
-               checkLength ? (maxLength = { length }) : ''
-             } style={{ maxWidth: 220 }} placeholder='请输入${item.columnName}'/>)}
+             })(<Input ${lengthStr} style={{ maxWidth: 220 }} placeholder='请输入${
+        item.columnName
+      }'/>)}
          </FormItem>
       </Col>\r\n`;
       break;
