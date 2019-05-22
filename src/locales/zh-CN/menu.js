@@ -46,5 +46,4 @@ export default {
 
   'menu.sys.test': '用户管理',
   'menu.auto': '生成代码管理',
-  'menu.auto.frame': '生成代码',
-}
+  'menu.auto.frame': '生成代码',}

@@ -42,6 +42,20 @@ class ClassForm extends React.Component {
     });
   };
 
+  //字段名称输入
+  columnNameChange = (e,text,record) => {
+    const {columnList=[] } = this.state;
+    for(let i=0; i<columnList.length; i++) {
+      if(columnList[i].tableColumn==record.tableColumn) {
+        columnList[i][text] = e.target.value;
+        break;
+      }
+    }
+    this.setState({
+      columnList,
+    });
+  };
+
   //下拉选项
   selectList = (text, record, type) => {
     return <Select style={{width:'90%'}} getPopupContainer={triggerNode => triggerNode.parentNode}
@@ -148,6 +162,20 @@ class ClassForm extends React.Component {
         tempEngValue:""
       })
     }
+  };
+
+  initState =() => {
+    this.setState({
+      parentRouter:"",
+      router:"",
+      chinaValue:"",
+      engValue:"",
+      tempParentRouter:"",
+      tempRouter:"",
+      tempChinaValue:"",
+      tempEngValue:"",
+      columnList:[]
+    });
   };
 
   render = () => {
@@ -325,6 +353,12 @@ class ClassForm extends React.Component {
       dataIndex: 'columnType',
       key:'columnType',
     }, {
+      title: '字段名称',
+      dataIndex: 'columnName',
+      key:'columnName',
+      render:(text,record)=><Input style={{width:'60%'}}
+                                   value={text} onChange={e=>{this.columnNameChange(e,"columnName",record)}}/>
+    },{
       title: '字段长度',
       dataIndex: 'columnLength',
       key:'columnLength',
@@ -369,11 +403,6 @@ class ClassForm extends React.Component {
       key:'queryFlag',
       render: (text,record) => this.selectList(text,record,"queryFlag"),
     },{
-      title: '是否共通字段',
-      dataIndex: 'publicFlag',
-      key:'publicFlag',
-      render: (text,record) => this.selectList(text,record,"publicFlag"),
-    },{
       title: '排序',
       dataIndex: 'sort',
       key:'sort',
@@ -395,6 +424,11 @@ class ClassForm extends React.Component {
         <Option value={"DatePicker_datetime"}>DatePicker_datetime</Option>
       </Select>),
     }];
+
+
+    if(hasPage=="" && tempParentRouter){
+      this.initState();
+    }
     return (
       <Drawer {...drawerProps} onClose={closeDrawer} destroyOnClose>
         <Form {...formItemLayout} style={tableStyle}>
