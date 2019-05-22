@@ -1,6 +1,6 @@
 import request from '@/utils/request';
 
-const APIPREX = '/pipe-gallery';
+const APIPREX = '/api/auto';
 
 
 //分页
