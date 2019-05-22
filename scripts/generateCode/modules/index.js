@@ -297,8 +297,9 @@ const generateIndex = (param, namespace) => {
 };
 
 //生成service页面
-const generateService = (param, namespace) => {
+const generateService = param => {
   let result = fs.readFileSync(serverTemp, 'utf8');
+  const baseReqUrl = `${param.parentRouter}${param.router}`;
 
   // const queryListUrl =
   //   '`${APIPREX}/' +
@@ -311,13 +312,13 @@ const generateService = (param, namespace) => {
   // const delUrl = '`${APIPREX}/' + namespace + '/del`';
 
   const queryListUrl =
-    '`${APIPREX}/' +
-    namespace +
+    '`${APIPREX}' +
+    baseReqUrl +
     '?size=${params.size}&current=${params.current}&limit=${params.limit?params.limit:10}`';
-  const saveUrl = '`${APIPREX}/' + namespace + '/add`';
-  const updateUrl = '`${APIPREX}/' + namespace + '/update`';
-  const getUrl = '`${APIPREX}/' + namespace + '/${params.id}`';
-  const delUrl = '`${APIPREX}/' + namespace + '`';
+  const saveUrl = '`${APIPREX}' + baseReqUrl + '/add`';
+  const updateUrl = '`${APIPREX}' + baseReqUrl + '/update`';
+  const getUrl = '`${APIPREX}' + baseReqUrl + '/${params.id}`';
+  const delUrl = '`${APIPREX}' + baseReqUrl + '`';
 
   //模板替换
   result = result
