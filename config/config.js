@@ -84,10 +84,10 @@ export default {
     'primary-color': primaryColor,
   },
   proxy: {
-    '/pipe-gallery': {
-      target: 'http://localhost:67',
+    '/api/auto': {
+      target: 'http://localhost:88',
       changeOrigin: true,
-      pathRewrite: { '^/pipe-gallery': '/pipe-gallery' },
+      pathRewrite: { '^/api': '' },
     },
     //代码生成代理
     '/createFile': {

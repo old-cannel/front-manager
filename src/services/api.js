@@ -1,5 +1,6 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
+const API_PREX = `/api/auto`;
 
 export async function queryProjectNotice() {
   return request('/api/project/notice');
@@ -124,3 +125,16 @@ export async function queryNotices(params = {}) {
 export async function getFakeCaptcha(mobile) {
   return request(`/api/captcha?mobile=${mobile}`);
 }
+
+const Api = {
+  auto: {
+    pages: `${API_PREX}/auto/completeList`,
+    del: `${API_PREX}/auto/del/`,
+    tableList:`${API_PREX}/auto/tableList`,
+    tableColumnList:`${API_PREX}/auto/tableColumnList`,
+    add:`${API_PREX}/auto/tableInfoSave`,
+    check:`${API_PREX}/auto/checkRouter`,
+  },
+};
+
+export default Api;

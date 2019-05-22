@@ -5,6 +5,7 @@
 import { extend } from 'umi-request';
 import { notification } from 'antd';
 import router from 'umi/router';
+import { isAntdPro } from './utils';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -66,11 +67,15 @@ const errorHandler = error => {
  */
 const request = extend({
   headers: {
-    Authorization:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsInZhbGlkVGltZSI6IjE1NTg0MTQ3NzcxOTgiLCJ0aW1lT3V0IjoiMTU1ODQwNzU3NzIwNCJ9.eyJjb2RlIjoiMSIsImFkZFRpbWUiOjE1NTQyNzgyNDYwMDAsIm5vbkxvY2tlZCI6dHJ1ZSwic3JjT3JnQ29kZSI6IjEiLCJjcmVkZW50aWFsc05vbkV4cGlyZWQiOnRydWUsImFkZE1hcmsiOiIxIiwiZnVsbE5hbWUiOiJhZG1pbiIsInRlbXBQcm9qY2V0Tm9zIjoiNDMwMDQsMSw0MzAwMiw0MzAwMyw0MzAwMSIsImRlbEZsYWciOiIwIiwidXNlck5hbWUiOiJhZG1pbiIsInByb2plY3ROb3MiOlsiNDMwMDQiLCIxIiwiNDMwMDIiLCI0MzAwMyIsIjQzMDAxIl0sImVuYWJsZWQiOnRydWUsIm1vYmlsZU51bSI6IjEzODU2Nzg1Njc4Iiwid29ya051bSI6IjAwMSIsIm5vbkV4cGlyZWQiOnRydWUsImFjY291bnROb25FeHBpcmVkIjp0cnVlLCJhZGRVc2VyQ29kZSI6IjEiLCJpZCI6IjEiLCJhZG1pbkZsYWciOiIxIiwiYWNjb3VudE5vbkxvY2tlZCI6dHJ1ZSwidXNlcm5hbWUiOiJhZG1pbiJ9.kUg4sK8DQ0YoN_ANZ-wMSczso9mKNs5edO9GonfpZ1g',
-    'Content-Type': 'application/json; charset=utf-8',
+    "Content-Type":'application/json; charset=utf-8', // unified headers
+    "Accept":"application/json",
+    // Authorization:
+    //   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsInZhbGlkVGltZSI6IjE1NTgwOTExMDEwMjYiLCJ0aW1lT3V0IjoiMTU1ODA4MzkwMTAyNiJ9.eyJjb2RlIjoiMSIsImFkZFRpbWUiOjE1NTQyNzgyNDYwMDAsIm5vbkxvY2tlZCI6dHJ1ZSwic3JjT3JnQ29kZSI6IjEiLCJjcmVkZW50aWFsc05vbkV4cGlyZWQiOnRydWUsImFkZE1hcmsiOiIxIiwiZnVsbE5hbWUiOiJhZG1pbiIsInRlbXBQcm9qY2V0Tm9zIjoiNDMwMDQsMSw0MzAwMiw0MzAwMyw0MzAwMSIsImRlbEZsYWciOiIwIiwidXNlck5hbWUiOiJhZG1pbiIsInByb2plY3ROb3MiOlsiNDMwMDQiLCIxIiwiNDMwMDIiLCI0MzAwMyIsIjQzMDAxIl0sImVuYWJsZWQiOnRydWUsIm1vYmlsZU51bSI6IjEzODU2Nzg1Njc4Iiwid29ya051bSI6IjAwMSIsIm5vbkV4cGlyZWQiOnRydWUsImFjY291bnROb25FeHBpcmVkIjp0cnVlLCJhZGRVc2VyQ29kZSI6IjEiLCJpZCI6IjEiLCJhZG1pbkZsYWciOiIxIiwiYWNjb3VudE5vbkxvY2tlZCI6dHJ1ZSwidXNlcm5hbWUiOiJhZG1pbiJ9.JERHem5EbsooF1qTlXE0gusfO2EYY9_8rMuZFk4C9IA',
+    // 'Content-Type': 'application/json; charset=utf-8',
   },
-  errorHandler, // 默认错误处理
+  // errorHandler, // 默认错误处理
+  credentials: 'include', // 默认请求是否带上cookie
+  expirys:isAntdPro(),
 });
 
 export default request;
