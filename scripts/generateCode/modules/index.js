@@ -317,7 +317,7 @@ const generateAdd = (param, namespace) => {
   let formItemStr = '';
   let dateHandle = '';
   param.tableInfo.forEach(item => {
-    if (item.insertFlag === '1') {
+    if (item.insertFlag === '1' && item.publicFlag === '0') {
       const createRes = utils.renderAddFormItem(item, editLength);
       formItemStr += createRes[0];
       dateHandle += createRes[1];
