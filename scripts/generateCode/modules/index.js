@@ -403,9 +403,7 @@ const generateService = param => {
   const baseReqUrl = `${param.parentRouter}${param.router}`;
 
   const queryListUrl =
-    '`${APIPREX}' +
-    baseReqUrl +
-    '?size=${params.size}&current=${params.current}&limit=${params.limit?params.limit:10}`';
+    '`${APIPREX}' + baseReqUrl + '?size=${params.size?params.size:10}&current=${params.current}`';
   const saveUrl = '`${APIPREX}' + baseReqUrl + '/add`';
   const updateUrl = '`${APIPREX}' + baseReqUrl + '/update`';
   const getUrl = '`${APIPREX}' + baseReqUrl + '/${params.id}`';

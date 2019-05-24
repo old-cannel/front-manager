@@ -26,13 +26,13 @@ export default {
   effects: {
     //分页list
     * queryList({ payload = {} }, { call, put }) {
-      const page = { size: 10, current: 1, limit: 10 };
-      payload = { ...page, ...payload };
-      const { code, result } = yield call(queryList, payload);
+      const page = { size: 10, current: 1 };
+      let param = { ...page, ...payload };
+      const { code, result } = yield call(queryList, param);
       if (result && code === 10000) {
         const pagination = {
-          current: payload ? Number(payload.current) : 1,
-          pageSize: payload ? Number(payload.size) : 10,
+          current: param ? Number(param.current) : 1,
+          pageSize: param ? Number(param.size) : 10,
           total: result.total,
         };
         yield put({ type: 'updateState', payload: { list: result.records, pagination } });
