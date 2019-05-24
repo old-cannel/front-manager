@@ -7,7 +7,6 @@ const initState = {
   current: {},
   pagination: {},//分页
 
-  editLoading: false,//编辑页面loading
 };
 
 export default {

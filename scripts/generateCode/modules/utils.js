@@ -262,6 +262,76 @@ const renderEditFormItem = (item, editLength) => {
 };
 
 /**
+ * 新增页面 表单
+ * @param item
+ */
+const renderAddFormItem = (item, editLength) => {
+  const notNullFlag = item.notNullFlag === '1';
+  const checkLength = item.columnLength && item.columnLength !== '';
+  const length = item.columnLength;
+  const message = `${item.columnName}不能为空`;
+  let formItem = '';
+  let dataHandle = '';
+
+  let colTemp = `<Col span="12">`;
+  if (editLength < 6) {
+    colTemp = `<Col span="24">`;
+  }
+  const componentType = item.component.type;
+  switch (componentType) {
+    case 'Input':
+      const lengthStr = checkLength ? `maxLength={${length}}` : '';
+      formItem = `${colTemp}
+         <FormItem label="${item.columnName}:" {...formItemLayout}>
+            {getFieldDecorator('${item.javaName}', {
+                   rules:[
+                      ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
+                   ]
+             })(<Input ${lengthStr} style={{ maxWidth: 220 }} placeholder='请输入${
+        item.columnName
+      }'/>)}
+         </FormItem>
+      </Col>\r\n`;
+      break;
+    case 'DatePicker_date':
+      formItem = `${colTemp}
+         <FormItem label="${item.columnName}:" {...formItemLayout}>
+            {getFieldDecorator('${item.javaName}',
+                   rules:[
+                      ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
+                   ]
+             })(<DatePicker format="YYYY-MM-DD" style={{ width: 220 }} placeholder='请选择${
+               item.columnName
+             }'/>)}
+         </FormItem>
+      </Col>\r\n`;
+      dataHandle += ` if (data.${item.javaName}) {
+            data.${item.javaName} = moment(data.${item.javaName}).format('YYYY-MM-DD');
+          }\r\n`;
+      break;
+    case 'DatePicker_datetime':
+      formItem = `${colTemp}
+         <FormItem label="${item.columnName}:" {...formItemLayout}>
+            {getFieldDecorator('${item.javaName}', {
+                   rules:[
+                      ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
+                   ]
+             })(<DatePicker showTime format="YYYY-MM-DD HH:mm:ss" style={{ width: 220 }} placeholder='请选择${
+               item.columnName
+             }'/>)}
+         </FormItem>
+      </Col>\r\n`;
+      dataHandle += ` if (data.${item.javaName}) {
+            data.${item.javaName} = moment(data.${item.javaName}).format('YYYY-MM-DD HH:mm:ss');
+          }\r\n`;
+      break;
+    default:
+      break;
+  }
+  return [formItem, dataHandle];
+};
+
+/**
  * 生成详情页面item
  * @param item
  * @param editLength
@@ -381,4 +451,5 @@ module.exports = {
   renderFilterFormItem,
   renderDetailsItem,
   getDataFile,
+  renderAddFormItem,
 };

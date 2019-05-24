@@ -4,7 +4,6 @@ import DescriptionList from '@/components/DescriptionList';
 #{IMPORTDYNAMIC}
 const { Description } = DescriptionList;
 
-
 class Detail extends Component {
   constructor(props) {
     super(props);
@@ -25,7 +24,7 @@ class Detail extends Component {
 
   render() {
     const {
-      detailVisible,
+      visible,
       current,
       loading
     } = this.props;
@@ -38,7 +37,7 @@ class Detail extends Component {
           width={#{DRAWERWIDTH}}
           placement="right"
           onClose={this.cancel}
-          visible={detailVisible}
+          visible={visible}
         >
           <Spin  spinning={loading}>
               #{DETAILSITEM}

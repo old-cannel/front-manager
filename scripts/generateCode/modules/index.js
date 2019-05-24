@@ -26,6 +26,7 @@ const menuLocales = [
 
 const filterTemp = './scripts/generateCode/modules/template/filterTemp.js';
 const listTemp = './scripts/generateCode/modules/template/listTemp.js';
+const addTemp = './scripts/generateCode/modules/template/addTemp.js';
 const editTemp = './scripts/generateCode/modules/template/editTemp.js';
 const detailsTemp = './scripts/generateCode/modules/template/detailsTemp.js';
 const indexTemp = './scripts/generateCode/modules/template/indexTemp.js';
@@ -49,6 +50,8 @@ const generateCodeHandle = param => {
   generateFactory(param, 'list');
   //生成编辑页面
   generateFactory(param, 'edit');
+  //生成新增页面
+  generateFactory(param, 'add');
   //生成详情页面
   generateFactory(param, 'details');
   //生成入口文件 index.js
@@ -75,6 +78,9 @@ const generateFactory = (param, type) => {
         break;
       case 'list':
         switchStrategy = generateList;
+        break;
+      case 'add':
+        switchStrategy = generateAdd;
         break;
       case 'edit':
         switchStrategy = generateEdit;
@@ -203,7 +209,7 @@ const generateList = (param, namespace) => {
   return [path, fileName, result];
 };
 
-//生成编辑页面 注：编辑页面可能存在其他页面调用情况 生成模板不绑定namespace
+//生成编辑页面
 const generateEdit = (param, namespace) => {
   let result = fs.readFileSync(editTemp, 'utf8');
   //react 引入
@@ -250,6 +256,56 @@ const generateEdit = (param, namespace) => {
 
   const path = `${pagesPath}${param.parentRouter}${param.router}`;
   const fileName = 'Edit.js';
+  return [path, fileName, result];
+};
+
+//生成新增页面
+const generateAdd = (param, namespace) => {
+  let result = fs.readFileSync(addTemp, 'utf8');
+  //react 引入
+  let importTemp = '';
+
+  //其他模块引入
+  let importDynamic = '';
+  //定义常量
+  let constant = '';
+
+  //FilterItem
+  let importFilterItem = '';
+
+  //如果编辑框小于6个 一行一个 大于一行2个显示
+  const editLength = param.tableInfo.filter(editItem => editItem.editFlag === '1').length;
+  const drawerWidth = editLength < 6 ? 550 : 740;
+
+  //生成编辑页面表单
+  let formItemStr = '';
+  let dateHandle = '';
+  param.tableInfo.forEach(item => {
+    if (item.insertFlag === '1') {
+      const createRes = utils.renderAddFormItem(item, editLength);
+      formItemStr += createRes[0];
+      dateHandle += createRes[1];
+    }
+  });
+
+  //模板替换
+  result = result
+    .replace('#{DRAWERWIDTH}', drawerWidth)
+    .replace('#{IMPORTFILTERITEM}', formItemStr)
+    .replace('#{DATEHANDLE}', dateHandle)
+    .replace(/#{NAMESPACE}/g, namespace);
+  //动态import antd 模块
+  const importAd = utils.importAD(result);
+  result = result.replace('#{IMPORTANTD}', importAd);
+  //动态import dynamicImport 模块
+  const importDyn = utils.dynamicImport(result);
+  result = result.replace('#{IMPORTDYNAMIC}', importDyn);
+  //动态常量引入
+  const dynamicConstant = utils.dynamicConstant(result);
+  result = result.replace('#{CONSTANT}', dynamicConstant);
+
+  const path = `${pagesPath}${param.parentRouter}${param.router}`;
+  const fileName = 'Add.js';
   return [path, fileName, result];
 };
 
@@ -300,16 +356,6 @@ const generateIndex = (param, namespace) => {
 const generateService = param => {
   let result = fs.readFileSync(serverTemp, 'utf8');
   const baseReqUrl = `${param.parentRouter}${param.router}`;
-
-  // const queryListUrl =
-  //   '`${APIPREX}/' +
-  //   namespace +
-  //   '/list' +
-  //   '?size=${params.size}&current=${params.current}&limit=${params.limit?params.limit:10}`';
-  // const saveUrl = '`${APIPREX}/' + namespace + '/save`';
-  // const updateUrl = '`${APIPREX}/' + namespace + '/update`';
-  // const getUrl = '`${APIPREX}/' + namespace + '/get/${params.id}`';
-  // const delUrl = '`${APIPREX}/' + namespace + '/del`';
 
   const queryListUrl =
     '`${APIPREX}' +

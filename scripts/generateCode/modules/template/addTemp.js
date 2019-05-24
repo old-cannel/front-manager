@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 #{IMPORTANTD}
 #{IMPORTDYNAMIC}
 #{CONSTANT}
+
+
 const formItemLayout = {
   labelCol: {
     span: 8,
@@ -11,7 +13,7 @@ const formItemLayout = {
   },
 };
 
-class Edit extends Component {
+class Add extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -32,17 +34,17 @@ class Edit extends Component {
 
   //保存
   submitForm = () => {
-    this.setState({loading:true})
+    this.setState({ loading: true });
     const { form: { validateFields, resetFields }, onOk } = this.props;
     validateFields((err, values) => {
       let data = values;
       if (!err) {
         if (onOk) {
           #{DATEHANDLE}
-          onOk(data, ()=>{this.setState({loading:false})});
+          onOk(data,()=>{this.setState({loading:false})});
         }
       }else{
-        this.setState({loading:false})
+        this.setState({ loading: false });
       }
     });
   };
@@ -51,30 +53,27 @@ class Edit extends Component {
   render() {
     const {
       visible,
-      current,
+      onCancel,
       form: { getFieldDecorator },
     } = this.props;
-    const { loading } = this.state;
 
+    const { loading } = this.state;
 
     return (
       <div>
         <Drawer
           maskClosable={false}
           width={#{DRAWERWIDTH}}
-          title="修改"
+          title="新增"
           placement="right"
-          onClose={this.cancel}
+          onClose={() => {
+            onCancel();
+          }}
           visible={visible}
         >
           <Spin spinning={loading}>
             <Form style={{ paddingBottom: 15 }}>
               <Row>
-                <FormItem style={{ display: 'none' }}>
-                  {getFieldDecorator('id', {
-                    initialValue: current.id,
-                  })(<Input/>)}
-                </FormItem>
                 #{IMPORTFILTERITEM}
               </Row>
             </Form>
@@ -93,4 +92,4 @@ class Edit extends Component {
   }
 }
 
-export default Form.create()(Edit);
+export default Form.create()(Add);

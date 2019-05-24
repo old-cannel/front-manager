@@ -1,16 +1,10 @@
 import { connect } from 'dva';
 import  React,{ Component } from 'react';
 #{IMPORTANTD}
-
 #{IMPORTDYNAMIC}
 import FilterItem from '@/components/FilterItem/FilterItem';
-
-
 #{CONSTANT}
-
-@connect(({ }) => ({
-
-}))
+@connect(({ }) => ({}))
 class Filter extends Component {
   constructor(props) {
     super(props);

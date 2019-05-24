@@ -3,6 +3,7 @@ import { connect } from 'dva';
 #{IMPORTANTD}
 #{IMPORTDYNAMIC}
 import Filter from './Filter';
+import Add from './Add';
 import Edit from './Edit';
 import Details from './Details';
 
@@ -10,9 +11,8 @@ import Details from './Details';
   pagination: #{NAMESPACE}.pagination,
   list: #{NAMESPACE}.list,
   current: #{NAMESPACE}.current,
-  detailsLoading:loading.effects['#{NAMESPACE}/get'],
+  detailsLoading: loading.effects['#{NAMESPACE}/get'],
   loading: loading.effects['#{NAMESPACE}/queryList'],
-  editLoading:#{NAMESPACE}.editLoading,
 }))
 
 class List extends Component {
@@ -20,8 +20,8 @@ class List extends Component {
     super(props);
     this.filterRef = React.createRef();
     this.state = {
-      editTitle: '',
       editVisible: false,
+      addVisible: false,
     };
   }
 
@@ -32,22 +32,22 @@ class List extends Component {
 
   //新增
   add = () => {
-    this.setState({ editTitle: '新增', editVisible: true });
+    this.setState({ addVisible: true });
   };
 
   //编辑
   edit = record => {
-    this.setState({ editTitle: '修改', editVisible: true });
+    this.setState({ editVisible: true });
     const { dispatch } = this.props;
-    dispatch({ type: '#{NAMESPACE}/updateState', payload: { editLoading: true } });
+    dispatch({ type: '#{NAMESPACE}/updateState' });
     dispatch({ type: '#{NAMESPACE}/edit', payload: { id: record.id } });
   };
 
   //删除
-  confirmDel=(id)=>{
+  confirmDel = (id) => {
     const { dispatch } = this.props;
-    dispatch({type:'#{NAMESPACE}/delete',payload:{id}})
-  }
+    dispatch({ type: '#{NAMESPACE}/delete', payload: { id } });
+  };
 
 
   //详情
@@ -69,33 +69,44 @@ class List extends Component {
     dispatch({ type: '#{NAMESPACE}/queryList', payload });
   };
 
-  //保存
-  saveForm = (values, resetFields) => {
+  //修改
+  update = (values, callback) => {
     const { dispatch } = this.props;
-    dispatch({type:'#{NAMESPACE}/updateState',payload:{editLoading:true}})
-    const url = values.id ? '#{NAMESPACE}/update' : '#{NAMESPACE}/save';
-    dispatch({ type: url, payload: values }).then((result) => {
+    dispatch({ type: '#{NAMESPACE}/update', payload: values }).then((result) => {
       if (result && result.code === 10000) {
         message.success(result.msg);
-        this.setState({ editTitle: '', editVisible: false });
-        dispatch({type:'#{NAMESPACE}/updateState',payload:{current:{},editLoading:false}})
+        this.setState({ editVisible: false });
+        dispatch({ type: '#{NAMESPACE}/updateState', payload: { current: {} } });
         dispatch({ type: '#{NAMESPACE}/queryList' });
-        resetFields();
       } else {
-        dispatch({type:'#{NAMESPACE}/updateState',payload:{editLoading:false}})
+        callback();
+        message.error(result.msg);
+      }
+    });
+  };
+
+  //新增
+  save = (values, callback) => {
+    const { dispatch } = this.props;
+    dispatch({ type: '#{NAMESPACE}/save', payload: values }).then((result) => {
+      if (result && result.code === 10000) {
+        message.success(result.msg);
+        this.setState({ addVisible: false });
+        dispatch({ type: '#{NAMESPACE}/queryList' });
+      } else {
+        callback();
         message.error(result.msg);
       }
     });
   };
 
 
-
   render() {
     const {
       list, loading, pagination, dispatch, current,
-      detailsLoading, editLoading,
+      detailsLoading,
     } = this.props;
-    const { editTitle, editVisible, detailVisible } = this.state;
+    const { editVisible, detailVisible, addVisible } = this.state;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -125,22 +136,35 @@ class List extends Component {
           dataSource={list}
           pagination={paginationProps}
         />
-        <Edit
-          editTitle={editTitle}
-          dispatch={dispatch}
-          editVisible={editVisible}
-          loading={editLoading}
-          current={current}
-          onCancel={() => {
-            dispatch({ type: '#{NAMESPACE}/updateState', payload: { current: {} } });
-            this.setState({ editVisible: false });
-          }}
-          onOk={(values, resetFields) => {
-            this.saveForm(values, resetFields);
-          }}/>
+        {
+          editVisible &&  <Edit
+            visible={editVisible}
+            current={current}
+            onCancel={() => {
+              dispatch({ type: '#{NAMESPACE}/updateState', payload: { current: {} } });
+              this.setState({ editVisible: false });
+            }}
+            onOk={(values, callback) => {
+              this.update(values, callback);
+            }}/>
+        }
+
+
+        {
+          addVisible && <Add
+            visible={addVisible}
+            onCancel={() => {
+              this.setState({ addVisible: false });
+            }}
+            onOk={(values, callback) => {
+              this.save(values, callback);
+            }}/>
+        }
+
+
         <Details
           loading={detailsLoading}
-          detailVisible={detailVisible}
+          visible={detailVisible}
           current={current}
           onCancel={() => {
             dispatch({ type: '#{NAMESPACE}/updateState', payload: { current: {} } });
