@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react';
 import {Row, Form, Drawer, Table, Input, span, Select,
-  Divider, Button, message, Radio,Tree,Modal } from 'antd'
+  Divider, Button, message, Radio,Tree,Modal,Checkbox } from 'antd'
 const formItemLayout = {
   labelCol: {
     xs: {span: 24},
@@ -25,6 +25,7 @@ class ClassForm extends React.Component {
     tempRouter:"",
     tempChinaValue:"",
     tempEngValue:"",
+    preParentRouter:"",
     columnList:[]
   };
 
@@ -56,25 +57,28 @@ class ClassForm extends React.Component {
     });
   };
 
-  //下拉选项
-  selectList = (text, record, type) => {
-    return <Select style={{width:'90%'}} getPopupContainer={triggerNode => triggerNode.parentNode}
-                   defaultValue={text} onChange={e=>this.flagChange(e,record,type)}>
-      <Option value={"1"}>是</Option>
-      <Option value={"0"}>否</Option>
-    </Select>
+  //复选框选项
+  checkboxList = (text, record, type) => {
+    let flag = false;
+    if(text && text=='1'){
+      flag = true;
+    }
+    return <Checkbox defaultChecked={flag} onChange={e=>this.checkboxChange(e,record,type)}></Checkbox>
   };
 
-  //下拉选项切换
-  flagChange = (e,record,type) => {
+  //复选框切换
+  checkboxChange = (e,record,type) => {
     const {columnList=[] } = this.state;
+    let flag = 0;
+    if(e.target.checked) {
+      flag = 1;
+    }
     for(let i=0; i<columnList.length; i++) {
       if(columnList[i].tableColumn==record.tableColumn) {
-        columnList[i][type] = e;
+        columnList[i][type] = flag;
         break;
       }
     }
-    console.log(columnList);
   };
 
   //路由输入
@@ -97,6 +101,31 @@ class ClassForm extends React.Component {
     tempEngValue:value.target.value.replace(/[^a-zA-Z]/g,"")
   });
 };
+
+  //java类型选项
+  javaTypeList = (text,record,type) => {
+    return <Select style={{width:'90%'}} getPopupContainer={triggerNode => triggerNode.parentNode}
+                   defaultValue={text}
+                   onSelect={e => {this.changeSelect(e,type,record)}}>
+      <Option value={"String"}>String</Option>
+      <Option value={"Integer"}>Integer</Option>
+      <Option value={"Double"}>Double</Option>
+      <Option value={"BigDecimal"}>BigDecimal</Option>
+      <Option value={"Float"}>Float</Option>
+      <Option value={"Date"}>Date</Option>
+    </Select>
+  };
+
+  //下拉选项切换
+  changeSelect = (e,text,record) => {
+    const {columnList=[] } = this.state;
+    for(let i=0; i<columnList.length; i++) {
+      if(columnList[i].tableColumn==record.tableColumn) {
+        columnList[i][text] = e;
+        break;
+      }
+    }
+  };
 
   //取消
   handleCancel = e => {
@@ -140,11 +169,11 @@ class ClassForm extends React.Component {
 
   //选中路由
   selectRouter = (value) =>{
-    const { parentRouter, router, chinaValue, engValue } = this.state;
+    const { parentRouter, router, chinaValue, engValue, preParentRouter } = this.state;
     if(parentRouter == value[0]) {
       this.setState({
         visible:true,
-        tempParentRouter:parentRouter,
+        tempParentRouter:value,
         tempRouter:router,
         tempChinaValue:chinaValue,
         tempEngValue:engValue
@@ -152,6 +181,7 @@ class ClassForm extends React.Component {
     }else if(value.length==0){
       this.setState({
         visible:true,
+        tempParentRouter:preParentRouter,
       });
     }else{
       this.setState({
@@ -159,12 +189,14 @@ class ClassForm extends React.Component {
         tempParentRouter:value,
         tempRouter:"",
         tempChinaValue:"",
-        tempEngValue:""
+        tempEngValue:"",
+        preParentRouter:value
       })
     }
   };
 
   initState =() => {
+    const { cleanData } = this.props;
     this.setState({
       parentRouter:"",
       router:"",
@@ -178,6 +210,30 @@ class ClassForm extends React.Component {
     });
   };
 
+  //查询方式
+  queryModeList = (text,record,type) => {
+    return <Select style={{width:'80%'}} getPopupContainer={triggerNode => triggerNode.parentNode}
+                   defaultValue={text}
+                   onSelect={e => {this.changeSelect(e,type,record)}}>
+      <Option value={"="}>=</Option>
+      <Option value={"like"}>like</Option>
+    </Select>
+  };
+
+  componentTypeList = (text,record,type) => {
+    return <Select style={{width:'90%'}} getPopupContainer={triggerNode => triggerNode.parentNode}
+                   defaultValue={text} placeholder="请选择"
+                   onChange={e=>{this.changeSelect(e,"componentType",record)}}>
+      <Option value={"Input"}>Input</Option>
+      <Option value={"InputNumber"}>InputNumber</Option>
+      <Option value={"Radio"}>Radio</Option>
+      <Option value={"Select"}>Select</Option>
+      <Option value={"Checkbox"}>Checkbox</Option>
+      <Option value={"DatePicker_date"}>DatePicker_date</Option>
+      <Option value={"DatePicker_datetime"}>DatePicker_datetime</Option>
+    </Select>
+  };
+
   render = () => {
     const {
       form: {getFieldDecorator, validateFields},
@@ -186,6 +242,7 @@ class ClassForm extends React.Component {
       modalLoading,
       cleanData,
       dispatch,
+      firstFlag,
       hasPage,
       routerList,
       ...drawerProps
@@ -205,25 +262,43 @@ class ClassForm extends React.Component {
         if (errors) {
           return;
         }
+        //路由非空验证
         if(!values.parentRouter) {
           message.error("请选择路由");
           return;
         }
+        //表字段验证
         let errorFlag = 0;
         if(hasPage=="1" && columnList) {
           if(!values.tableName) {
             message.error("请选择数据库表");
             return;
           }
+          const componentType = ["Radio","Select","Checkbox"];
           for(let i=0; i<columnList.length; i++) {
+            //java类型验证
             if(!columnList[i].javaType){
               message.error(columnList[i].tableColumn+" java类型不可为空");
               errorFlag = 1;
               break;
             }
+            //查询方式验证
+            if(columnList[i].queryFlag=="1" && !columnList[i].queryMode) {
+              message.error(columnList[i].tableColumn+" 查询方式不可为空");
+              errorFlag = 1;
+              break;
+            }
+            //组件类型验证
             if(!columnList[i].componentType
               && (columnList[i].queryFlag=='1' || columnList[i].editFlag=='1')){
               message.error(columnList[i].tableColumn+" 组件类型不可为空");
+              errorFlag = 1;
+              break;
+            }
+            //选项或字典值验证
+            if(componentType.indexOf(columnList[i].componentType)>=0
+               && !columnList[i].componentData) {
+              message.error(columnList[i].tableColumn+"选项或字典值不可为空");
               errorFlag = 1;
               break;
             }
@@ -236,10 +311,27 @@ class ClassForm extends React.Component {
               let obj = {type:columnList[i].componentType};
               columnList[i].component=obj;
             }
+            if(componentType.indexOf(columnList[i].componentType)>=0){
+              if(columnList[i].componentData.indexOf(":")>=0) {
+                columnList[i].component.dataFrom = "1";
+                let kvArr = columnList[i].componentData.split(";");
+                let dataSource = [];
+                for(let vo of kvArr) {
+                  let kv = vo.split(":");
+                  let dataSourceObj = {value:kv[0],label:kv[1]};
+                  dataSource.push(dataSourceObj);
+                }
+                columnList[i].component.dataSource = dataSource;
+              }else{
+                columnList[i].component.dataFrom = "2";
+                columnList[i].component.column = columnList[i].componentData;
+              }
+            }
           }
           values.tableInfo = columnList;
         }
         values.router = "/"+values.router;
+        values.parentRouter = values.parentRouter.substring(5);
         values.fileUrl = values.parentRouter+values.router;
         values.hasPage = hasPage;
         let menuName = [];
@@ -254,6 +346,8 @@ class ClassForm extends React.Component {
         menuName.push(obj1);
         menuName.push(obj2);
         values.menuName = menuName;
+        values.tableComment = values.chinaValue;
+        console.log(values);
         if(hasPage == "1"){
           drawerProps.onCheck({
             ...record,
@@ -267,37 +361,6 @@ class ClassForm extends React.Component {
         }
 
       });
-    };
-
-    const changeSelect=(value,record,index)=>{
-      // console.log("value==",value);
-      // console.log("record==",record);
-      // console.log("index==",index);
-    };
-
-    const javaTypeList = (text,record) => {
-      return <Select style={{width:'90%'}} getPopupContainer={triggerNode => triggerNode.parentNode}
-                                      defaultValue={text}
-          onSelect={(value,index,record)=>{changeSelect(value,index,record)}}>
-        <Option value={"String"}>String</Option>
-        <Option value={"Integer"}>Integer</Option>
-        <Option value={"Double"}>Double</Option>
-        <Option value={"BigDecimal"}>BigDecimal</Option>
-        <Option value={"Float"}>Float</Option>
-        <Option value={"Date"}>Date</Option>
-      </Select>
-    };
-
-
-
-    //组件类型选择
-    const componentSelect = (e,text,record) => {
-      for(let i=0; i<columnList.length; i++) {
-        if(columnList[i].tableColumn==record.tableColumn) {
-          columnList[i][text] = e;
-          break;
-        }
-      }
     };
 
     const tableStyle = {
@@ -324,12 +387,14 @@ class ClassForm extends React.Component {
     //关闭抽屉
     const closeDrawer = () => {
       drawerProps.onClose();
+      this.initState();
     };
 
     //选择生成方式
     const selectChange = (value) => {
       let hasPage = value.target.value;
       drawerProps.changeHasPage(hasPage);
+      this.initState();
     };
 
     //路由树
@@ -337,12 +402,12 @@ class ClassForm extends React.Component {
       data.map(item => {
         if (item.path && item.children && item.children.length>0) {
           return (
-            <TreeNode key={item.path} title={item.path.replace(pre,"")}>
+            <TreeNode key={`/root${item.path}`} title={item.path.replace(pre,"")}>
               {loop(item.children,item.path.replace(pre,""))}
             </TreeNode>
           );
         }
-        return <TreeNode key={item.path} title={item.path.replace(pre,"")} />;
+        return <TreeNode key={`/root${item.path}`} title={item.path.replace(pre,"")} />;
       });
     const columns = [{
       title: '表字段',
@@ -356,8 +421,8 @@ class ClassForm extends React.Component {
       title: '字段名称',
       dataIndex: 'columnName',
       key:'columnName',
-      render:(text,record)=><Input style={{width:'60%'}}
-                                   value={text} onChange={e=>{this.columnNameChange(e,"columnName",record)}}/>
+      render:(text,record)=><Input style={{width:'60%'}} maxLength={10}
+             value={text} onChange={e=>{this.columnNameChange(e,"columnName",record)}}/>
     },{
       title: '字段长度',
       dataIndex: 'columnLength',
@@ -376,32 +441,37 @@ class ClassForm extends React.Component {
       title: 'java类型',
       dataIndex: 'javaType',
       key:'javaType',
-      render:(text,record)=> javaTypeList(text,record,"javaType"),
+      render:(text,record)=> this.javaTypeList(text,record,"javaType"),
     }, {
-      title: '是否不可为空',
+      title: '不可为空',
       dataIndex: 'notNullFlag',
       key:'notNullFlag',
-      render: (text,record) => this.selectList(text,record,"notNullFlag"),
+      width:50,
+      render: (text,record) => this.checkboxList(text,record,"notNullFlag"),
     },{
-      title: '是否插入字段',
-      dataIndex: 'insertFlag',
-      key:'insertFlag',
-      render: (text,record) => this.selectList(text,record,"insertFlag"),
-    },{
-      title: '是否编辑字段',
-      dataIndex: 'editFlag',
-      key:'editFlag',
-      render: (text,record) => this.selectList(text,record,"editFlag"),
-    },{
-      title: '是否列表字段',
+      title: '列表',
       dataIndex: 'listFlag',
       key:'listFlag',
-      render: (text,record) => this.selectList(text,record,"listFlag"),
+      width:50,
+      render: (text,record) => this.checkboxList(text,record,"listFlag"),
     },{
-      title: '是否查询字段',
+      title: '查询',
       dataIndex: 'queryFlag',
       key:'queryFlag',
-      render: (text,record) => this.selectList(text,record,"queryFlag"),
+      width:50,
+      render: (text,record) => this.checkboxList(text,record,"queryFlag"),
+    },{
+      title: '插入',
+      dataIndex: 'insertFlag',
+      key:'insertFlag',
+      width:50,
+      render: (text,record) => this.checkboxList(text,record,"insertFlag"),
+    },{
+      title: '编辑',
+      dataIndex: 'editFlag',
+      key:'editFlag',
+      width:50,
+      render: (text,record) => this.checkboxList(text,record,"editFlag"),
     },{
       title: '排序',
       dataIndex: 'sort',
@@ -412,37 +482,36 @@ class ClassForm extends React.Component {
       }
       ,
     }, {
+      title: '查询方式',
+      dataIndex: 'queryMode',
+      key:'queryMode',
+      width:150,
+      render:(text,record) => this.queryModeList(text,record,"queryMode"),
+    }, {
       title: '组件类型',
       dataIndex: 'componentType',
       key:'componentType',
       width:150,
-      render:(text,record) => (<Select style={{width:'90%'}} getPopupContainer={triggerNode => triggerNode.parentNode}
-                                       defaultValue={text} placeholder="请选择"
-                                       onChange={e=>{componentSelect(e,"componentType",record)}}>
-        <Option value={"Input"}>Input</Option>
-        <Option value={"DatePicker_date"}>DatePicker_date</Option>
-        <Option value={"DatePicker_datetime"}>DatePicker_datetime</Option>
-      </Select>),
+      render:(text,record) => this.componentTypeList(text,record,"componentType"),
+    }, {
+      title: '选项或字典值',
+      dataIndex: 'componentData',
+      key:'componentData',
+      render:(text,record)=><Input
+           value={text} onChange={e=>{this.columnNameChange(e,"componentData",record)}}/>
     }];
-
-
-    if(hasPage=="" && tempParentRouter){
-      this.initState();
-    }
     return (
       <Drawer {...drawerProps} onClose={closeDrawer} destroyOnClose>
         <Form {...formItemLayout} style={tableStyle}>
-          {!hasPage &&
           <Form.Item label="生成方式">
             {getFieldDecorator('hasPage', {
+              initialValue: hasPage,
               rules: [{required: true, message: '请选择生成方式'}],
-            })(<Radio.Group onChange={(value)=> {
-              selectChange(value)
-            }}>
-              <Radio value="1">生成页面</Radio>
+            })(<Radio.Group onChange={(value)=> {selectChange(value)}}>
               <Radio value="2">只生成路由</Radio>
+              <Radio value="1">生成页面</Radio>
             </Radio.Group>)}
-          </Form.Item>}
+          </Form.Item>
           {hasPage && <div>
             {hasPage=="1" && <Form.Item label="数据库表：">
               {getFieldDecorator('tableName', {
@@ -460,12 +529,6 @@ class ClassForm extends React.Component {
                 </Select>
               )}
             </Form.Item>}
-            <Form.Item label="名称">
-              {getFieldDecorator('tableComment',{
-                initialValue: record.tableComment,
-                rules: [{required: true, message: '请输入名称'}],
-              })(<Input placeholder="请输入" />)}
-            </Form.Item>
             <Form.Item label="路由">
               {getFieldDecorator('fileUrl')(<Tree
                 className="draggable-tree"
@@ -473,7 +536,10 @@ class ClassForm extends React.Component {
                 blockNode
                 onSelect={(value)=>{this.selectRouter(value)}}
               >
-                {loop(routerList,"")}
+                <TreeNode key={"/root"} title={"/root"}>
+                  {loop(routerList,"")}
+                </TreeNode>
+
               </Tree>)}
             </Form.Item>
             {parentRouter &&

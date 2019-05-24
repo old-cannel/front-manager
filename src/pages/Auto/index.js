@@ -28,7 +28,7 @@ class TableList extends PureComponent {
     formValues: {},
     preUpdateClazz: {},
     modalLoading: false,
-    hasPage:"",
+    hasPage:"2",
     routerList:[]
   };
 
@@ -169,7 +169,6 @@ class TableList extends PureComponent {
   // 打开/关闭抽屉
   handleModalVisible = (flag, clazz = {}) => {
     const { dispatch,menu } = this.props;
-    let menuParent = [];
     if (!!flag) {
       dispatch({
         type: 'auto/tableList'
@@ -178,7 +177,7 @@ class TableList extends PureComponent {
     this.setState({
       modalVisible: !!flag,
       routerList:menu.menuData,
-      hasPage:""
+      hasPage:"2"
     });
   };
 
@@ -213,7 +212,7 @@ class TableList extends PureComponent {
       },
       success: res => {
         this.handleAdd(fields);
-        this.addFramePage(fields);
+        // this.addFramePage(fields);
       },
       fail: res => {
         message.error(res.result);
@@ -268,13 +267,18 @@ class TableList extends PureComponent {
     this.setState({
       record:record||{},
       tableList:tableList||[],
-      hasPage:"",
+      hasPage:"2",
     });
   };
 
   selectHasPage = (value) => {
+    const { menu } = this.props;
     this.setState({
-      hasPage:value
+      routerList:[],
+    });
+    this.setState({
+      hasPage:value,
+      routerList:menu.menuData,
     });
   };
 
