@@ -6,6 +6,11 @@ export default {
   state: {
     collapsed: false,
     notices: [],
+    dictInfo: [
+      { value: '00', label: '字典00', type: 'dictType' },
+      { value: '01', label: '字典01', type: 'dictType' },
+      { value: '02', label: '字典02', type: 'dictType' },
+    ],
   },
 
   effects: {

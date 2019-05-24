@@ -165,6 +165,10 @@ const dynamicConstant = content => {
   if (content.indexOf('<RangePicker') > -1) {
     dynamicConstant += `const { RangePicker } = DatePicker;\r\n`;
   }
+  if (content.indexOf('<Option') > -1) {
+    dynamicConstant += `const  Option  =Select.Option;\r\n`;
+  }
+
   return dynamicConstant;
 };
 
@@ -255,6 +259,50 @@ const renderEditFormItem = (item, editLength) => {
             data.${item.javaName} = moment(data.${item.javaName}).format('YYYY-MM-DD HH:mm:ss');
           }\r\n`;
       break;
+    case 'Select':
+      if (item.component.dataForm === '1') {
+        let optionStr = "<Option value=''>请选择</Option> \r\n";
+        (item.component.dataSource || []).forEach(item => {
+          optionStr += ` <Option value="${item.value}">${item.label}</Option> \r\n`;
+        });
+        formItem = `${colTemp}
+         <FormItem label="${item.columnName}:" {...formItemLayout}>
+            {getFieldDecorator('${item.javaName}', {
+               initialValue:current.${item.javaName}?current.${item.javaName}:'',
+                   rules:[
+                      ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
+                   ]
+             })(<Select defaultValue='' style={{ maxWidth: 240 }} placeholder='请选择${
+               item.columnName
+             }'>
+              ${optionStr}
+          </Select>)}
+         </FormItem>
+      </Col>\r\n`;
+      } else if (item.component.dataForm === '2') {
+        formItem = `${colTemp}
+         <FormItem label="${item.columnName}:" {...formItemLayout}>
+            {getFieldDecorator('${item.javaName}', {
+              initialValue:current.${item.javaName}?current.${item.javaName}:'',
+                   rules:[
+                      ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
+                   ]
+             })(<Select defaultValue='' style={{ maxWidth: 240 }} placeholder='请选择${
+               item.columnName
+             }'>
+              <Option value=''>请选择</Option>
+              {
+               (this.props.dictInfo || []).filter(filterItem=>filterItem.type==='${
+                 item.component.column
+               }').map(item=>{
+              return  <Option key={item.value} value={item.value}>{item.label}</Option>
+            })
+            }
+          </Select>)}
+         </FormItem>
+      </Col>\r\n`;
+      }
+      break;
     default:
       break;
   }
@@ -324,6 +372,50 @@ const renderAddFormItem = (item, editLength) => {
       dataHandle += ` if (data.${item.javaName}) {
             data.${item.javaName} = moment(data.${item.javaName}).format('YYYY-MM-DD HH:mm:ss');
           }\r\n`;
+      break;
+    case 'Select':
+      if (item.component.dataForm === '1') {
+        let optionStr = "<Option value=''>请选择</Option> \r\n";
+        (item.component.dataSource || []).forEach(item => {
+          optionStr += ` <Option value="${item.value}">${item.label}</Option> \r\n`;
+        });
+        formItem = `${colTemp}
+         <FormItem label="${item.columnName}:" {...formItemLayout}>
+            {getFieldDecorator('${item.javaName}', {
+             initialValue:'',
+                   rules:[
+                      ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
+                   ]
+             })(<Select defaultValue='' style={{ maxWidth: 240 }} placeholder='请选择${
+               item.columnName
+             }'>
+              ${optionStr}
+          </Select>)}
+         </FormItem>
+      </Col>\r\n`;
+      } else if (item.component.dataForm === '2') {
+        formItem = `${colTemp}
+         <FormItem label="${item.columnName}:" {...formItemLayout}>
+            {getFieldDecorator('${item.javaName}', {
+             initialValue:'',
+                   rules:[
+                      ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
+                   ]
+             })(<Select defaultValue='' style={{ maxWidth: 240 }} placeholder='请选择${
+               item.columnName
+             }'>
+              <Option value=''>请选择</Option>
+              {
+               (this.props.dictInfo || []).filter(filterItem=>filterItem.type==='${
+                 item.component.column
+               }').map(item=>{
+              return  <Option key={item.value} value={item.value}>{item.label}</Option>
+            })
+            }
+          </Select>)}
+         </FormItem>
+      </Col>\r\n`;
+      }
       break;
     default:
       break;
@@ -404,6 +496,40 @@ const renderFilterFormItem = (item, editLength) => {
       }[1]).format('YYYY-MM-DD HH:mm:ss');
         searchParam.${item.javaName}=''
       }\r\n`;
+      break;
+    case 'Select':
+      if (item.component.dataForm === '1') {
+        let optionStr = "<Option value=''>全部</Option> \r\n";
+        (item.component.dataSource || []).forEach(item => {
+          optionStr += ` <Option value="${item.value}">${item.label}</Option> \r\n`;
+        });
+        formItem = `<Col xxl={{ span: 7 }} md={{ span: 7 }}>
+         <FilterItem label="${item.columnName}:">
+                {getFieldDecorator('${item.javaName}', {
+                    initialValue:''
+                })( <Select defaultValue='' style={{ maxWidth: 240 }}>
+              ${optionStr}
+          </Select>)}
+         </FilterItem>
+      </Col>\r\n`;
+      } else if (item.component.dataForm === '2') {
+        formItem = `<Col xxl={{ span: 7 }} md={{ span: 7 }}>
+         <FilterItem label="${item.columnName}:">
+                {getFieldDecorator('${item.javaName}', {
+                    initialValue:''
+                })( <Select defaultValue='' style={{ maxWidth: 240 }}>
+                <Option value=''>全部</Option>
+            {
+               (this.props.dictInfo || []).filter(filterItem=>filterItem.type==='${
+                 item.component.column
+               }').map(item=>{
+              return  <Option key={item.value} value={item.value}>{item.label}</Option>
+            })
+            }
+          </Select>)}
+         </FilterItem>
+      </Col>\r\n`;
+      }
       break;
   }
   return [formItem, dataHandle];

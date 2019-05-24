@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'dva';
 #{IMPORTANTD}
 #{IMPORTDYNAMIC}
 #{CONSTANT}
@@ -12,7 +13,9 @@ const formItemLayout = {
     span: 16,
   },
 };
-
+@connect(({ #{NAMESPANCE} }) => ({
+  #{NAMESPANCEITEM}
+}))
 class Add extends Component {
   constructor(props) {
     super(props);

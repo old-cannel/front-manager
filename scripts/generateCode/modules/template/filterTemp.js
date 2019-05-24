@@ -4,7 +4,9 @@ import  React,{ Component } from 'react';
 #{IMPORTDYNAMIC}
 import FilterItem from '@/components/FilterItem/FilterItem';
 #{CONSTANT}
-@connect(({ }) => ({}))
+@connect(({ #{NAMESPANCE} }) => ({
+  #{NAMESPANCEITEM}
+}))
 class Filter extends Component {
   constructor(props) {
     super(props);

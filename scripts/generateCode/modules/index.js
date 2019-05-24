@@ -149,6 +149,13 @@ const generateFilter = (param, namespace) => {
     .replace(' #{DATEHANDLE}', dateHandle)
     .replace('#{IMPORTFILTERITEM}', formItemStr)
     .replace(/#{NAMESPACE}/g, namespace);
+  //global 是否引用
+  if (result.indexOf('props.dictInfo') > 0) {
+    result = result
+      .replace('#{NAMESPANCE}', 'global')
+      .replace(' #{NAMESPANCEITEM}', 'dictInfo:global.dictInfo');
+  }
+  result = result.replace('#{NAMESPANCE}', '').replace('#{NAMESPANCEITEM}', '');
 
   //动态import antd 模块
   const importAd = utils.importAD(result);
@@ -244,6 +251,13 @@ const generateEdit = (param, namespace) => {
     .replace('#{IMPORTFILTERITEM}', formItemStr)
     .replace('#{DATEHANDLE}', dateHandle)
     .replace(/#{NAMESPACE}/g, namespace);
+  //global 是否引用
+  if (result.indexOf('props.dictInfo') > 0) {
+    result = result
+      .replace('#{NAMESPANCE}', 'global')
+      .replace(' #{NAMESPANCEITEM}', 'dictInfo:global.dictInfo');
+  }
+  result = result.replace('#{NAMESPANCE}', '').replace('#{NAMESPANCEITEM}', '');
   //动态import antd 模块
   const importAd = utils.importAD(result);
   result = result.replace('#{IMPORTANTD}', importAd);
@@ -294,6 +308,15 @@ const generateAdd = (param, namespace) => {
     .replace('#{IMPORTFILTERITEM}', formItemStr)
     .replace('#{DATEHANDLE}', dateHandle)
     .replace(/#{NAMESPACE}/g, namespace);
+
+  //global 是否引用
+  if (result.indexOf('props.dictInfo') > 0) {
+    result = result
+      .replace('#{NAMESPANCE}', 'global')
+      .replace(' #{NAMESPANCEITEM}', 'dictInfo:global.dictInfo');
+  }
+  result = result.replace('#{NAMESPANCE}', '').replace('#{NAMESPANCEITEM}', '');
+
   //动态import antd 模块
   const importAd = utils.importAD(result);
   result = result.replace('#{IMPORTANTD}', importAd);

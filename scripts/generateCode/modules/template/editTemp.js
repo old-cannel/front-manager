@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'dva';
 #{IMPORTANTD}
 #{IMPORTDYNAMIC}
 #{CONSTANT}
@@ -11,6 +12,9 @@ const formItemLayout = {
   },
 };
 
+@connect(({ #{NAMESPANCE} }) => ({
+  #{NAMESPANCEITEM}
+}))
 class Edit extends Component {
   constructor(props) {
     super(props);
