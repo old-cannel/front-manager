@@ -82,6 +82,16 @@ const importAD = content => {
     modules.push('Select');
   }
 
+  //select
+  if (content.indexOf('<Select') > -1) {
+    modules.push('Select');
+  }
+
+  //InputNumber
+  if (content.indexOf('<InputNumber') > -1) {
+    modules.push('InputNumber');
+  }
+
   //Row
   if (content.indexOf('<Row') > -1) {
     modules.push('Row');
@@ -135,6 +145,7 @@ const importAD = content => {
   }
 
   if (modules.length > 0) {
+    modules = new Set(modules);
     let importAD = '';
     modules.forEach(item => {
       importAD += item + ',';
@@ -150,6 +161,9 @@ const dynamicImport = content => {
   let importDyn = '';
   if (content.indexOf('DatePicker') > -1) {
     importDyn += `import moment from 'moment';\r\n`;
+  }
+  if (content.indexOf('DictLabel') > -1) {
+    importDyn += `import DictLabel from '@/components/Dict/DictLabel';\r\n`;
   }
   return importDyn;
 };
@@ -303,6 +317,20 @@ const renderEditFormItem = (item, editLength) => {
       </Col>\r\n`;
       }
       break;
+    case 'InputNumber':
+      formItem = `${colTemp}
+         <FormItem label="${item.columnName}:" {...formItemLayout}>
+            {getFieldDecorator('${item.javaName}', {
+                initialValue:current.${item.javaName},
+                   rules:[
+                      ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
+                   ]
+             })(<InputNumber min={0} max={9999999}  precision="0" style={{ maxWidth: 220 }} placeholder='请输入${
+               item.columnName
+             }'/>)}
+         </FormItem>
+      </Col>\r\n`;
+      break;
     default:
       break;
   }
@@ -417,6 +445,19 @@ const renderAddFormItem = (item, editLength) => {
       </Col>\r\n`;
       }
       break;
+    case 'InputNumber':
+      formItem = `${colTemp}
+         <FormItem label="${item.columnName}:" {...formItemLayout}>
+            {getFieldDecorator('${item.javaName}', {
+                   rules:[
+                      ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
+                   ]
+             })(<InputNumber  min={0} max={9999999}  precision="0" style={{ maxWidth: 220 }} placeholder='请输入${
+               item.columnName
+             }'/>)}
+         </FormItem>
+      </Col>\r\n`;
+      break;
     default:
       break;
   }
@@ -434,9 +475,18 @@ const renderDetailsItem = (item, editLength) => {
   if (editLength < 6) {
     colTemp = `<Col span="24">`;
   }
-  const detailsItems = `<Description term="${item.columnName}">{current.${
-    item.javaName
-  }}</Description>\r\n`;
+  let str = `current.${item.javaName}`;
+  if (item.component.type === 'Select') {
+    if (item.component.dataForm === '2') {
+      str = `<DictLabel type={"${item.component.column}"} value={current.${item.javaName}}/>`;
+    } else if (item.component.dataForm === '1') {
+      str = `<DictLabel source={${JSON.stringify(item.component.dataSource)}} value={current.${
+        item.javaName
+      }}/>`;
+    }
+  }
+  const detailsItems = `<Description term="${item.columnName}">{${str}}</Description>\r\n`;
+
   return detailsItems;
 };
 
@@ -530,6 +580,16 @@ const renderFilterFormItem = (item, editLength) => {
          </FilterItem>
       </Col>\r\n`;
       }
+      break;
+    case 'InputNumber':
+      formItem = `<Col xxl={{ span: 7 }} md={{ span: 7 }}>
+         <FilterItem label="${item.columnName}:" >
+            {getFieldDecorator('${item.javaName}', {
+             })(<InputNumber min={0} max={9999999}  precision="0" style={{ maxWidth: 220 }} placeholder='请输入${
+               item.columnName
+             }'/>)}
+         </FilterItem>
+      </Col>\r\n`;
       break;
   }
   return [formItem, dataHandle];

@@ -69,7 +69,7 @@ export default {
 
     },
 
-    //删除
+    //获取详情
     * get({ payload = {} }, { call, put }) {
       const { code, result } = yield call(get, payload);
       if (code === 10000 && result) {

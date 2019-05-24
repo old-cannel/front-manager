@@ -177,12 +177,34 @@ const generateList = (param, namespace) => {
   let result = fs.readFileSync(listTemp, 'utf8');
   let columns = '[';
   param.tableInfo.forEach(item => {
+    let str = '';
+    if (item.component.type === 'Select') {
+      if (item.component.dataForm === '2') {
+        str = `<DictLabel type={"${item.component.column}"} value={current.${item.javaName}}/>`;
+      } else if (item.component.dataForm === '1') {
+        str = `<DictLabel source={${JSON.stringify(item.component.dataSource)}} value={current.${
+          item.javaName
+        }}/>`;
+      }
+    }
+
     if (item.listFlag === '1') {
-      columns += `{
+      if (str) {
+        columns += `{
+          title: '${item.columnName}',
+          dataIndex:'${item.javaName}',
+          key: '${item.javaName}',
+          render:text=>{
+            return ${str}
+          }
+        },`;
+      } else {
+        columns += `{
           title: '${item.columnName}',
           dataIndex:'${item.javaName}',
           key: '${item.javaName}',
         },`;
+      }
     }
   });
   columns += `{
