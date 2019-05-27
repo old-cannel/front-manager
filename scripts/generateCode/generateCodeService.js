@@ -87,7 +87,7 @@ const data = {
       columnName: '备注',
       component: {
         type: 'Select',
-        dataForm: '1',
+        dataFrom: '1',
         column: '',
         dataSource: [
           { value: '0', label: '备注0' },
@@ -134,7 +134,7 @@ const data = {
       columnName: '上级名称',
       component: {
         type: 'Select',
-        dataForm: '2',
+        dataFrom: '2',
         column: 'dictType',
       },
     },
@@ -319,16 +319,16 @@ http
     try {
       const pathName = url.parse(request.url).pathname;
       if (pathName === '/createFile') {
-        // generate.generateCodeHandle(data);
+        generate.generateCodeHandle(data);
 
-        let data = '';
-        request.on('data', chunk => {
-          data += chunk;
-          generate.generateCodeHandle(JSON.parse(data));
-          response.writeHead(200, { 'Content-Type': 'text/plain' });
-          response.write('successful');
-          response.end();
-        });
+        // let data = '';
+        // request.on('data', chunk => {
+        //   data += chunk;
+        //   generate.generateCodeHandle(JSON.parse(data));
+        //   response.writeHead(200, { 'Content-Type': 'text/plain' });
+        //   response.write('successful');
+        //   response.end();
+        // });
       }
     } catch (e) {
       console.log(e);

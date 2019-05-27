@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React,{ Component } from 'react';
 #{IMPORTANTD}
 #{IMPORTDYNAMIC}
 import { connect } from 'dva';

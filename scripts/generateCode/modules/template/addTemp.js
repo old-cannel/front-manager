@@ -3,8 +3,6 @@ import { connect } from 'dva';
 #{IMPORTANTD}
 #{IMPORTDYNAMIC}
 #{CONSTANT}
-
-
 const formItemLayout = {
   labelCol: {
     span: 8,
@@ -23,8 +21,6 @@ class Add extends Component {
       loading: false,
     };
   }
-
-
   //取消
   cancel = () => {
     const { form: { resetFields }, onCancel } = this.props;
@@ -32,13 +28,12 @@ class Add extends Component {
     if (onCancel) {
       onCancel();
     }
-
   };
 
   //保存
   submitForm = () => {
     this.setState({ loading: true });
-    const { form: { validateFields, resetFields }, onOk } = this.props;
+    const { form: { validateFields }, onOk } = this.props;
     validateFields((err, values) => {
       let data = values;
       if (!err) {
@@ -52,16 +47,13 @@ class Add extends Component {
     });
   };
 
-
   render() {
     const {
       visible,
       onCancel,
       form: { getFieldDecorator },
     } = this.props;
-
     const { loading } = this.state;
-
     return (
       <div>
         <Drawer

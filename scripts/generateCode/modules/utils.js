@@ -68,6 +68,21 @@ const formatCode = command => {
 };
 
 /**
+ * 代码格式化 Json 代码
+ * @param command 命令
+ */
+const formatJsonCode = path => {
+  const execCommand = `js-beautify -s 2 -f  ${path} -r ${path}`;
+  exec(execCommand, function(err, stdout, stderr) {
+    if (err) {
+      console.log('格式化代码失败：' + execCommand);
+    } else {
+      console.log('格式化代码完成：' + execCommand);
+    }
+  });
+};
+
+/**
  * 根据生成的code 动态引入需要加载的ant design 代码
  * @param content 生成的代码
  */
@@ -180,7 +195,7 @@ const dynamicConstant = content => {
     dynamicConstant += `const { RangePicker } = DatePicker;\r\n`;
   }
   if (content.indexOf('<Option') > -1) {
-    dynamicConstant += `const  Option  =Select.Option;\r\n`;
+    dynamicConstant += `const  { Option }  =Select;\r\n`;
   }
 
   return dynamicConstant;
@@ -274,7 +289,7 @@ const renderEditFormItem = (item, editLength) => {
           }\r\n`;
       break;
     case 'Select':
-      if (item.component.dataForm === '1') {
+      if (item.component.dataFrom === '1') {
         let optionStr = "<Option value=''>请选择</Option> \r\n";
         (item.component.dataSource || []).forEach(item => {
           optionStr += ` <Option value="${item.value}">${item.label}</Option> \r\n`;
@@ -286,14 +301,15 @@ const renderEditFormItem = (item, editLength) => {
                    rules:[
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
-             })(<Select defaultValue='' style={{ maxWidth: 240 }} placeholder='请选择${
+             })(
+             <Select defaultValue='' style={{ maxWidth: 240 }} placeholder='请选择${
                item.columnName
              }'>
               ${optionStr}
           </Select>)}
          </FormItem>
       </Col>\r\n`;
-      } else if (item.component.dataForm === '2') {
+      } else if (item.component.dataFrom === '2') {
         formItem = `${colTemp}
          <FormItem label="${item.columnName}:" {...formItemLayout}>
             {getFieldDecorator('${item.javaName}', {
@@ -301,7 +317,8 @@ const renderEditFormItem = (item, editLength) => {
                    rules:[
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
-             })(<Select defaultValue='' style={{ maxWidth: 240 }} placeholder='请选择${
+             })(
+             <Select defaultValue='' style={{ maxWidth: 240 }} placeholder='请选择${
                item.columnName
              }'>
               <Option value=''>请选择</Option>
@@ -402,7 +419,7 @@ const renderAddFormItem = (item, editLength) => {
           }\r\n`;
       break;
     case 'Select':
-      if (item.component.dataForm === '1') {
+      if (item.component.dataFrom === '1') {
         let optionStr = "<Option value=''>请选择</Option> \r\n";
         (item.component.dataSource || []).forEach(item => {
           optionStr += ` <Option value="${item.value}">${item.label}</Option> \r\n`;
@@ -414,14 +431,15 @@ const renderAddFormItem = (item, editLength) => {
                    rules:[
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
-             })(<Select defaultValue='' style={{ maxWidth: 240 }} placeholder='请选择${
+             })(
+             <Select defaultValue='' style={{ maxWidth: 240 }} placeholder='请选择${
                item.columnName
              }'>
               ${optionStr}
           </Select>)}
          </FormItem>
       </Col>\r\n`;
-      } else if (item.component.dataForm === '2') {
+      } else if (item.component.dataFrom === '2') {
         formItem = `${colTemp}
          <FormItem label="${item.columnName}:" {...formItemLayout}>
             {getFieldDecorator('${item.javaName}', {
@@ -429,7 +447,8 @@ const renderAddFormItem = (item, editLength) => {
                    rules:[
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
-             })(<Select defaultValue='' style={{ maxWidth: 240 }} placeholder='请选择${
+             })(
+             <Select defaultValue='' style={{ maxWidth: 240 }} placeholder='请选择${
                item.columnName
              }'>
               <Option value=''>请选择</Option>
@@ -477,9 +496,9 @@ const renderDetailsItem = (item, editLength) => {
   }
   let str = `current.${item.javaName}`;
   if (item.component.type === 'Select') {
-    if (item.component.dataForm === '2') {
+    if (item.component.dataFrom === '2') {
       str = `<DictLabel type={"${item.component.column}"} value={current.${item.javaName}}/>`;
-    } else if (item.component.dataForm === '1') {
+    } else if (item.component.dataFrom === '1') {
       str = `<DictLabel source={${JSON.stringify(item.component.dataSource)}} value={current.${
         item.javaName
       }}/>`;
@@ -548,7 +567,7 @@ const renderFilterFormItem = (item, editLength) => {
       }\r\n`;
       break;
     case 'Select':
-      if (item.component.dataForm === '1') {
+      if (item.component.dataFrom === '1') {
         let optionStr = "<Option value=''>全部</Option> \r\n";
         (item.component.dataSource || []).forEach(item => {
           optionStr += ` <Option value="${item.value}">${item.label}</Option> \r\n`;
@@ -557,17 +576,19 @@ const renderFilterFormItem = (item, editLength) => {
          <FilterItem label="${item.columnName}:">
                 {getFieldDecorator('${item.javaName}', {
                     initialValue:''
-                })( <Select defaultValue='' style={{ maxWidth: 240 }}>
+                })(
+                 <Select defaultValue='' style={{ maxWidth: 240 }}>
               ${optionStr}
           </Select>)}
          </FilterItem>
       </Col>\r\n`;
-      } else if (item.component.dataForm === '2') {
+      } else if (item.component.dataFrom === '2') {
         formItem = `<Col xxl={{ span: 7 }} md={{ span: 7 }}>
          <FilterItem label="${item.columnName}:">
                 {getFieldDecorator('${item.javaName}', {
                     initialValue:''
-                })( <Select defaultValue='' style={{ maxWidth: 240 }}>
+                })( 
+                <Select defaultValue='' style={{ maxWidth: 240 }}>
                 <Option value=''>全部</Option>
             {
                (this.props.dictInfo || []).filter(filterItem=>filterItem.type==='${
@@ -638,4 +659,5 @@ module.exports = {
   renderDetailsItem,
   getDataFile,
   renderAddFormItem,
+  formatJsonCode,
 };
