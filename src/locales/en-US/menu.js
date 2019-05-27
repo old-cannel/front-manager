@@ -45,4 +45,5 @@ export default {
   sys: 'sysManager',
 
   'menu.sys.test': 'userManager',
-};
+
+'menu.sys.task':'task',}

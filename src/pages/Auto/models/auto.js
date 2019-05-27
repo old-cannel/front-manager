@@ -44,7 +44,7 @@ export default {
   },
 
   effects: {
-    *fetch({payload={}}, {call, put}) {
+    *fetch({ payload={} }, {call, put}) {
       const response = yield call(queryList, {});
       if (response.code !== 10000) {
         message.error('数据加载失败');
@@ -64,22 +64,22 @@ export default {
         }
       });
     },
-    //删除
+    // 删除
     *remove({payload, success, fail}, {call, put}) {
       const response = yield call(tableDel, payload);
       requestResolver(response, success, fail);
     },
-    //新增仓位信息
+    // 新增仓位信息
     *add({payload, success, fail}, {call, put}) {
       const response = yield call(save, payload);
       requestResolver(response, success, fail);
     },
-    //数据表字段
+    // 数据表字段
     *tableColumn({payload, success, fail}, {call, put}) {
       const response = yield call(tableColumnInfo, payload);
       requestResolver(response, success, fail);
     },
-    //数据库表信息
+    // 数据库表信息
     *tableList({payload, success, fail}, {call, put}) {
       const response = yield call(tableInfo, payload);
       yield put({
@@ -89,12 +89,12 @@ export default {
         }
       });
     },
-    //新增页面
+    // 新增页面
     *addFrame({payload, success, fail}, {call, put}) {
       const response = yield call(generateCode, payload);
       requestResolver(response, success, fail);
     },
-    //新增仓位信息
+    // 新增仓位信息
     *check({payload, success, fail}, {call, put}) {
       const response = yield call(checkRouter, payload);
       requestResolver(response, success, fail);

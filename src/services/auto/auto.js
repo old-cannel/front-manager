@@ -3,7 +3,7 @@ import Api  from '@/services/api';
 
 const { pages, del, tableList,tableColumnList,add,check } = Api.auto;
 
-//列表
+// 列表
 export async function queryList(payload) {
   return request(pages, {
     method: 'POST',
@@ -11,17 +11,17 @@ export async function queryList(payload) {
   });
 }
 
-//删除
+// 删除
 export async function tableDel(payload={}) {
   return request(`${del}${payload.id}`);
 }
 
-//数据库表信息
+// 数据库表信息
 export async function tableInfo(payload) {
   return request(tableList);
 }
 
-//列表
+// 列表
 export async function tableColumnInfo(payload) {
   return request(tableColumnList, {
     method: 'POST',
@@ -29,7 +29,7 @@ export async function tableColumnInfo(payload) {
   });
 }
 
-//列表
+// 列表
 export async function save(payload) {
   return request(add, {
     method: 'POST',
@@ -37,7 +37,7 @@ export async function save(payload) {
   });
 }
 
-//列表
+// 列表
 export async function checkRouter(payload) {
   return request(check, {
     method: 'POST',
