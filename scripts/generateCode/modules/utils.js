@@ -96,6 +96,14 @@ const importAD = content => {
   if (content.indexOf('<Select') > -1) {
     modules.push('Select');
   }
+  //Modal
+  if (content.indexOf('<Modal') > -1) {
+    modules.push('Modal');
+  }
+  //Modal
+  if (content.indexOf('confirm({') > -1) {
+    modules.push('Modal');
+  }
 
   //select
   if (content.indexOf('<Select') > -1) {
@@ -197,7 +205,9 @@ const dynamicConstant = content => {
   if (content.indexOf('<Option') > -1) {
     dynamicConstant += `const  { Option }  =Select;\r\n`;
   }
-
+  if (content.indexOf('confirm({') > -1) {
+    dynamicConstant += `const  { confirm }  =Modal;\r\n`;
+  }
   return dynamicConstant;
 };
 
@@ -302,7 +312,7 @@ const renderEditFormItem = (item, editLength) => {
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
              })(
-             <Select defaultValue='' style={{ maxWidth: 240 }} placeholder='请选择${
+             <Select defaultValue='' style={{ maxWidth: 220 }} placeholder='请选择${
                item.columnName
              }'>
               ${optionStr}
@@ -318,7 +328,7 @@ const renderEditFormItem = (item, editLength) => {
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
              })(
-             <Select defaultValue='' style={{ maxWidth: 240 }} placeholder='请选择${
+             <Select defaultValue='' style={{ maxWidth: 220 }} placeholder='请选择${
                item.columnName
              }'>
               <Option value=''>请选择</Option>
@@ -432,7 +442,7 @@ const renderAddFormItem = (item, editLength) => {
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
              })(
-             <Select defaultValue='' style={{ maxWidth: 240 }} placeholder='请选择${
+             <Select defaultValue='' style={{ maxWidth: 220 }} placeholder='请选择${
                item.columnName
              }'>
               ${optionStr}
@@ -448,7 +458,7 @@ const renderAddFormItem = (item, editLength) => {
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
              })(
-             <Select defaultValue='' style={{ maxWidth: 240 }} placeholder='请选择${
+             <Select defaultValue='' style={{ maxWidth: 220 }} placeholder='请选择${
                item.columnName
              }'>
               <Option value=''>请选择</Option>
@@ -526,7 +536,7 @@ const renderFilterFormItem = (item, editLength) => {
       formItem = `<Col xxl={{ span: 7 }} md={{ span: 7 }}>
          <FilterItem label="${item.columnName}:" >
             {getFieldDecorator('${item.javaName}', {
-             })(<Input  style={{ maxWidth: 240 }} placeholder='请输入${item.columnName}'/>)}
+             })(<Input  style={{ maxWidth: 220 }} placeholder='请输入${item.columnName}'/>)}
          </FilterItem>
       </Col>\r\n`;
       break;
@@ -577,7 +587,7 @@ const renderFilterFormItem = (item, editLength) => {
                 {getFieldDecorator('${item.javaName}', {
                     initialValue:''
                 })(
-                 <Select defaultValue='' style={{ maxWidth: 240 }}>
+                 <Select defaultValue='' style={{ maxWidth: 220 }}>
               ${optionStr}
           </Select>)}
          </FilterItem>
@@ -588,7 +598,7 @@ const renderFilterFormItem = (item, editLength) => {
                 {getFieldDecorator('${item.javaName}', {
                     initialValue:''
                 })( 
-                <Select defaultValue='' style={{ maxWidth: 240 }}>
+                <Select defaultValue='' style={{ maxWidth: 220 }}>
                 <Option value=''>全部</Option>
             {
                (this.props.dictInfo || []).filter(filterItem=>filterItem.type==='${

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 #{IMPORTANTD}
 #{IMPORTDYNAMIC}
+#{CONSTANT}
 import Filter from './Filter';
 import Add from './Add';
 import Edit from './Edit';
@@ -131,6 +132,7 @@ class List extends Component {
           #{DELETEBUTTON}
         </div>
         <Table
+          key={JSON.stringify(loading)}
           #{ROWSELECTION}
           onChange={this.tableChange}
           loading={loading}
