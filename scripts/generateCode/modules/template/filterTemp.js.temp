@@ -45,7 +45,7 @@ class Filter extends Component {
     return (
       <div>
         <Form>
-          <Row gutter={24}  style={{width:1280}}>
+          <Row gutter={24} style={{maxWidth:1280}}>
             #{IMPORTFILTERITEM}
             <Col xxl={{ span: 5 }} md={{ span: 5 }}>
               <FilterItem>
