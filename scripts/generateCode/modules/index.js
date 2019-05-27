@@ -24,15 +24,14 @@ const menuLocales = [
   },
 ];
 
-const filterTemp = './scripts/generateCode/modules/template/filterTemp.js';
-const listTemp = './scripts/generateCode/modules/template/listTemp.js';
-const addTemp = './scripts/generateCode/modules/template/addTemp.js';
-const editTemp = './scripts/generateCode/modules/template/editTemp.js';
-const detailsTemp = './scripts/generateCode/modules/template/detailsTemp.js';
-const indexTemp = './scripts/generateCode/modules/template/indexTemp.js';
-const serverTemp = './scripts/generateCode/modules/template/serverTemp.js';
-const modelsTemp = './scripts/generateCode/modules/template/modelsTemp.js';
-const modelsApiTemp = './src/services/url.js';
+const filterTemp = './scripts/generateCode/modules/template/filterTemp.js.temp';
+const listTemp = './scripts/generateCode/modules/template/listTemp.js.temp';
+const addTemp = './scripts/generateCode/modules/template/addTemp.js.temp';
+const editTemp = './scripts/generateCode/modules/template/editTemp.js.temp';
+const detailsTemp = './scripts/generateCode/modules/template/detailsTemp.js.temp';
+const indexTemp = './scripts/generateCode/modules/template/indexTemp.js.temp';
+const serverTemp = './scripts/generateCode/modules/template/serverTemp.js.temp';
+const modelsTemp = './scripts/generateCode/modules/template/modelsTemp.js.temp';
 
 //Filter.js  过滤(create)
 //List.js 列表(create)
@@ -44,6 +43,8 @@ const modelsApiTemp = './src/services/url.js';
 //api.js api (update)
 //router.config.js (update)
 const generateCodeHandle = param => {
+  //父路由为空 为 /
+  param.parentRouter = param.parentRouter ? param.parentRouter : '/';
   //生成 filter
   generateFactory(param, 'filter');
   //生成list
@@ -69,7 +70,7 @@ const generateCodeHandle = param => {
 const generateFactory = (param, type) => {
   //生成页面
   if (param.hasPage === '1') {
-    const namespace = param.tableName.replace(/_/g, '');
+    const namespace = `${param.parentRouter}${param.router}`.replace(/\//g, '');
     //1.按照生成的文件不同选择相应生成的策略
     let switchStrategy = null;
     switch (type) {
@@ -136,9 +137,16 @@ const generateFilter = (param, namespace) => {
   //生成筛选页面表单
   let formItemStr = '';
   let dateHandle = '';
+  let timeSearch = '';
   row.forEach(item => {
     if (item.queryFlag === '1') {
       const createRes = utils.renderFilterFormItem(item);
+      if (
+        item.component.type === 'DatePicker_date' ||
+        item.component.type === 'DatePicker_datetime'
+      ) {
+        timeSearch += `payload.${item.javaName}=''\r\n;`;
+      }
       formItemStr += createRes[0];
       dateHandle += createRes[1];
     }
@@ -166,6 +174,7 @@ const generateFilter = (param, namespace) => {
   //动态常量引入
   const dynamicConstant = utils.dynamicConstant(result);
   result = result.replace('#{CONSTANT}', dynamicConstant);
+  result = result.replace('#{TIMESEARCH}', timeSearch);
 
   const path = `${pagesPath}${param.parentRouter}${param.router}`;
   const fileName = 'Filter.js';
@@ -208,22 +217,69 @@ const generateList = (param, namespace) => {
   columns += `{
           title: '操作',
           render:(text,record)=>{
-              return <span>
-                <a  href="javascript:void(0)"  onClick={()=>{this.details(record)}}>详情</a> <Divider type="vertical" />
-                <a  href="javascript:void(0)"  onClick={()=>{this.edit(record)}}>修改</a> <Divider 
-                type="vertical" />
-                <Popconfirm
-                    title="您确认删除吗？"
-                    onConfirm={()=>{this.confirmDel(record.id)}}
-                    okText="确认" cancelText="取消" >
-                      <a  href="javascript:void(0)">删除</a>
-                 </Popconfirm>
-                 
-              </span>
+            const operation =
+                <span>
+                    <a  href="javascript:void(0)"  onClick={()=>{this.details(record)}}>详情</a> <Divider type="vertical" />
+                    <a  href="javascript:void(0)"  onClick={()=>{this.edit(record)}}>修改</a> <Divider 
+                    type="vertical" />
+                    <Popconfirm
+                        title="您确认删除吗？"
+                        onConfirm={()=>{this.confirmDel(record.id)}}
+                        okText="确认" cancelText="取消" >
+                          <a  href="javascript:void(0)">删除</a>
+                     </Popconfirm>
+                  </span>
+            return  operation
           }
         },`;
 
   columns += ']';
+  //带有checkbox
+  if (param.tableType === '2') {
+    result = result
+      .replace('#{ROWSELECTION}', `rowSelection={rowSelection}`)
+      .replace(
+        '#{DELETEBUTTON}',
+        `<Button style={{marginLeft:20}} onClick={()=>{
+            const { selectedRowKeys } = this.state;
+            if(selectedRowKeys && selectedRowKeys.length===0){
+              message.info('请选择要删除的数据')
+            }else{
+              confirm({
+              okText: '确认',
+              cancelText:'取消',
+              content:<div>您确认删除吗？</div>,
+              onOk:()=> {
+                  let ids=""
+                  selectedRowKeys.forEach(item=>{
+                    ids+=item+","
+                  })
+                   ids= ids.substring(0,ids.length-1)
+                  this.props.dispatch({ type: '${namespace}/delete', payload: { id:ids } }).then((result)=>{
+                      if(result && result.code===10000){
+                        this.setState({selectedRowKeys:[]})
+                      }
+                  });
+              }
+            });
+            }
+          }} type="danger"> 删除 </Button>`
+      )
+      .replace('#{SELECTEDROWKEYS}', 'selectedRowKeys:[]')
+      .replace(
+        '#{ROWSELECTIONFUNC}',
+        `const rowSelection = {
+        onChange: (selectedRowKeys) => {
+          this.setState({ selectedRowKeys });
+        },
+      };`
+      );
+  }
+  result = result
+    .replace('#{ROWSELECTION}', ``)
+    .replace('#{DELETEBUTTON}', ``)
+    .replace('#{SELECTEDROWKEYS}', ``)
+    .replace('#{ROWSELECTIONFUNC}', ``);
   result = result.replace('#{COLUMNS}', columns).replace(/#{NAMESPACE}/g, namespace);
   //动态import antd 模块
   const importAd = utils.importAD(result);
@@ -231,6 +287,10 @@ const generateList = (param, namespace) => {
   //动态import dynamicImport 模块
   const importDyn = utils.dynamicImport(result);
   result = result.replace('#{IMPORTDYNAMIC}', importDyn);
+  //动态常量引入
+  const dynamicConstant = utils.dynamicConstant(result);
+  result = result.replace('#{CONSTANT}', dynamicConstant);
+
   const path = `${pagesPath}${param.parentRouter}${param.router}`;
   const fileName = 'List.js';
   return [path, fileName, result];
@@ -308,7 +368,9 @@ const generateAdd = (param, namespace) => {
   let importFilterItem = '';
 
   //如果编辑框小于6个 一行一个 大于一行2个显示
-  const editLength = param.tableInfo.filter(editItem => editItem.editFlag === '1').length;
+  const editLength = param.tableInfo.filter(
+    editItem => editItem.insertFlag === '1' && editItem.publicFlag === '0'
+  ).length;
   const drawerWidth = editLength < 6 ? 550 : 740;
 
   //生成编辑页面表单
@@ -462,7 +524,7 @@ const generateRouter = param => {
 
     utils.writer(utils.formatPath(routerPath), fullPath, result);
     //格式化代码 selint 效验
-    utils.formatCode(fullPath);
+    utils.formatJsonCode(fullPath);
   });
 
   const routerHelp = router => {
@@ -476,7 +538,7 @@ const generateRouter = param => {
           const componentItem = componentPath ? { component: componentPath } : {};
           item.routes.push({
             ...{
-              path: fullRouter,
+              path: fullRouter.replace(/\/\//g, '/'),
               name: routerName,
             },
             ...componentItem,
@@ -505,6 +567,7 @@ const generateLocalesMenus = param => {
               .replace(';', '');
             const result = `${data}'menu.${routerName}':'${item.name}',}`;
             utils.writer(utils.formatPath(itemLocale.path), fullPath, result);
+            utils.formatJsonCode(fullPath);
           }
         });
       }

@@ -45,10 +45,10 @@ const writer = (paths, fullPath, result) => {
   //写入内容
   fs.writeFile(fullPath, result, 'utf8', function(error) {
     if (error) {
-      console.log(error);
+      console.log('\033[41;0m  创建文件成功：' + error + '\033[0m');
       return false;
     }
-    console.log('创建文件成功：' + fullPath);
+    console.log('\033[42;0m  创建文件成功：' + fullPath + '\033[0m');
   });
 };
 
@@ -60,9 +60,9 @@ const formatCode = command => {
   const execCommand = `eslint --fix ${command}`;
   exec(execCommand, function(err, stdout, stderr) {
     if (err) {
-      console.log('格式化代码失败：' + execCommand);
+      console.log('\033[41;0m  格式化代码失败：' + err + '\033[0m');
     } else {
-      console.log('格式化代码完成：' + execCommand);
+      console.log('\033[42;0m  格式化代码完成：' + execCommand + '\033[0m');
     }
   });
 };
@@ -75,9 +75,9 @@ const formatJsonCode = path => {
   const execCommand = `js-beautify -s 2 -f  ${path} -r ${path}`;
   exec(execCommand, function(err, stdout, stderr) {
     if (err) {
-      console.log('格式化代码失败：' + execCommand);
+      console.log('\033[41;0m  格式化代码完成：' + execCommand + '\033[0m');
     } else {
-      console.log('格式化代码完成：' + execCommand);
+      console.log('\033[42;0m  格式化代码完成：' + execCommand + '\033[0m');
     }
   });
 };
@@ -95,6 +95,14 @@ const importAD = content => {
   //select
   if (content.indexOf('<Select') > -1) {
     modules.push('Select');
+  }
+  //Modal
+  if (content.indexOf('<Modal') > -1) {
+    modules.push('Modal');
+  }
+  //Modal
+  if (content.indexOf('confirm({') > -1) {
+    modules.push('Modal');
   }
 
   //select
@@ -197,7 +205,9 @@ const dynamicConstant = content => {
   if (content.indexOf('<Option') > -1) {
     dynamicConstant += `const  { Option }  =Select;\r\n`;
   }
-
+  if (content.indexOf('confirm({') > -1) {
+    dynamicConstant += `const  { confirm }  =Modal;\r\n`;
+  }
   return dynamicConstant;
 };
 
@@ -302,7 +312,7 @@ const renderEditFormItem = (item, editLength) => {
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
              })(
-             <Select defaultValue='' style={{ maxWidth: 240 }} placeholder='请选择${
+             <Select defaultValue='' style={{ maxWidth: 220 }} placeholder='请选择${
                item.columnName
              }'>
               ${optionStr}
@@ -318,7 +328,7 @@ const renderEditFormItem = (item, editLength) => {
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
              })(
-             <Select defaultValue='' style={{ maxWidth: 240 }} placeholder='请选择${
+             <Select defaultValue='' style={{ maxWidth: 220 }} placeholder='请选择${
                item.columnName
              }'>
               <Option value=''>请选择</Option>
@@ -389,7 +399,7 @@ const renderAddFormItem = (item, editLength) => {
     case 'DatePicker_date':
       formItem = `${colTemp}
          <FormItem label="${item.columnName}:" {...formItemLayout}>
-            {getFieldDecorator('${item.javaName}',
+            {getFieldDecorator('${item.javaName}',{
                    rules:[
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
@@ -432,7 +442,7 @@ const renderAddFormItem = (item, editLength) => {
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
              })(
-             <Select defaultValue='' style={{ maxWidth: 240 }} placeholder='请选择${
+             <Select defaultValue='' style={{ maxWidth: 220 }} placeholder='请选择${
                item.columnName
              }'>
               ${optionStr}
@@ -448,7 +458,7 @@ const renderAddFormItem = (item, editLength) => {
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
              })(
-             <Select defaultValue='' style={{ maxWidth: 240 }} placeholder='请选择${
+             <Select defaultValue='' style={{ maxWidth: 220 }} placeholder='请选择${
                item.columnName
              }'>
               <Option value=''>请选择</Option>
@@ -526,7 +536,7 @@ const renderFilterFormItem = (item, editLength) => {
       formItem = `<Col xxl={{ span: 7 }} md={{ span: 7 }}>
          <FilterItem label="${item.columnName}:" >
             {getFieldDecorator('${item.javaName}', {
-             })(<Input  style={{ maxWidth: 240 }} placeholder='请输入${item.columnName}'/>)}
+             })(<Input  style={{ maxWidth: 220 }} placeholder='请输入${item.columnName}'/>)}
          </FilterItem>
       </Col>\r\n`;
       break;
@@ -577,7 +587,7 @@ const renderFilterFormItem = (item, editLength) => {
                 {getFieldDecorator('${item.javaName}', {
                     initialValue:''
                 })(
-                 <Select defaultValue='' style={{ maxWidth: 240 }}>
+                 <Select defaultValue='' style={{ maxWidth: 220 }}>
               ${optionStr}
           </Select>)}
          </FilterItem>
@@ -588,7 +598,7 @@ const renderFilterFormItem = (item, editLength) => {
                 {getFieldDecorator('${item.javaName}', {
                     initialValue:''
                 })( 
-                <Select defaultValue='' style={{ maxWidth: 240 }}>
+                <Select defaultValue='' style={{ maxWidth: 220 }}>
                 <Option value=''>全部</Option>
             {
                (this.props.dictInfo || []).filter(filterItem=>filterItem.type==='${

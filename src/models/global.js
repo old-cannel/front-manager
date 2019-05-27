@@ -1,4 +1,5 @@
 import { queryNotices } from '@/services/api';
+import { queryDict } from '@/services/common/common';
 
 export default {
   namespace: 'global',
@@ -6,11 +7,7 @@ export default {
   state: {
     collapsed: false,
     notices: [],
-    dictInfo: [
-      { value: '00', label: '字典00', type: 'dictType' },
-      { value: '01', label: '字典01', type: 'dictType' },
-      { value: '02', label: '字典02', type: 'dictType' },
-    ],
+    dictInfo: [],
   },
 
   effects: {
@@ -70,6 +67,20 @@ export default {
         },
       });
     },
+    *queryDict({}, { put, call }) {
+      const result = yield call(queryDict);
+      if (result && result.code === 10000) {
+        yield put({
+          type: 'updateDictInfo/queryDict',
+          payload: {
+            totalCount: result.result.map(item => {
+              Object.assign(item).dictValue = item.value;
+              return item;
+            }),
+          },
+        });
+      }
+    },
   },
 
   reducers: {
@@ -89,6 +100,12 @@ export default {
       return {
         ...state,
         notices: state.notices.filter(item => item.type !== payload),
+      };
+    },
+    updateDictInfo(state, { payload }) {
+      return {
+        ...state,
+        dictInfo: payload,
       };
     },
   },

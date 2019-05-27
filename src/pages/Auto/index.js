@@ -1,10 +1,10 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { Row, Col, Card, Form, Input, Select, Button, message, Badge, Divider, Modal } from 'antd';
+import { Row, Col, Card, Form, Input, Button, message, Modal } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import moment from 'moment';
-import ClassForm from './Form';
+import ClassForm from './Add';
 
 import styles from './index.less';
 
@@ -26,26 +26,10 @@ class TableList extends PureComponent {
     modalVisible: false,
     selectedRows: [],
     formValues: {},
-    preUpdateClazz: {},
     modalLoading: false,
     hasPage:"2",
+    tableType: "1",
     routerList:[]
-  };
-
-  handleText = text => {
-    let textview = text;
-    if (textview === undefined || textview == '') {
-      textview = '';
-    } else if (textview.length > 10) {
-      textview = `${textview.substring(0, 10)}...`;
-    }
-    return <div title={text}>{textview}</div>;
-  };
-
-  handleUpdTime = text => {
-    if (text != undefined) {
-      return moment(text).format('YYYY-MM-DD');
-    }
   };
 
   columns = [
@@ -92,6 +76,23 @@ class TableList extends PureComponent {
   ];
 
   componentDidMount() {}
+
+  handleText = text => {
+    let textview = text;
+    if (textview === undefined || textview === '') {
+      textview = '';
+    } else if (textview.length > 10) {
+      textview = `${textview.substring(0, 10)}...`;
+    }
+    return <div title={text}>{textview}</div>;
+  };
+
+  handleUpdTime = text => {
+    if (text !== undefined) {
+      return moment(text).format('YYYY-MM-DD');
+    }
+    return "";
+  };
 
   // 分页相关数据改变
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
@@ -154,7 +155,6 @@ class TableList extends PureComponent {
     const {
       form,
       dispatch,
-      auto: { data },
     } = this.props;
     form.resetFields();
     this.setState({
@@ -167,7 +167,7 @@ class TableList extends PureComponent {
   };
 
   // 打开/关闭抽屉
-  handleModalVisible = (flag, clazz = {}) => {
+  handleModalVisible = (flag) => {
     const { dispatch,menu } = this.props;
     if (!!flag) {
       dispatch({
@@ -177,7 +177,8 @@ class TableList extends PureComponent {
     this.setState({
       modalVisible: !!flag,
       routerList:menu.menuData,
-      hasPage:"2"
+      hasPage:"2",
+      tableType:"1"
     });
   };
 
@@ -190,13 +191,13 @@ class TableList extends PureComponent {
       payload: {
         ...fields,
       },
-      success: res => {
+      success: () => {
         message.success('添加成功');
         this.handleSearch();
         // this.changeModalLoadingStatus(false);
         this.handleModalVisible(false);
       },
-      fail: res => {
+      fail: () => {
         message.error('添加失败');
         // this.changeModalLoadingStatus(false);
       },
@@ -210,7 +211,7 @@ class TableList extends PureComponent {
       payload: {
         ...fields,
       },
-      success: res => {
+      success: () => {
         this.handleAdd(fields);
         this.addFramePage(fields);
       },
@@ -243,7 +244,7 @@ class TableList extends PureComponent {
           payload: {
             ...fields,
           },
-          success: res => {
+          success: () => {
             message.success('删除成功');
             this.handleSearch();
           },
@@ -262,15 +263,6 @@ class TableList extends PureComponent {
     });
   };
 
-  //清空新增页面数据
-  cleanRecord = (record,tableList) =>{
-    this.setState({
-      record:record||{},
-      tableList:tableList||[],
-      hasPage:"2",
-    });
-  };
-
   selectHasPage = (value) => {
     const { menu } = this.props;
     this.setState({
@@ -281,6 +273,12 @@ class TableList extends PureComponent {
       routerList:menu.menuData,
     });
   };
+
+  selectChangeType = value => {
+    this.setState({
+      tableType: value
+    });
+  }
 
   renderSimpleForm() {
     const {
@@ -321,12 +319,12 @@ class TableList extends PureComponent {
     const { auto = {}, loading, dispatch, form} = this.props;
     const { data,  filterKey, tableData } = auto;
 
-    const { selectedRows, modalVisible, modalLoading, hasPage,routerList } = this.state;
+    const { selectedRows, modalVisible, modalLoading, hasPage,routerList,tableType } = this.state;
 
     // 刷新条件检索框
     if (tempFilterKey == null) {
       tempFilterKey = filterKey;
-    } else if (tempFilterKey != filterKey) {
+    } else if (tempFilterKey !== filterKey) {
       form.resetFields();
       this.setState({
         formValues: {},
@@ -340,11 +338,12 @@ class TableList extends PureComponent {
       visible: modalVisible,
       modalLoading,
       hasPage,
+      tableType,
       record:{},
       tableList:tableData,
       routerList,
-      cleanData:this.cleanRecord,
       changeHasPage:this.selectHasPage,
+      changeTableType:this.selectChangeType,
       onClose: () => {
         this.handleModalVisible(false);
       },

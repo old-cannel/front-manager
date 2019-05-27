@@ -1,6 +1,6 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
-const API_PREX = `/api/auto`;
+const API_PREX = `/api/newproject`;
 
 export async function queryProjectNotice() {
   return request('/api/project/notice');
