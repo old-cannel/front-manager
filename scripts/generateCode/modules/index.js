@@ -43,6 +43,8 @@ const modelsTemp = './scripts/generateCode/modules/template/modelsTemp.js.temp';
 //api.js api (update)
 //router.config.js (update)
 const generateCodeHandle = param => {
+  //父路由为空 为 /
+  param.parentRouter = param.parentRouter ? param.parentRouter : '/';
   //生成 filter
   generateFactory(param, 'filter');
   //生成list
