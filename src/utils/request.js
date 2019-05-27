@@ -67,15 +67,15 @@ const errorHandler = error => {
  */
 const request = extend({
   headers: {
-    "Content-Type":'application/json; charset=utf-8', // unified headers
-    "Accept":"application/json",
+    'Content-Type': 'application/json; charset=utf-8', // unified headers
+    Accept: 'application/json',
     Authorization:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsInZhbGlkVGltZSI6IjE1NTg3MDg2ODk5NjUiLCJ0aW1lT3V0IjoiMTU1ODcwMTQ4OTk3NyJ9.eyJjb2RlIjoiMSIsImFkZFRpbWUiOjE1NTQyNzgyNDYwMDAsIm5vbkxvY2tlZCI6dHJ1ZSwic3JjT3JnQ29kZSI6IjEiLCJjcmVkZW50aWFsc05vbkV4cGlyZWQiOnRydWUsImFkZE1hcmsiOiIxIiwiZnVsbE5hbWUiOiJhZG1pbiIsImRlbEZsYWciOiIwIiwidXNlck5hbWUiOiJhZG1pbiIsImVuYWJsZWQiOnRydWUsIm1vYmlsZU51bSI6IjEzODU2Nzg1Njc4Iiwid29ya051bSI6IjAwMSIsIm5vbkV4cGlyZWQiOnRydWUsImFjY291bnROb25FeHBpcmVkIjp0cnVlLCJhZGRVc2VyQ29kZSI6IjEiLCJpZCI6IjEiLCJhZG1pbkZsYWciOiIxIiwiYWNjb3VudE5vbkxvY2tlZCI6dHJ1ZSwidXNlcm5hbWUiOiJhZG1pbiJ9.3PEVLkkpU9uAEQBBRG2dCaZ_eeHFwcWttPITqIh2euk',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsInZhbGlkVGltZSI6IjE1NTg5NTM5ODA5OTkiLCJ0aW1lT3V0IjoiMTU1ODk0Njc4MTAwMyJ9.eyJjb2RlIjoiMSIsImFkZFRpbWUiOjE1NTQyNzgyNDYwMDAsIm5vbkxvY2tlZCI6dHJ1ZSwic3JjT3JnQ29kZSI6IjEiLCJjcmVkZW50aWFsc05vbkV4cGlyZWQiOnRydWUsImFkZE1hcmsiOiIxIiwiZnVsbE5hbWUiOiJhZG1pbiIsImRlbEZsYWciOiIwIiwidXNlck5hbWUiOiJhZG1pbiIsImVuYWJsZWQiOnRydWUsIm1vYmlsZU51bSI6IjEzODU2Nzg1Njc4Iiwid29ya051bSI6IjAwMSIsIm5vbkV4cGlyZWQiOnRydWUsImFjY291bnROb25FeHBpcmVkIjp0cnVlLCJhZGRVc2VyQ29kZSI6IjEiLCJpZCI6IjEiLCJhZG1pbkZsYWciOiIxIiwiYWNjb3VudE5vbkxvY2tlZCI6dHJ1ZSwidXNlcm5hbWUiOiJhZG1pbiJ9.Rs0yxGx1HwmQ7wcpFpQ6-dcFF3FM1a8JTTPgfl2Ejwc',
     // 'Content-Type': 'application/json; charset=utf-8',
   },
   // errorHandler, // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
-  expirys:isAntdPro(),
+  expirys: isAntdPro(),
 });
 
 export default request;
