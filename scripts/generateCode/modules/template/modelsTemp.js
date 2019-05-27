@@ -14,7 +14,7 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen(location => {
-        if (location.pathname === '#{ROUTER}') {
+        if (location.pathname === '#{ROUTER}' || location.pathname === '#{ROUTER}/') {
           initState.pageKey = Math.random();
           dispatch({ type: 'updateState', payload: initState });
         }
