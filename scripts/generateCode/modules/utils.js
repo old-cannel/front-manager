@@ -45,10 +45,10 @@ const writer = (paths, fullPath, result) => {
   //写入内容
   fs.writeFile(fullPath, result, 'utf8', function(error) {
     if (error) {
-      console.log(error);
+      console.log('\033[41;0m  创建文件成功：' + error + '\033[0m');
       return false;
     }
-    console.log('创建文件成功：' + fullPath);
+    console.log('\033[42;0m  创建文件成功：' + fullPath + '\033[0m');
   });
 };
 
@@ -60,9 +60,9 @@ const formatCode = command => {
   const execCommand = `eslint --fix ${command}`;
   exec(execCommand, function(err, stdout, stderr) {
     if (err) {
-      console.log('格式化代码失败：' + execCommand);
+      console.log('\033[41;0m  格式化代码失败：' + err + '\033[0m');
     } else {
-      console.log('格式化代码完成：' + execCommand);
+      console.log('\033[42;0m  格式化代码完成：' + execCommand + '\033[0m');
     }
   });
 };
@@ -75,9 +75,9 @@ const formatJsonCode = path => {
   const execCommand = `js-beautify -s 2 -f  ${path} -r ${path}`;
   exec(execCommand, function(err, stdout, stderr) {
     if (err) {
-      console.log('格式化代码失败：' + execCommand);
+      console.log('\033[41;0m  格式化代码完成：' + execCommand + '\033[0m');
     } else {
-      console.log('格式化代码完成：' + execCommand);
+      console.log('\033[42;0m  格式化代码完成：' + execCommand + '\033[0m');
     }
   });
 };
