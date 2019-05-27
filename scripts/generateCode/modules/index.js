@@ -179,9 +179,9 @@ const generateList = (param, namespace) => {
   param.tableInfo.forEach(item => {
     let str = '';
     if (item.component.type === 'Select') {
-      if (item.component.dataForm === '2') {
+      if (item.component.dataFrom === '2') {
         str = `<DictLabel type={"${item.component.column}"} value={current.${item.javaName}}/>`;
-      } else if (item.component.dataForm === '1') {
+      } else if (item.component.dataFrom === '1') {
         str = `<DictLabel source={${JSON.stringify(item.component.dataSource)}} value={current.${
           item.javaName
         }}/>`;

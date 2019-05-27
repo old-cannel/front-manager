@@ -274,7 +274,7 @@ const renderEditFormItem = (item, editLength) => {
           }\r\n`;
       break;
     case 'Select':
-      if (item.component.dataForm === '1') {
+      if (item.component.dataFrom === '1') {
         let optionStr = "<Option value=''>请选择</Option> \r\n";
         (item.component.dataSource || []).forEach(item => {
           optionStr += ` <Option value="${item.value}">${item.label}</Option> \r\n`;
@@ -293,7 +293,7 @@ const renderEditFormItem = (item, editLength) => {
           </Select>)}
          </FormItem>
       </Col>\r\n`;
-      } else if (item.component.dataForm === '2') {
+      } else if (item.component.dataFrom === '2') {
         formItem = `${colTemp}
          <FormItem label="${item.columnName}:" {...formItemLayout}>
             {getFieldDecorator('${item.javaName}', {
@@ -402,7 +402,7 @@ const renderAddFormItem = (item, editLength) => {
           }\r\n`;
       break;
     case 'Select':
-      if (item.component.dataForm === '1') {
+      if (item.component.dataFrom === '1') {
         let optionStr = "<Option value=''>请选择</Option> \r\n";
         (item.component.dataSource || []).forEach(item => {
           optionStr += ` <Option value="${item.value}">${item.label}</Option> \r\n`;
@@ -421,7 +421,7 @@ const renderAddFormItem = (item, editLength) => {
           </Select>)}
          </FormItem>
       </Col>\r\n`;
-      } else if (item.component.dataForm === '2') {
+      } else if (item.component.dataFrom === '2') {
         formItem = `${colTemp}
          <FormItem label="${item.columnName}:" {...formItemLayout}>
             {getFieldDecorator('${item.javaName}', {
@@ -477,9 +477,9 @@ const renderDetailsItem = (item, editLength) => {
   }
   let str = `current.${item.javaName}`;
   if (item.component.type === 'Select') {
-    if (item.component.dataForm === '2') {
+    if (item.component.dataFrom === '2') {
       str = `<DictLabel type={"${item.component.column}"} value={current.${item.javaName}}/>`;
-    } else if (item.component.dataForm === '1') {
+    } else if (item.component.dataFrom === '1') {
       str = `<DictLabel source={${JSON.stringify(item.component.dataSource)}} value={current.${
         item.javaName
       }}/>`;
@@ -548,7 +548,7 @@ const renderFilterFormItem = (item, editLength) => {
       }\r\n`;
       break;
     case 'Select':
-      if (item.component.dataForm === '1') {
+      if (item.component.dataFrom === '1') {
         let optionStr = "<Option value=''>全部</Option> \r\n";
         (item.component.dataSource || []).forEach(item => {
           optionStr += ` <Option value="${item.value}">${item.label}</Option> \r\n`;
@@ -562,7 +562,7 @@ const renderFilterFormItem = (item, editLength) => {
           </Select>)}
          </FilterItem>
       </Col>\r\n`;
-      } else if (item.component.dataForm === '2') {
+      } else if (item.component.dataFrom === '2') {
         formItem = `<Col xxl={{ span: 7 }} md={{ span: 7 }}>
          <FilterItem label="${item.columnName}:">
                 {getFieldDecorator('${item.javaName}', {

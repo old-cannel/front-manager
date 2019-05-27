@@ -87,7 +87,7 @@ const data = {
       columnName: '备注',
       component: {
         type: 'Select',
-        dataForm: '1',
+        dataFrom: '1',
         column: '',
         dataSource: [
           { value: '0', label: '备注0' },
@@ -134,7 +134,7 @@ const data = {
       columnName: '上级名称',
       component: {
         type: 'Select',
-        dataForm: '2',
+        dataFrom: '2',
         column: 'dictType',
       },
     },
