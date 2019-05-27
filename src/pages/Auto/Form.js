@@ -15,7 +15,7 @@ const formItemLayout = {
   },
 };
 const {TreeNode} = Tree;
-const Option = Select.Option;
+const {Option} = Select;
 
 @Form.create()
 class ClassForm extends React.Component {
@@ -36,7 +36,7 @@ class ClassForm extends React.Component {
   // table表中input输入
   sortChange = (e, text, record) => {
     const {columnList = []} = this.state;
-    for (let i = 0; i < columnList.length; i++) {
+    for (let i = 0; i < columnList.length; i+=1) {
       if (columnList[i].tableColumn === record.tableColumn) {
         columnList[i][text] = Math.round((`${e.target.value  }`).replace(/[^0-9]/, ''));
         break;
@@ -50,7 +50,7 @@ class ClassForm extends React.Component {
   // 字段名称输入
   columnNameChange = (e, text, record) => {
     const {columnList = []} = this.state;
-    for (let i = 0; i < columnList.length; i++) {
+    for (let i = 0; i < columnList.length; i+=1) {
       if (columnList[i].tableColumn === record.tableColumn) {
         columnList[i][text] = e.target.value;
         break;
@@ -77,7 +77,7 @@ class ClassForm extends React.Component {
     if (e.target.checked) {
       flag = 1;
     }
-    for (let i = 0; i < columnList.length; i++) {
+    for (let i = 0; i < columnList.length; i+=1) {
       if (columnList[i].tableColumn === record.tableColumn) {
         columnList[i][type] = flag;
         break;
@@ -129,7 +129,7 @@ class ClassForm extends React.Component {
   // 下拉选项切换
   changeSelect = (e, text, record) => {
     const {columnList = []} = this.state;
-    for (let i = 0; i < columnList.length; i++) {
+    for (let i = 0; i < columnList.length; i+=1) {
       if (columnList[i].tableColumn === record.tableColumn) {
         columnList[i][text] = e;
         break;
@@ -221,35 +221,40 @@ class ClassForm extends React.Component {
 
   // 查询方式
   queryModeList = (text, record, type) => {
-    return <Select
-      style={{width: '80%'}}
-      getPopupContainer={triggerNode => triggerNode.parentNode}
-      defaultValue={text}
-      onSelect={e => {
-                     this.changeSelect(e, type, record)
-                   }}
-    >
-      <Option value="=">=</Option>
-      <Option value="like">like</Option>
-    </Select>
+    const temp=
+      <Select
+        style={{width: '80%'}}
+        getPopupContainer={triggerNode => triggerNode.parentNode}
+        defaultValue={text}
+        onSelect={e => {
+          this.changeSelect(e, type, record)
+        }}
+      >
+        <Option value="=">=</Option>
+        <Option value="like">like</Option>
+      </Select>
+    return  temp;
+
   };
 
   componentTypeList = (text, record, type) => {
-    return <Select
-      style={{width: '90%'}}
-      getPopupContainer={triggerNode => triggerNode.parentNode}
-      defaultValue={text}
-      placeholder="请选择"
-      onChange={e => {
-                     this.changeSelect(e, type, record)
-                   }}
-    >
-      <Option value="Input">Input</Option>
-      <Option value="InputNumber">InputNumber</Option>
-      <Option value="Select">Select</Option>
-      <Option value="DatePicker_date">DatePicker_date</Option>
-      <Option value="DatePicker_datetime">DatePicker_datetime</Option>
-    </Select>
+    const temp =
+      <Select
+        style={{width: '90%'}}
+        getPopupContainer={triggerNode => triggerNode.parentNode}
+        defaultValue={text}
+        placeholder="请选择"
+        onChange={e => {
+          this.changeSelect(e, type, record)
+        }}
+      >
+        <Option value="Input">Input</Option>
+        <Option value="InputNumber">InputNumber</Option>
+        <Option value="Select">Select</Option>
+        <Option value="DatePicker_date">DatePicker_date</Option>
+        <Option value="DatePicker_datetime">DatePicker_datetime</Option>
+      </Select>
+    return temp;
   };
 
   render = () => {
