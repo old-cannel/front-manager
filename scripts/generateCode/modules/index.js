@@ -208,7 +208,8 @@ const generateList = (param, namespace) => {
   columns += `{
           title: '操作',
           render:(text,record)=>{
-              return <span>
+              const temp= 
+              <span>
                 <a  href="javascript:void(0)"  onClick={()=>{this.details(record)}}>详情</a> <Divider type="vertical" />
                 <a  href="javascript:void(0)"  onClick={()=>{this.edit(record)}}>修改</a> <Divider 
                 type="vertical" />
@@ -218,8 +219,9 @@ const generateList = (param, namespace) => {
                     okText="确认" cancelText="取消" >
                       <a  href="javascript:void(0)">删除</a>
                  </Popconfirm>
-                 
               </span>
+              return  temp
+             
           }
         },`;
 
@@ -231,6 +233,38 @@ const generateList = (param, namespace) => {
   //动态import dynamicImport 模块
   const importDyn = utils.dynamicImport(result);
   result = result.replace('#{IMPORTDYNAMIC}', importDyn);
+
+  //带有checkbox
+  if (param.tableType === '2') {
+    result = result
+      .replace('#{ROWSELECTION}', `rowSelection={rowSelection}`)
+      .replace(
+        '#{DELETEBUTTON}',
+        `<Button style={{marginLeft:10}} onClick={()=>{
+            const { selectedRowKeys } = this.state;
+            this.props.dispatch({ type: '${namespace}/delete', payload: { id:selectedRowKeys } }).then((result)=>{
+                if(result && result.code===10000){
+                  this.setState({selectedRowKeys:[]})
+                }
+            });
+          }} type="danger"> 删除 </Button>`
+      )
+      .replace('#{SELECTEDROWKEYS}', 'selectedRowKeys:[]')
+      .replace(
+        '#{ROWSELECTIONFUNC}',
+        `const rowSelection = {
+        onChange: (selectedRowKeys) => {
+          this.setState({ selectedRowKeys });
+        },
+      };`
+      );
+  }
+  result = result
+    .replace('#{ROWSELECTION}', ``)
+    .replace('#{DELETEBUTTON}', ``)
+    .replace('#{SELECTEDROWKEYS}', '')
+    .replace('#{ROWSELECTIONFUNC}', ``);
+
   const path = `${pagesPath}${param.parentRouter}${param.router}`;
   const fileName = 'List.js';
   return [path, fileName, result];
@@ -333,7 +367,7 @@ const generateAdd = (param, namespace) => {
   if (result.indexOf('props.dictInfo') > 0) {
     result = result
       .replace('#{NAMESPANCE}', 'global')
-      .replace(' #{NAMESPANCEITEM}', 'dictInfo:global.dictInfo');
+      .replace('#{NAMESPANCEITEM}', 'dictInfo:global.dictInfo');
   }
   result = result.replace('#{NAMESPANCE}', '').replace('#{NAMESPANCEITEM}', '');
 

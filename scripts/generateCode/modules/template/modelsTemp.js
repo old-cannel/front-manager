@@ -66,7 +66,7 @@ export default {
       }else{
         message.success(result.msg);
       }
-
+      return result
     },
 
     //获取详情

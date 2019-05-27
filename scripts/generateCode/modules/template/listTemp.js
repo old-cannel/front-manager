@@ -22,6 +22,7 @@ class List extends Component {
     this.state = {
       editVisible: false,
       addVisible: false,
+      #{SELECTEDROWKEYS}
     };
   }
 
@@ -101,6 +102,7 @@ class List extends Component {
   };
 
 
+
   render() {
     const {
       list, loading, pagination, dispatch, current,
@@ -113,8 +115,7 @@ class List extends Component {
       ...pagination,
     };
     const columns = #{COLUMNS}
-
-
+    #{ROWSELECTIONFUNC}
     return (
       <div className="container">
         <Filter ref={this.filterRef}/>
@@ -127,8 +128,10 @@ class List extends Component {
           >
             新增
           </Button>
+          #{DELETEBUTTON}
         </div>
         <Table
+          #{ROWSELECTION}
           onChange={this.tableChange}
           loading={loading}
           columns={columns}
@@ -149,7 +152,6 @@ class List extends Component {
             }}/>
         }
 
-
         {
           addVisible && <Add
             visible={addVisible}
@@ -160,7 +162,6 @@ class List extends Component {
               this.save(values, callback);
             }}/>
         }
-
 
         <Details
           loading={detailsLoading}

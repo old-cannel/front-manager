@@ -389,7 +389,7 @@ const renderAddFormItem = (item, editLength) => {
     case 'DatePicker_date':
       formItem = `${colTemp}
          <FormItem label="${item.columnName}:" {...formItemLayout}>
-            {getFieldDecorator('${item.javaName}',
+            {getFieldDecorator('${item.javaName}',{
                    rules:[
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
