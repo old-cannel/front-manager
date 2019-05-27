@@ -11,7 +11,6 @@ const formItemLayout = {
     span: 16,
   },
 };
-
 @connect(({ #{NAMESPANCE} }) => ({
   #{NAMESPANCEITEM}
 }))
@@ -22,8 +21,6 @@ class Edit extends Component {
       loading: false,
     };
   }
-
-
   //取消
   cancel = () => {
     const { form: { resetFields }, onCancel } = this.props;
@@ -31,13 +28,12 @@ class Edit extends Component {
     if (onCancel) {
       onCancel();
     }
-
   };
 
   //保存
   submitForm = () => {
     this.setState({loading:true})
-    const { form: { validateFields, resetFields }, onOk } = this.props;
+    const { form: { validateFields }, onOk } = this.props;
     validateFields((err, values) => {
       let data = values;
       if (!err) {
@@ -51,7 +47,6 @@ class Edit extends Component {
     });
   };
 
-
   render() {
     const {
       visible,
@@ -59,7 +54,6 @@ class Edit extends Component {
       form: { getFieldDecorator },
     } = this.props;
     const { loading } = this.state;
-
 
     return (
       <div>

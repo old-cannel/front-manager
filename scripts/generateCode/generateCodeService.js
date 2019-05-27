@@ -319,16 +319,16 @@ http
     try {
       const pathName = url.parse(request.url).pathname;
       if (pathName === '/createFile') {
-        // generate.generateCodeHandle(data);
+        generate.generateCodeHandle(data);
 
-        let data = '';
-        request.on('data', chunk => {
-          data += chunk;
-          generate.generateCodeHandle(JSON.parse(data));
-          response.writeHead(200, { 'Content-Type': 'text/plain' });
-          response.write('successful');
-          response.end();
-        });
+        // let data = '';
+        // request.on('data', chunk => {
+        //   data += chunk;
+        //   generate.generateCodeHandle(JSON.parse(data));
+        //   response.writeHead(200, { 'Content-Type': 'text/plain' });
+        //   response.write('successful');
+        //   response.end();
+        // });
       }
     } catch (e) {
       console.log(e);

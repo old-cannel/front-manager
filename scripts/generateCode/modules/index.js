@@ -180,11 +180,9 @@ const generateList = (param, namespace) => {
     let str = '';
     if (item.component.type === 'Select') {
       if (item.component.dataFrom === '2') {
-        str = `<DictLabel type={"${item.component.column}"} value={current.${item.javaName}}/>`;
+        str = `<DictLabel type={"${item.component.column}"} value={text}/>`;
       } else if (item.component.dataFrom === '1') {
-        str = `<DictLabel source={${JSON.stringify(item.component.dataSource)}} value={current.${
-          item.javaName
-        }}/>`;
+        str = `<DictLabel source={${JSON.stringify(item.component.dataSource)}} value={text}/>`;
       }
     }
 
