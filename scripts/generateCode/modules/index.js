@@ -137,9 +137,16 @@ const generateFilter = (param, namespace) => {
   //生成筛选页面表单
   let formItemStr = '';
   let dateHandle = '';
+  let timeSearch = '';
   row.forEach(item => {
     if (item.queryFlag === '1') {
       const createRes = utils.renderFilterFormItem(item);
+      if (
+        item.component.type === 'DatePicker_date' ||
+        item.component.type === 'DatePicker_datetime'
+      ) {
+        timeSearch += `payload.${item.javaName}=''\r\n;`;
+      }
       formItemStr += createRes[0];
       dateHandle += createRes[1];
     }
@@ -167,6 +174,7 @@ const generateFilter = (param, namespace) => {
   //动态常量引入
   const dynamicConstant = utils.dynamicConstant(result);
   result = result.replace('#{CONSTANT}', dynamicConstant);
+  result = result.replace('#{TIMESEARCH}', timeSearch);
 
   const path = `${pagesPath}${param.parentRouter}${param.router}`;
   const fileName = 'Filter.js';
@@ -238,9 +246,16 @@ const generateList = (param, namespace) => {
               message.info('请选择要删除的数据')
             }else{
               confirm({
+              okText: '确认',
+              cancelText:'取消',
               content:<div>您确认删除吗？</div>,
               onOk:()=> {
-                  this.props.dispatch({ type: '${namespace}/delete', payload: { id:selectedRowKeys } }).then((result)=>{
+                  let ids=""
+                  selectedRowKeys.forEach(item=>{
+                    ids+=item+","
+                  })
+                   ids= ids.substring(0,ids.length-1)
+                  this.props.dispatch({ type: '${namespace}/delete', payload: { id:ids } }).then((result)=>{
                       if(result && result.code===10000){
                         this.setState({selectedRowKeys:[]})
                       }
