@@ -4,7 +4,7 @@ import { Row, Col, Card, Form, Input, Button, message, Modal } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import moment from 'moment';
-import ClassForm from './Form';
+import ClassForm from './Add';
 
 import styles from './index.less';
 

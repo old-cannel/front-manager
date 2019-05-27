@@ -109,21 +109,16 @@ class ClassForm extends React.Component {
 
   // java类型选项
   javaTypeList = (text, record, type) => {
-    return <Select
-      style={{width: '90%'}}
-      getPopupContainer={triggerNode => triggerNode.parentNode}
-      defaultValue={text}
-      onSelect={e => {
-                     this.changeSelect(e, type, record)
-                   }}
-    >
-      <Option value="String">String</Option>
-      <Option value="Integer">Integer</Option>
-      <Option value="Double">Double</Option>
-      <Option value="BigDecimal">BigDecimal</Option>
-      <Option value="Float">Float</Option>
-      <Option value="Date">Date</Option>
-    </Select>
+      const temp =
+        <Select style={{width: '90%'}} getPopupContainer={triggerNode => triggerNode.parentNode} defaultValue={text} onSelect={e => { this.changeSelect(e, type, record) }}>
+          <Option value="String">String</Option>
+          <Option value="Integer">Integer</Option>
+          <Option value="Double">Double</Option>
+          <Option value="BigDecimal">BigDecimal</Option>
+          <Option value="Float">Float</Option>
+          <Option value="Date">Date</Option>
+        </Select>
+    return temp;
   };
 
   // 下拉选项切换
@@ -284,23 +279,24 @@ class ClassForm extends React.Component {
     } = this.state;
     const submit = () => {
       validateFields((errors, values) => {
+        const info = values;
         if (errors) {
           return;
         }
         // 路由非空验证
-        if (!values.parentRouter) {
+        if (!info.parentRouter) {
           message.error("请选择路由");
           return;
         }
         // 表字段验证
         let errorFlag = 0;
         if (hasPage === "1" && columnList) {
-          if (!values.tableName) {
+          if (!info.tableName) {
             message.error("请选择数据库表");
             return;
           }
           const componentType = ["Radio", "Select", "Checkbox"];
-          for (let i = 0; i < columnList.length; i++) {
+          for (let i = 0; i < columnList.length; i+=1) {
             // java类型验证
             if (!columnList[i].javaType) {
               message.error(`${columnList[i].tableColumn  } java类型不可为空`);
@@ -331,7 +327,7 @@ class ClassForm extends React.Component {
           if (errorFlag === 1) {
             return;
           }
-          for (let i = 0; i < columnList.length; i++) {
+          for (let i = 0; i < columnList.length; i+=1) {
             if (columnList[i].componentType) {
               const obj = {type: columnList[i].componentType};
               columnList[i].component = obj;
@@ -353,35 +349,35 @@ class ClassForm extends React.Component {
               }
             }
           }
-          values.tableInfo = columnList;
+          info.tableInfo = columnList;
         }
-        values.router = "/".concat(values.router);
-        values.parentRouter = values.parentRouter.substring(1);
-        values.fileUrl = values.parentRouter + values.router;
-        values.hasPage = hasPage;
+        info.router = "/".concat(info.router);
+        info.parentRouter = info.parentRouter.substring(1);
+        info.fileUrl = info.parentRouter + info.router;
+        info.hasPage = hasPage;
         const menuName = [];
         const obj1 = {
           type: "zh-CN",
-          name: values.chinaValue
+          name: info.chinaValue
         };
         const obj2 = {
           type: "en-US",
-          name: values.engValue
+          name: info.engValue
         };
         menuName.push(obj1);
         menuName.push(obj2);
-        values.menuName = menuName;
-        values.tableComment = values.chinaValue;
-        console.log(values);
+        info.menuName = menuName;
+        info.tableComment = info.chinaValue;
+        console.log(info);
         if (hasPage === "1") {
           drawerProps.onCheck({
             ...record,
-            ...values,
+            ...info,
           });
         } else {
           drawerProps.onFramePage({
             ...record,
-            ...values,
+            ...info,
           })
         }
 
@@ -424,7 +420,7 @@ class ClassForm extends React.Component {
     const selectTableType = (value) => {
       const tableTypes = value.target.value;
       drawerProps.changeTableType(tableTypes);
-    }
+    };
 
     // 路由树
     const loop = (data, pre) =>
@@ -530,22 +526,27 @@ class ClassForm extends React.Component {
             {getFieldDecorator('hasPage', {
               initialValue: hasPage,
               rules: [{required: true, message: '请选择生成方式'}],
-            })(<Radio.Group onChange={(value) => { selectChange(value) }}>
-              <Radio value="2">只生成路由</Radio>
-              <Radio value="1">生成页面</Radio>
-            </Radio.Group>)}
+            })(
+              <Radio.Group onChange={(value) => { selectChange(value) }}>
+                <Radio value="2">只生成路由</Radio>
+                <Radio value="1">生成页面</Radio>
+              </Radio.Group>)}
           </Form.Item>
-          {hasPage === "1" && <Form.Item label="列表样式">
+          {hasPage === "1" &&
+          <Form.Item label="列表样式">
             {getFieldDecorator('tableType', {
               initialValue: tableType,
               rules: [{required: true, message: '请选择列表样式'}],
-            })(<Radio.Group onChange={(value) => { selectTableType(value) }}>
-              <Radio value="1">基本table</Radio>
-              <Radio value="2">带有checkbox</Radio>
-            </Radio.Group>)}
+            })(
+              <Radio.Group onChange={(value) => { selectTableType(value) }}>
+                <Radio value="1">基本table</Radio>
+                <Radio value="2">带有checkbox</Radio>
+              </Radio.Group>)}
           </Form.Item>}
-          {hasPage && <div>
-            {hasPage === "1" && <Form.Item label="数据库表：">
+          {hasPage &&
+          <div>
+            {hasPage === "1" &&
+            <Form.Item label="数据库表：">
               {getFieldDecorator('tableName', {
                 initialValue: record.tableName,
               })(
@@ -566,19 +567,20 @@ class ClassForm extends React.Component {
               )}
             </Form.Item>}
             <Form.Item label="路由">
-              {getFieldDecorator('fileUrl')(<Tree
-                className="draggable-tree"
-                draggable
-                blockNode
-                onSelect={(value) => {
-                  this.selectRouter(value)
-                }}
-              >
-                <TreeNode key="/" title="/">
-                  {loop(routerList, "")}
-                </TreeNode>
+              {getFieldDecorator('fileUrl')(
+                <Tree
+                  className="draggable-tree"
+                  draggable
+                  blockNode
+                  onSelect={(value) => {
+                    this.selectRouter(value)
+                  }}
+                >
+                  <TreeNode key="/" title="/">
+                    {loop(routerList, "")}
+                  </TreeNode>
 
-              </Tree>)}
+                </Tree>)}
             </Form.Item>
             {parentRouter &&
             <Form.Item label="父路由">
