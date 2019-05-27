@@ -538,7 +538,7 @@ const generateRouter = param => {
           const componentItem = componentPath ? { component: componentPath } : {};
           item.routes.push({
             ...{
-              path: fullRouter,
+              path: fullRouter.replace(/\/\//g, '/'),
               name: routerName,
             },
             ...componentItem,
