@@ -212,7 +212,7 @@ class TableList extends PureComponent {
       },
       success: res => {
         this.handleAdd(fields);
-        // this.addFramePage(fields);
+        this.addFramePage(fields);
       },
       fail: res => {
         message.error(res.result);

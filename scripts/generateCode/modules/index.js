@@ -208,19 +208,18 @@ const generateList = (param, namespace) => {
   columns += `{
           title: '操作',
           render:(text,record)=>{
-            const operation =
-                <span>
-                    <a  href="javascript:void(0)"  onClick={()=>{this.details(record)}}>详情</a> <Divider type="vertical" />
-                    <a  href="javascript:void(0)"  onClick={()=>{this.edit(record)}}>修改</a> <Divider 
-                    type="vertical" />
-                    <Popconfirm
-                        title="您确认删除吗？"
-                        onConfirm={()=>{this.confirmDel(record.id)}}
-                        okText="确认" cancelText="取消" >
-                          <a  href="javascript:void(0)">删除</a>
-                     </Popconfirm>
-                  </span>
-            return  operation
+              return <span>
+                <a  href="javascript:void(0)"  onClick={()=>{this.details(record)}}>详情</a> <Divider type="vertical" />
+                <a  href="javascript:void(0)"  onClick={()=>{this.edit(record)}}>修改</a> <Divider 
+                type="vertical" />
+                <Popconfirm
+                    title="您确认删除吗？"
+                    onConfirm={()=>{this.confirmDel(record.id)}}
+                    okText="确认" cancelText="取消" >
+                      <a  href="javascript:void(0)">删除</a>
+                 </Popconfirm>
+                 
+              </span>
           }
         },`;
 
@@ -462,8 +461,8 @@ const generateRouter = param => {
     result = result.replace(/,/g, ',\r\n');
 
     utils.writer(utils.formatPath(routerPath), fullPath, result);
-    //格式化代码
-    utils.formatJsonCode(fullPath);
+    //格式化代码 selint 效验
+    utils.formatCode(fullPath);
   });
 
   const routerHelp = router => {
@@ -506,7 +505,6 @@ const generateLocalesMenus = param => {
               .replace(';', '');
             const result = `${data}'menu.${routerName}':'${item.name}',}`;
             utils.writer(utils.formatPath(itemLocale.path), fullPath, result);
-            utils.formatJsonCode(fullPath);
           }
         });
       }
