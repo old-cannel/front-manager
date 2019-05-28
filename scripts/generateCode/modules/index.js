@@ -566,7 +566,8 @@ const generateRouter = param => {
 
 //菜单名称国际化处理
 const generateLocalesMenus = param => {
-  const fullRouter = `${param.parentRouter}${param.router}`;
+  let fullRouter = `${param.parentRouter}${param.router}`;
+  fullRouter=fullRouter.replace(/\/\//g,"/");
   const routerName = fullRouter.substring(1, fullRouter.length).replace(/\//g, '.');
   param.menuName.forEach(item => {
     menuLocales.forEach(itemLocale => {
