@@ -145,7 +145,7 @@ const generateFilter = (param, namespace) => {
         item.component.type === 'DatePicker_date' ||
         item.component.type === 'DatePicker_datetime'
       ) {
-        timeSearch += `payload.${item.javaName}=''\r\n;`;
+        timeSearch += `payload.${item.javaName}='';\r\n`;
       }
       formItemStr += createRes[0];
       dateHandle += createRes[1];
@@ -463,11 +463,11 @@ const generateService = param => {
   const baseReqUrl = `${param.parentRouter}${param.router}`;
 
   const queryListUrl =
-    '`${APIPREX}' + baseReqUrl + '?size=${params.size?params.size:10}&current=${params.current}`';
-  const saveUrl = '`${APIPREX}' + baseReqUrl + '/add`';
-  const updateUrl = '`${APIPREX}' + baseReqUrl + '/update`';
-  const getUrl = '`${APIPREX}' + baseReqUrl + '/${params.id}`';
-  const delUrl = '`${APIPREX}' + baseReqUrl + '`';
+    '`${API_PREX}' + baseReqUrl + '?size=${params.size?params.size:10}&current=${params.current}`';
+  const saveUrl = '`${API_PREX}' + baseReqUrl + '/add`';
+  const updateUrl = '`${API_PREX}' + baseReqUrl + '/update`';
+  const getUrl = '`${API_PREX}' + baseReqUrl + '/${params.id}`';
+  const delUrl = '`${API_PREX}' + baseReqUrl + '`';
 
   //模板替换
   result = result
@@ -518,6 +518,19 @@ const generateRouter = param => {
         .replace(';', '')
     );
     routerHelp(router);
+
+    //"component": "404" 放到路由最后
+    let subArr = [];
+    router[1].routes.forEach(item => {
+      if (!item.component || item.component !== '404') {
+        subArr.push(item);
+      }
+    });
+    router[1].routes = subArr;
+    router[1].routes.push({
+      component: '404',
+    });
+
     const fullPath = `${routerPath}/router.config.js`;
     let result = 'export default ' + JSON.stringify(eval(router));
     result = result.replace(/,/g, ',\r\n');
