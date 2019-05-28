@@ -74,10 +74,8 @@ export default {
           return { ...item, ...{ value: item.dictKey, label: item.dictValue } };
         });
         yield put({
-          type: 'updateDictInfo/queryDict',
-          payload: {
-            dictInfo: dicts,
-          },
+          type: 'global/updateDictInfo',
+          payload: dicts,
         });
       }
     },

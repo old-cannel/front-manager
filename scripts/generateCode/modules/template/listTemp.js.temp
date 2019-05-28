@@ -118,7 +118,7 @@ class List extends Component {
     const columns = #{COLUMNS}
     #{ROWSELECTIONFUNC}
     return (
-      <div className="container">
+      <div>
         <Filter ref={this.filterRef}/>
         <div style={{ marginTop: 10 }}>
           <Button

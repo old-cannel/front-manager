@@ -254,7 +254,7 @@ const renderEditFormItem = (item, editLength) => {
                    rules:[
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
-             })(<Input ${lengthStr} style={{ maxWidth: 220 }} placeholder='请输入${
+             })(<Input ${lengthStr} style={{ maxWidth: 200 }} placeholder='请输入${
         item.columnName
       }'/>)}
          </FormItem>
@@ -270,7 +270,7 @@ const renderEditFormItem = (item, editLength) => {
                    rules:[
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
-             })(<DatePicker format="YYYY-MM-DD" style={{ width: 220 }} placeholder='请选择${
+             })(<DatePicker format="YYYY-MM-DD" style={{ width: 200 }} placeholder='请选择${
                item.columnName
              }'/>)}
          </FormItem>
@@ -289,7 +289,7 @@ const renderEditFormItem = (item, editLength) => {
                    rules:[
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
-             })(<DatePicker showTime format="YYYY-MM-DD HH:mm:ss" style={{ width: 220 }} placeholder='请选择${
+             })(<DatePicker showTime format="YYYY-MM-DD HH:mm:ss" style={{ width: 200 }} placeholder='请选择${
                item.columnName
              }'/>)}
          </FormItem>
@@ -312,7 +312,7 @@ const renderEditFormItem = (item, editLength) => {
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
              })(
-             <Select defaultValue='' style={{ maxWidth: 220 }} placeholder='请选择${
+             <Select defaultValue='' style={{ maxWidth: 200 }} placeholder='请选择${
                item.columnName
              }'>
               ${optionStr}
@@ -328,7 +328,7 @@ const renderEditFormItem = (item, editLength) => {
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
              })(
-             <Select defaultValue='' style={{ maxWidth: 220 }} placeholder='请选择${
+             <Select defaultValue='' style={{ maxWidth: 200 }} placeholder='请选择${
                item.columnName
              }'>
               <Option value=''>请选择</Option>
@@ -352,7 +352,7 @@ const renderEditFormItem = (item, editLength) => {
                    rules:[
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
-             })(<InputNumber min={0} max={9999999}  precision="0" style={{ maxWidth: 220 }} placeholder='请输入${
+             })(<InputNumber min={0} max={9999999}  precision="0" style={{ maxWidth: 200 }} placeholder='请输入${
                item.columnName
              }'/>)}
          </FormItem>
@@ -390,7 +390,7 @@ const renderAddFormItem = (item, editLength) => {
                    rules:[
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
-             })(<Input ${lengthStr} style={{ maxWidth: 220 }} placeholder='请输入${
+             })(<Input ${lengthStr} style={{ maxWidth: 200 }} placeholder='请输入${
         item.columnName
       }'/>)}
          </FormItem>
@@ -403,7 +403,7 @@ const renderAddFormItem = (item, editLength) => {
                    rules:[
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
-             })(<DatePicker format="YYYY-MM-DD" style={{ width: 220 }} placeholder='请选择${
+             })(<DatePicker format="YYYY-MM-DD" style={{ width: 200 }} placeholder='请选择${
                item.columnName
              }'/>)}
          </FormItem>
@@ -419,7 +419,7 @@ const renderAddFormItem = (item, editLength) => {
                    rules:[
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
-             })(<DatePicker showTime format="YYYY-MM-DD HH:mm:ss" style={{ width: 220 }} placeholder='请选择${
+             })(<DatePicker showTime format="YYYY-MM-DD HH:mm:ss" style={{ width: 200 }} placeholder='请选择${
                item.columnName
              }'/>)}
          </FormItem>
@@ -442,7 +442,7 @@ const renderAddFormItem = (item, editLength) => {
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
              })(
-             <Select defaultValue='' style={{ maxWidth: 220 }} placeholder='请选择${
+             <Select defaultValue='' style={{ maxWidth: 200 }} placeholder='请选择${
                item.columnName
              }'>
               ${optionStr}
@@ -458,7 +458,7 @@ const renderAddFormItem = (item, editLength) => {
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
              })(
-             <Select defaultValue='' style={{ maxWidth: 220 }} placeholder='请选择${
+             <Select defaultValue='' style={{ maxWidth: 200 }} placeholder='请选择${
                item.columnName
              }'>
               <Option value=''>请选择</Option>
@@ -481,7 +481,7 @@ const renderAddFormItem = (item, editLength) => {
                    rules:[
                       ${notNullFlag ? JSON.stringify({ required: true, message: message }) : ''}
                    ]
-             })(<InputNumber  min={0} max={9999999}  precision="0" style={{ maxWidth: 220 }} placeholder='请输入${
+             })(<InputNumber  min={0} max={9999999}  precision="0" style={{ maxWidth: 200 }} placeholder='请输入${
                item.columnName
              }'/>)}
          </FormItem>
@@ -533,21 +533,21 @@ const renderFilterFormItem = (item, editLength) => {
   const componentType = item.component.type;
   switch (componentType) {
     case 'Input':
-      formItem = `<Col xxl={{ span: 7 }} md={{ span: 7 }}>
+      formItem = `
          <FilterItem label="${item.columnName}:" >
             {getFieldDecorator('${item.javaName}', {
-             })(<Input  style={{ maxWidth: 220 }} placeholder='请输入${item.columnName}'/>)}
-         </FilterItem>
-      </Col>\r\n`;
+             })(<Input  style={{ width: 200 }} placeholder='请输入${item.columnName}'/>)}
+         </FilterItem>\r\n`;
       break;
     case 'DatePicker_date':
-      formItem = `<Col xxl={{ span: 9 }} md={{ span: 9 }}>
-        <FilterItem label="${item.columnName}:">
+      formItem = `
+        <FilterItem type="rangePicker" label="${item.columnName}:">
                 {getFieldDecorator('${item.javaName}', {
-                })(<RangePicker  format="YYYY-MM-DD HH:mm:ss" showTime style={{ maxWidth: 350 }} />)}
-        </FilterItem>
-      </Col>\r\n`;
-      dataHandle += ` if (searchParam.${item.javaName} && searchParam.${item.javaName}.length===2) {
+                })(<RangePicker  format="YYYY-MM-DD HH:mm:ss" showTime />)}
+        </FilterItem>\r\n`;
+      dataHandle += `     if (searchParam.${item.javaName} && searchParam.${
+        item.javaName
+      }.length===2) {
         searchParam.${item.javaName}Search=[]
         searchParam.${item.javaName}Search[0] = moment(searchParam.${
         item.javaName
@@ -559,12 +559,11 @@ const renderFilterFormItem = (item, editLength) => {
       }\r\n`;
       break;
     case 'DatePicker_datetime':
-      formItem = `<Col xxl={{ span: 9 }} md={{ span: 9 }}>
-         <FilterItem label="${item.columnName}:">
+      formItem = `
+         <FilterItem type="rangePicker" label="${item.columnName}:">
                 {getFieldDecorator('${item.javaName}', {
-                })(<RangePicker  format="YYYY-MM-DD HH:mm:ss" showTime style={{ maxWidth: 350 }} />)}
-         </FilterItem>
-      </Col>\r\n`;
+                })(<RangePicker  format="YYYY-MM-DD HH:mm:ss" showTime  />)}
+         </FilterItem>\r\n`;
       dataHandle += `if (searchParam.${item.javaName} && searchParam.${item.javaName}.length===2) {
         searchParam.${item.javaName}Search=[]
         searchParam.${item.javaName}Search[0] = moment(searchParam.${
@@ -582,23 +581,22 @@ const renderFilterFormItem = (item, editLength) => {
         (item.component.dataSource || []).forEach(item => {
           optionStr += ` <Option value="${item.value}">${item.label}</Option> \r\n`;
         });
-        formItem = `<Col xxl={{ span: 7 }} md={{ span: 7 }}>
+        formItem = `
          <FilterItem label="${item.columnName}:">
                 {getFieldDecorator('${item.javaName}', {
                     initialValue:''
                 })(
-                 <Select defaultValue='' style={{ maxWidth: 220 }}>
+                 <Select defaultValue=''  style={{ width: 200 }} >
               ${optionStr}
           </Select>)}
-         </FilterItem>
-      </Col>\r\n`;
+         </FilterItem>\r\n`;
       } else if (item.component.dataFrom === '2') {
-        formItem = `<Col xxl={{ span: 7 }} md={{ span: 7 }}>
+        formItem = `
          <FilterItem label="${item.columnName}:">
                 {getFieldDecorator('${item.javaName}', {
                     initialValue:''
                 })( 
-                <Select defaultValue='' style={{ maxWidth: 220 }}>
+                <Select defaultValue='' style={{ width: 200 }}>
                 <Option value=''>全部</Option>
             {
                (this.props.dictInfo || []).filter(filterItem=>filterItem.type==='${
@@ -608,19 +606,17 @@ const renderFilterFormItem = (item, editLength) => {
             })
             }
           </Select>)}
-         </FilterItem>
-      </Col>\r\n`;
+         </FilterItem>\r\n`;
       }
       break;
     case 'InputNumber':
-      formItem = `<Col xxl={{ span: 7 }} md={{ span: 7 }}>
+      formItem = `
          <FilterItem label="${item.columnName}:" >
             {getFieldDecorator('${item.javaName}', {
-             })(<InputNumber min={0} max={9999999}  precision="0" style={{ maxWidth: 220 }} placeholder='请输入${
+             })(<InputNumber min={0} max={9999999}  precision="0" style={{ width: 200 }} placeholder='请输入${
                item.columnName
              }'/>)}
-         </FilterItem>
-      </Col>\r\n`;
+         </FilterItem>\r\n`;
       break;
   }
   return [formItem, dataHandle];

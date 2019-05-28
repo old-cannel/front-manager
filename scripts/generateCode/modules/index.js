@@ -145,7 +145,7 @@ const generateFilter = (param, namespace) => {
         item.component.type === 'DatePicker_date' ||
         item.component.type === 'DatePicker_datetime'
       ) {
-        timeSearch += `payload.${item.javaName}=''\r\n;`;
+        timeSearch += `payload.${item.javaName}='';\r\n`;
       }
       formItemStr += createRes[0];
       dateHandle += createRes[1];

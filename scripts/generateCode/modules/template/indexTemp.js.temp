@@ -16,7 +16,9 @@ class Ledger extends Component {
     const { pageKey } = this.props;
     return (
       <PageHeaderWrapper key={pageKey}>
-        <List/>
+        <div className="pageContainer">
+          <List />
+        </div>
       </PageHeaderWrapper>
     );
   }

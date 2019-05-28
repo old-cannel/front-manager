@@ -45,21 +45,17 @@ class Filter extends Component {
     return (
       <div>
         <Form>
-          <Row gutter={24} style={{maxWidth:1280}}>
+           <div className="filterItem">
             #{IMPORTFILTERITEM}
-            <Col xxl={{ span: 5 }} md={{ span: 5 }}>
-              <FilterItem>
-                <div style={{ minWidth: 170 }}>
-                  <Button type="primary" onClick={this.searchHandle}>
-                    查询
-                  </Button>
-                  <Button style={{ marginLeft: 20 }} onClick={this.reSetHandle}>
-                    重置查询
-                  </Button>
-                </div>
-              </FilterItem>
-            </Col>
-          </Row>
+            <FilterItem type="button">
+              <Button  type="primary" onClick={this.searchHandle}>
+                查询
+              </Button>
+              <Button style={{ marginLeft: 20 }} onClick={this.reSetHandle}>
+                重置查询
+              </Button>
+            </FilterItem>
+          </div>
         </Form>
       </div>
     );
