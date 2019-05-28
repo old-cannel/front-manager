@@ -352,7 +352,7 @@ class ClassForm extends React.Component {
           info.tableInfo = columnList;
         }
         info.router = "/".concat(info.router);
-        info.parentRouter = info.parentRouter.substring(1);
+        info.parentRouter = info.parentRouter.replace("//","/");
         info.fileUrl = info.parentRouter + info.router;
         info.hasPage = hasPage;
         const menuName = [];
@@ -380,7 +380,6 @@ class ClassForm extends React.Component {
             ...info,
           })
         }
-
       });
     };
 
@@ -427,12 +426,12 @@ class ClassForm extends React.Component {
       data.map(item => {
         if (item.path && item.children && item.children.length > 0) {
           return (
-            <TreeNode key={`/${item.path}`} title={item.path.replace(pre, "")}>
+            <TreeNode key={`${item.path}`} title={item.path.replace(pre, "")}>
               {loop(item.children, item.path.replace(pre, ""))}
             </TreeNode>
           );
         }
-        return <TreeNode key={`/${item.path}`} title={item.path.replace(pre, "")} />;
+        return <TreeNode key={`${item.path}`} title={item.path.replace(pre, "")} />;
       });
     const columns = [{
       title: '表字段',
@@ -499,8 +498,7 @@ class ClassForm extends React.Component {
       dataIndex: 'sort',
       key: 'sort',
       width: 120,
-      render: (text,detail) => <Input style={{width: '40%'}} value={text} onChange={e => { this.sortChange(e, "sort", (text,detail)) }} />
-      ,
+      render: (text,detail) => <Input style={{width: '40%'}} value={text} onChange={e => { this.sortChange(e, "sort", detail) }} />,
     }, {
       title: '查询方式',
       dataIndex: 'queryMode',
@@ -629,7 +627,7 @@ class ClassForm extends React.Component {
               {tempParentRouter}
             </Form.Item>
             <Form.Item label="路由">
-              <Input type={Text} placeholder="请输入" value={tempRouter} onChange={value => { this.changeRouterName(value) }} />
+              <Input placeholder="请输入" value={tempRouter} onChange={value => { this.changeRouterName(value) }} />
             </Form.Item>
             <Form.Item label="中文名称">
               <Input placeholder="请输入" value={tempChinaValue} defaultValue={tempChinaValue} onChange={value => { this.changeChinaValue(value) }} />
