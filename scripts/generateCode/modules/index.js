@@ -463,11 +463,11 @@ const generateService = param => {
   const baseReqUrl = `${param.parentRouter}${param.router}`;
 
   const queryListUrl =
-    '`${APIPREX}' + baseReqUrl + '?size=${params.size?params.size:10}&current=${params.current}`';
-  const saveUrl = '`${APIPREX}' + baseReqUrl + '/add`';
-  const updateUrl = '`${APIPREX}' + baseReqUrl + '/update`';
-  const getUrl = '`${APIPREX}' + baseReqUrl + '/${params.id}`';
-  const delUrl = '`${APIPREX}' + baseReqUrl + '`';
+    '`${API_PREX}' + baseReqUrl + '?size=${params.size?params.size:10}&current=${params.current}`';
+  const saveUrl = '`${API_PREX}' + baseReqUrl + '/add`';
+  const updateUrl = '`${API_PREX}' + baseReqUrl + '/update`';
+  const getUrl = '`${API_PREX}' + baseReqUrl + '/${params.id}`';
+  const delUrl = '`${API_PREX}' + baseReqUrl + '`';
 
   //模板替换
   result = result

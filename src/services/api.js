@@ -1,6 +1,6 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
-const API_PREX = `/api/newproject`;
+export const API_PREX = `/api/newproject`;
 
 export async function queryProjectNotice() {
   return request('/api/project/notice');
@@ -130,10 +130,10 @@ const Api = {
   auto: {
     pages: `${API_PREX}/auto/completeList`,
     del: `${API_PREX}/auto/del/`,
-    tableList:`${API_PREX}/auto/tableList`,
-    tableColumnList:`${API_PREX}/auto/tableColumnList`,
-    add:`${API_PREX}/auto/tableInfoSave`,
-    check:`${API_PREX}/auto/checkRouter`,
+    tableList: `${API_PREX}/auto/tableList`,
+    tableColumnList: `${API_PREX}/auto/tableColumnList`,
+    add: `${API_PREX}/auto/tableInfoSave`,
+    check: `${API_PREX}/auto/checkRouter`,
   },
 };
 

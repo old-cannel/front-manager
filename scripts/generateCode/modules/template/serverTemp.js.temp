@@ -1,6 +1,5 @@
 import request from '@/utils/request';
-
-const APIPREX = '/api/newproject';
+import { API_PREX } from '@/services/api';
 
 
 //分页
