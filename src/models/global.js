@@ -70,13 +70,13 @@ export default {
     *queryDict({}, { put, call }) {
       const result = yield call(queryDict);
       if (result && result.code === 10000) {
+        const dicts = result.result.map(item => {
+          return { ...item, ...{ value: item.dictKey, label: item.dictValue } };
+        });
         yield put({
           type: 'updateDictInfo/queryDict',
           payload: {
-            totalCount: result.result.map(item => {
-              Object.assign(item).dictValue = item.value;
-              return item;
-            }),
+            dictInfo: dicts,
           },
         });
       }

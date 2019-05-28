@@ -518,6 +518,19 @@ const generateRouter = param => {
         .replace(';', '')
     );
     routerHelp(router);
+
+    //"component": "404" 放到路由最后
+    let subArr = [];
+    router[1].routes.forEach(item => {
+      if (!item.component || item.component !== '404') {
+        subArr.push(item);
+      }
+    });
+    router[1].routes = subArr;
+    router[1].routes.push({
+      component: '404',
+    });
+
     const fullPath = `${routerPath}/router.config.js`;
     let result = 'export default ' + JSON.stringify(eval(router));
     result = result.replace(/,/g, ',\r\n');
