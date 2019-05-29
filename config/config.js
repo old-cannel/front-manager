@@ -89,6 +89,11 @@ export default {
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },
+    '/api/upload/files': {
+      target: 'http://localhost:69',
+      changeOrigin: true,
+      pathRewrite: { '^/api': '' },
+    },
     //代码生成代理
     '/createFile': {
       target: 'http://localhost:9229',
