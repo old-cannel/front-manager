@@ -46,4 +46,7 @@ export default {
 
   'menu.sys.test': 'userManager',
 
-'menu.sys.task':'task',}
+  'menu.sys.task': 'task',
+  'menu.base': 'base',
+  'menu.base.businessManage': 'businessManage',
+}
