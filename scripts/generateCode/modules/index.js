@@ -491,7 +491,7 @@ const generateModels = (param, namespace) => {
   //模板替换
   result = result
     .replace('#{IMPORTSERVER}', importServer)
-    .replace('#{ROUTER}', router)
+    .replace(/#{ROUTER}/g, router)
     .replace(/#{NAMESPACE}/g, namespace);
   const path = `${pagesPath}${param.parentRouter}${param.router}/models`;
   const fileName = `${namespace}.js`;
