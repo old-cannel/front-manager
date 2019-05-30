@@ -15,8 +15,8 @@ export default {
     setup({ dispatch, history }) {
       history.listen(location => {
         if (location.pathname === '#{ROUTER}' || location.pathname === '#{ROUTER}/') {
-          initState.pageKey = Math.random();
-          dispatch({ type: 'updateState', payload: initState });
+          const state = { ...initState, ...{ pageKey: Math.random() } };
+          dispatch({ type: 'updateState', payload: state });
         }
       });
     },

@@ -631,7 +631,7 @@ const resetPath = paths => {
     //pages 下面的路径需要大写
     let upperCase = false;
     paths.split('/').forEach(item => {
-      if (upperCase) {
+      if (upperCase && item !== 'models') {
         item = item.substring(0, 1).toLocaleUpperCase() + item.substring(1, item.length);
       }
       if (item === 'pages') {
