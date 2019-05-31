@@ -47,4 +47,9 @@ export default {
   'menu.sys.test': '用户管理',
   'menu.auto': '生成代码管理',
   'menu.auto.frame': '生成代码',
-'menu.sys.task':'任务管理',}
+  'menu.sys.task': '任务管理',
+  'menu.base': '基础数据管理',
+  'menu.base.businessManage': '商户管理',
+  'menu.base.brand': '品牌管理',
+  'menu.index.index': '首页',
+}

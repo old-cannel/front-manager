@@ -12,7 +12,9 @@ export default [
         name: 'login',
         component: './User/Login',
       },
-      { component: '404' },
+      {
+        component: '404',
+      },
     ],
   },
   {
@@ -23,6 +25,11 @@ export default [
       {
         path: '/',
         redirect: '/',
+      },
+      {
+        path: '/index',
+        name: '首页',
+        component: './Index/index',
       },
       {
         path: '/sys',
@@ -79,7 +86,25 @@ export default [
           },
         ],
       },
-      { component: '404' },
+      {
+        path: '/base',
+        name: 'base',
+        routes: [
+          {
+            path: '/base/businessManage',
+            name: 'businessManage',
+            component: './Base/BusinessManage/index',
+          },
+          {
+            path: '/base/brand',
+            name: 'brand',
+            component: './Base/Brand/index',
+          },
+        ],
+      },
+      {
+        component: '404',
+      },
     ],
   },
 ];

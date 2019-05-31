@@ -1,5 +1,6 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
+
 export const API_PREX = `/api/newproject`;
 
 export async function queryProjectNotice() {
@@ -127,6 +128,10 @@ export async function getFakeCaptcha(mobile) {
 }
 
 const Api = {
+  upload: {
+    IMG_API: `/api/upload/files`,
+    IMG_PATH: `11111`,
+  },
   auto: {
     pages: `${API_PREX}/auto/completeList`,
     del: `${API_PREX}/auto/del/`,

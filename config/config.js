@@ -84,8 +84,13 @@ export default {
     'primary-color': primaryColor,
   },
   proxy: {
-    '/api/newproject': {
+    '/api/app': {
       target: 'http://localhost:87',
+      changeOrigin: true,
+      pathRewrite: { '^/api': '' },
+    },
+    '/api/upload/files': {
+      target: 'http://localhost:69',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },
