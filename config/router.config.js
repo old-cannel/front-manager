@@ -23,26 +23,6 @@ export default [
     Routes: ['src/pages/Authorized'],
     routes: [
       {
-        path: '/',
-        redirect: '/',
-      },
-      {
-        path: '/index',
-        name: '首页',
-        component: './Index/index',
-      },
-      {
-        path: '/sys',
-        name: 'sys',
-        routes: [
-          {
-            path: '/sys/test',
-            name: 'test',
-            component: './Sys/Test/index',
-          },
-        ],
-      },
-      {
         name: 'exception',
         icon: 'warning',
         path: '/exception',
@@ -83,22 +63,6 @@ export default [
             path: '/auto/completeList',
             name: 'frame',
             component: './Auto/index',
-          },
-        ],
-      },
-      {
-        path: '/base',
-        name: 'base',
-        routes: [
-          {
-            path: '/base/businessManage',
-            name: 'businessManage',
-            component: './Base/BusinessManage/index',
-          },
-          {
-            path: '/base/brand',
-            name: 'brand',
-            component: './Base/Brand/index',
           },
         ],
       },
