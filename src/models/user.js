@@ -27,8 +27,10 @@ export default {
       if (code === 10000 && result) {
         yield put({
           type: 'updateState',
-          serviceMenus: result.menus,
-          operationCodes: result.operationCodes,
+          payload: {
+            serviceMenus: result.menus,
+            operationCodes: result.operationCodes,
+          },
         });
       }
     },
