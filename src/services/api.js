@@ -17,6 +17,14 @@ export async function loginJwt(params) {
     data: params,
   });
 }
+/**
+ * 退出登录
+ */
+export async function logoutJwt() {
+  return requestNoAuthorize(`${API_PREFIX}/logoutjwt`, {
+    method: 'post',
+  });
+}
 
 /**
  * 获取用户信息

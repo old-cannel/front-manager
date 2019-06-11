@@ -1,5 +1,6 @@
 import { routerRedux } from 'dva/router';
-import { loginJwt } from '@/services/api';
+import { message } from 'antd';
+import { loginJwt, logoutJwt } from '@/services/api';
 import { setAuthority } from '@/utils/authority';
 
 export default {
@@ -22,21 +23,45 @@ export default {
     },
 
     // 退出登录清除操作
-    *logout(_, { put }) {
-      localStorage.setItem('authorization', '');
-      yield put({
-        type: 'updateState',
-        payload: {
-          currentUser: {},
-          serviceMenus: [],
-          operationCodes: [],
-        },
-      });
-      yield put(
-        routerRedux.push({
-          pathname: '/user/login',
-        })
-      );
+    *logout(_, { put, call }) {
+      if (localStorage.getItem('authorization')) {
+        const { code, msg } = yield call(logoutJwt);
+        if (code === 10000) {
+          localStorage.setItem('authorization', '');
+          yield put({
+            type: 'updateState',
+            payload: {
+              currentUser: {},
+              serviceMenus: [],
+              operationCodes: [],
+            },
+          });
+          yield put(
+            routerRedux.push({
+              pathname: '/user/login',
+            })
+          );
+          message.success(msg);
+        } else {
+          message.success(msg);
+          message.error(msg);
+        }
+      } else {
+        localStorage.setItem('authorization', '');
+        yield put({
+          type: 'updateState',
+          payload: {
+            currentUser: {},
+            serviceMenus: [],
+            operationCodes: [],
+          },
+        });
+        yield put(
+          routerRedux.push({
+            pathname: '/user/login',
+          })
+        );
+      }
     },
   },
 

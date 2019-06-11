@@ -3,9 +3,8 @@
  * 更详细的api文档: https://bigfish.alipay.com/doc/api#request
  */
 import { extend } from 'umi-request';
-import { notification, message } from 'antd';
+import { notification } from 'antd';
 import router from 'umi/router';
-import { isAntdPro } from './utils';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
