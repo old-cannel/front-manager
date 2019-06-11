@@ -53,17 +53,17 @@ class BaseMenu extends PureComponent {
     if (!serviceMenus || serviceMenus.length === 0) {
       return Object.assign(menu, { hideInMenu: true });
     }
+    // 如果是超级管理员 显示所有菜单
+    const userInfo = JSON.parse(window.localStorage.getItem('userInfo'));
+    if (userInfo && userInfo.adminFlag === '1') {
+      return Object.assign(menu, { hideInMenu: false });
+    }
     if (
       serviceMenus.filter(item => {
         return item.url === menu.path;
       }).length !== 0
     ) {
       return Object.assign(menu, ...{ hideInMenu: false });
-    }
-    // 如果是超级管理员 显示所有菜单
-    const userInfo = JSON.parse(window.localStorage.getItem('userInfo'));
-    if (userInfo && userInfo.adminFlag === '1') {
-      return Object.assign(menu, { hideInMenu: false });
     }
     return Object.assign(menu, { hideInMenu: true });
   };
