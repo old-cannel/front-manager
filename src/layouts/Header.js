@@ -48,10 +48,6 @@ class HeaderView extends Component {
       })}`
     );
     const { dispatch } = this.props;
-    dispatch({
-      type: 'global/clearNotices',
-      payload: type,
-    });
   };
 
   handleMenuClick = ({ key }) => {

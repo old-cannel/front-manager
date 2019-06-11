@@ -49,7 +49,10 @@ class BaseMenu extends PureComponent {
   };
 
   hasMenu = menu => {
-    const { serviceMenus = [] } = this.props;
+    const { serviceMenus } = this.props;
+    if (!serviceMenus || serviceMenus.length === 0) {
+      return Object.assign(menu, { hideInMenu: true });
+    }
     if (
       serviceMenus.filter(item => {
         return item.url === menu.path;
