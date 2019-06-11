@@ -23,6 +23,10 @@ export default [
     Routes: ['src/pages/Authorized'],
     routes: [
       {
+        path: '/',
+        redirect: '/auto/completeList',
+      },
+      {
         name: 'exception',
         icon: 'warning',
         path: '/exception',
