@@ -14,6 +14,7 @@ import Details from './Details';
   current: #{NAMESPACE}.current,
   detailsLoading: loading.effects['#{NAMESPACE}/get'],
   loading: loading.effects['#{NAMESPACE}/queryList'],
+  filterKey: #{NAMESPACE}.filterKey,
 }))
 
 class List extends Component {
@@ -78,7 +79,7 @@ class List extends Component {
       if (result && result.code === 10000) {
         message.success(result.msg);
         this.setState({ editVisible: false });
-        dispatch({ type: '#{NAMESPACE}/updateState', payload: { current: {} } });
+        dispatch({ type: '#{NAMESPACE}/updateState', payload: { current: {}, filterKey: Math.random() } });
         dispatch({ type: '#{NAMESPACE}/queryList' });
       } else {
         callback();
@@ -94,6 +95,7 @@ class List extends Component {
       if (result && result.code === 10000) {
         message.success(result.msg);
         this.setState({ addVisible: false });
+        dispatch({ type: '#{NAMESPACE}/updateState', payload: {  filterKey: Math.random() } });
         dispatch({ type: '#{NAMESPACE}/queryList' });
       } else {
         callback();
@@ -107,7 +109,7 @@ class List extends Component {
   render() {
     const {
       list, loading, pagination, dispatch, current,
-      detailsLoading,
+      detailsLoading,filterKey,
     } = this.props;
     const { editVisible, detailVisible, addVisible } = this.state;
     const paginationProps = {
@@ -119,7 +121,7 @@ class List extends Component {
     #{ROWSELECTIONFUNC}
     return (
       <div>
-        <Filter ref={this.filterRef}/>
+        <Filter key={filterKey} ref={this.filterRef}/>
         <div style={{ marginTop: 10 }}>
           <Button
             onClick={() => {

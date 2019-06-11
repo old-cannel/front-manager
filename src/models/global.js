@@ -1,4 +1,3 @@
-import { queryNotices } from '@/services/api';
 import { queryDict } from '@/services/common/common';
 
 export default {
@@ -11,23 +10,7 @@ export default {
   },
 
   effects: {
-    *fetchNotices(_, { call, put, select }) {
-      const data = yield call(queryNotices);
-      yield put({
-        type: 'saveNotices',
-        payload: data,
-      });
-      const unreadCount = yield select(
-        state => state.global.notices.filter(item => !item.read).length
-      );
-      yield put({
-        type: 'user/changeNotifyCount',
-        payload: {
-          totalCount: data.length,
-          unreadCount,
-        },
-      });
-    },
+    *fetchNotices(_, { call, put, select }) {},
     *clearNotices({ payload }, { put, select }) {
       yield put({
         type: 'saveClearedNotices',
@@ -37,13 +20,6 @@ export default {
       const unreadCount = yield select(
         state => state.global.notices.filter(item => !item.read).length
       );
-      yield put({
-        type: 'user/changeNotifyCount',
-        payload: {
-          totalCount: count,
-          unreadCount,
-        },
-      });
     },
     *changeNoticeReadState({ payload }, { put, select }) {
       const notices = yield select(state =>
@@ -58,13 +34,6 @@ export default {
       yield put({
         type: 'saveNotices',
         payload: notices,
-      });
-      yield put({
-        type: 'user/changeNotifyCount',
-        payload: {
-          totalCount: notices.length,
-          unreadCount: notices.filter(item => !item.read).length,
-        },
       });
     },
     *queryDict({}, { put, call }) {

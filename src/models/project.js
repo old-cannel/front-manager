@@ -1,5 +1,3 @@
-import { queryProjectNotice } from '@/services/api';
-
 export default {
   namespace: 'project',
 
@@ -8,13 +6,7 @@ export default {
   },
 
   effects: {
-    *fetchNotice(_, { call, put }) {
-      const response = yield call(queryProjectNotice);
-      yield put({
-        type: 'saveNotice',
-        payload: Array.isArray(response) ? response : [],
-      });
-    },
+    *fetchNotice(_, { call, put }) {},
   },
 
   reducers: {

@@ -463,11 +463,13 @@ const generateService = param => {
   const baseReqUrl = `${param.parentRouter}${param.router}`;
 
   const queryListUrl =
-    '`${API_PREX}' + baseReqUrl + '?size=${params.size?params.size:10}&current=${params.current}`';
-  const saveUrl = '`${API_PREX}' + baseReqUrl + '/add`';
-  const updateUrl = '`${API_PREX}' + baseReqUrl + '/update`';
-  const getUrl = '`${API_PREX}' + baseReqUrl + '/${params.id}`';
-  const delUrl = '`${API_PREX}' + baseReqUrl + '`';
+    '`${API_PREFIX}' +
+    baseReqUrl +
+    '?size=${params.size?params.size:10}&current=${params.current}`';
+  const saveUrl = '`${API_PREFIX}' + baseReqUrl + '/add`';
+  const updateUrl = '`${API_PREFIX}' + baseReqUrl + '/update`';
+  const getUrl = '`${API_PREFIX}' + baseReqUrl + '/${params.id}`';
+  const delUrl = '`${API_PREFIX}' + baseReqUrl + '`';
 
   //模板替换
   result = result
@@ -484,9 +486,7 @@ const generateService = param => {
 //生成 models 页面
 const generateModels = (param, namespace) => {
   let result = fs.readFileSync(modelsTemp, 'utf8');
-  const importServer = `import {queryList,save,update,get,del} from '@/services${
-    param.parentRouter
-  }${param.router}/service';`;
+  const importServer = `import {queryList,save,update,get,del} from '@/services${param.parentRouter}${param.router}/service';`;
   const router = `${param.parentRouter}${param.router}`;
   //模板替换
   result = result

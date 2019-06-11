@@ -1,145 +1,37 @@
-import { stringify } from 'qs';
-import request from '@/utils/request';
+import { request, requestNoAuthorize } from '@/utils/request';
 
-export const API_PREX = `/api/newproject`;
+// 接口请求前缀
+export const API_PREFIX = `/api/newproject`;
+// 上传文件地址
+export const UPLOAD_URL = `/api/upload/files`;
+// 文件回显前缀
+export const FILE_DISPLAY_PREFIX = `/api/upload/files`;
 
-export async function queryProjectNotice() {
-  return request('/api/project/notice');
-}
-
-export async function queryActivities() {
-  return request('/api/activities');
-}
-
-export async function queryRule(params) {
-  return request(`/api/rule?${stringify(params)}`);
-}
-
-export async function removeRule(params) {
-  return request('/api/rule', {
-    method: 'POST',
-    data: {
-      ...params,
-      method: 'delete',
-    },
-  });
-}
-
-export async function addRule(params) {
-  return request('/api/rule', {
-    method: 'POST',
-    data: {
-      ...params,
-      method: 'post',
-    },
-  });
-}
-
-export async function updateRule(params = {}) {
-  return request(`/api/rule?${stringify(params.query)}`, {
-    method: 'POST',
-    data: JSON.stringify({
-      ...params.body,
-      method: 'update',
-    }),
-  });
-}
-
-export async function fakeSubmitForm(params) {
-  return request('/api/forms', {
-    method: 'POST',
+/**
+ * 登录
+ */
+export async function loginJwt(params) {
+  return requestNoAuthorize(`${API_PREFIX}/loginjwt`, {
+    method: 'post',
+    requestType: 'form',
     data: params,
   });
 }
 
-export async function fakeChartData() {
-  return request('/api/fake_chart_data');
-}
-
-export async function queryTags() {
-  return request('/api/tags');
-}
-
-export async function queryBasicProfile(id) {
-  return request(`/api/profile/basic?id=${id}`);
-}
-
-export async function queryAdvancedProfile() {
-  return request('/api/profile/advanced');
-}
-
-export async function queryFakeList(params) {
-  return request(`/api/fake_list?${stringify(params)}`);
-}
-
-export async function removeFakeList(params) {
-  const { count = 5, ...restParams } = params;
-  return request(`/api/fake_list?count=${count}`, {
+/**
+ * 获取用户信息
+ */
+export async function queryCurrent() {
+  return request(`${API_PREFIX}/token/user`, {
     method: 'POST',
-    data: {
-      ...restParams,
-      method: 'delete',
-    },
   });
 }
 
-export async function addFakeList(params) {
-  const { count = 5, ...restParams } = params;
-  return request(`/api/fake_list?count=${count}`, {
+/**
+ * 获取用户菜单 操作权限
+ */
+export async function queryAuthorize() {
+  return request(`${API_PREFIX}/token/user/menus`, {
     method: 'POST',
-    data: {
-      ...restParams,
-      method: 'post',
-    },
   });
 }
-
-export async function updateFakeList(params) {
-  const { count = 5, ...restParams } = params;
-  return request(`/api/fake_list?count=${count}`, {
-    method: 'POST',
-    data: {
-      ...restParams,
-      method: 'update',
-    },
-  });
-}
-
-export async function fakeAccountLogin(params) {
-  return request('/api/login/account', {
-    method: 'POST',
-    data: params,
-  });
-}
-
-export async function fakeRegister(params) {
-  return request('/api/register', {
-    method: 'POST',
-    data: params,
-  });
-}
-
-export async function queryNotices(params = {}) {
-  return request(`/api/notices?${stringify(params)}`);
-}
-
-export async function getFakeCaptcha(mobile) {
-  return request(`/api/captcha?mobile=${mobile}`);
-}
-
-const Api = {
-  upload: {
-    IMG_API: `/api/upload/files`,
-    IMG_PATH: `11111`,
-  },
-  auto: {
-    pages: `${API_PREX}/auto/completeList`,
-    del: `${API_PREX}/auto/del/`,
-    tableList: `${API_PREX}/auto/tableList`,
-    tableColumnList: `${API_PREX}/auto/tableColumnList`,
-    add: `${API_PREX}/auto/tableInfoSave`,
-    check: `${API_PREX}/auto/checkRouter`,
-  },
-};
-
-export default Api;

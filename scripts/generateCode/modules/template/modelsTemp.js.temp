@@ -6,7 +6,7 @@ const initState = {
   list: [],//table list
   current: {},
   pagination: {},//分页
-
+  filterKey: Math.random(),
 };
 
 export default {
@@ -62,6 +62,7 @@ export default {
       const result = yield call(del, payload);
       if (result && result.code === 10000) {
         message.success(result.msg);
+        yield put({ type: 'updateState', payload: { filterKey: Math.random() } });
         yield put({ type: 'queryList' });
       }else{
         message.success(result.msg);

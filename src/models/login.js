@@ -1,9 +1,7 @@
 import { routerRedux } from 'dva/router';
 import { stringify } from 'qs';
-import { fakeAccountLogin, getFakeCaptcha } from '@/services/api';
+import { loginJwt } from '@/services/api';
 import { setAuthority } from '@/utils/authority';
-import { getPageQuery } from '@/utils/utils';
-import { reloadAuthorized } from '@/utils/Authorized';
 
 export default {
   namespace: 'login',
@@ -14,57 +12,32 @@ export default {
 
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(fakeAccountLogin, payload);
-      yield put({
-        type: 'changeLoginStatus',
-        payload: response,
-      });
-      // Login successfully
-      if (response.status === 'ok') {
-        reloadAuthorized();
-        const urlParams = new URL(window.location.href);
-        const params = getPageQuery();
-        let { redirect } = params;
-        if (redirect) {
-          const redirectUrlParams = new URL(redirect);
-          if (redirectUrlParams.origin === urlParams.origin) {
-            redirect = redirect.substr(urlParams.origin.length);
-            if (redirect.match(/^\/.*#/)) {
-              redirect = redirect.substr(redirect.indexOf('#') + 1);
-            }
-          } else {
-            redirect = null;
-          }
-        }
-        yield put(routerRedux.replace(redirect || '/'));
+      const { code, result } = yield call(loginJwt, payload);
+      if (code === 10000) {
+        localStorage.setItem('authorization', result);
+        setTimeout(() => {}, 1000);
+        window.location.href = '/';
+      } else {
+        localStorage.setItem('authorization', '');
       }
     },
 
-    *getCaptcha({ payload }, { call }) {
-      yield call(getFakeCaptcha, payload);
-    },
-
+    // 退出登录清除操作
     *logout(_, { put }) {
+      localStorage.setItem('authorization', '');
       yield put({
-        type: 'changeLoginStatus',
+        type: 'updateState',
         payload: {
-          status: false,
-          currentAuthority: 'guest',
+          currentUser: {},
+          serviceMenus: [],
+          operationCodes: [],
         },
       });
-      reloadAuthorized();
-      const { redirect } = getPageQuery();
-      // redirect
-      if (window.location.pathname !== '/user/login' && !redirect) {
-        yield put(
-          routerRedux.replace({
-            pathname: '/user/login',
-            search: stringify({
-              redirect: window.location.href,
-            }),
-          })
-        );
-      }
+      yield put(
+        routerRedux.push({
+          pathname: '/user/login',
+        })
+      );
     },
   },
 

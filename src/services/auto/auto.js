@@ -1,46 +1,44 @@
-import request from '@/utils/request';
-import Api  from '@/services/api';
-
-const { pages, del, tableList,tableColumnList,add,check } = Api.auto;
+import { request } from '@/utils/request';
+import { API_PREFIX } from '@/services/api';
 
 // 列表
 export async function queryList(payload) {
-  return request(pages, {
+  return request(`${API_PREFIX}/auto/completeList`, {
     method: 'POST',
-    body: JSON.stringify(payload || {}),
+    data: payload,
   });
 }
 
 // 删除
-export async function tableDel(payload={}) {
-  return request(`${del}${payload.id}`);
+export async function tableDel(payload = {}) {
+  return request(`${API_PREFIX}/auto/del/${payload.id}`);
 }
 
 // 数据库表信息
-export async function tableInfo(payload) {
-  return request(tableList);
+export async function tableInfo() {
+  return request(`${API_PREFIX}/auto/tableList`);
 }
 
 // 列表
 export async function tableColumnInfo(payload) {
-  return request(tableColumnList, {
+  return request(`${API_PREFIX}/auto/tableColumnList`, {
     method: 'POST',
-    body: JSON.stringify(payload || {}),
+    data: payload,
   });
 }
 
 // 列表
 export async function save(payload) {
-  return request(add, {
+  return request(`${API_PREFIX}/auto/tableInfoSave`, {
     method: 'POST',
-    body: JSON.stringify(payload || {}),
+    data: payload,
   });
 }
 
 // 列表
 export async function checkRouter(payload) {
-  return request(check, {
+  return request(`${API_PREFIX}/auto/checkRouter`, {
     method: 'POST',
-    body: JSON.stringify(payload || {}),
+    data: payload,
   });
 }

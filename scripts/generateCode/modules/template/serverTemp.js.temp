@@ -1,5 +1,5 @@
-import request from '@/utils/request';
-import { API_PREX } from '@/services/api';
+import {request} from '@/utils/request';
+import { API_PREFIX } from '@/services/api';
 
 
 //分页
@@ -7,7 +7,7 @@ export async function queryList(params) {
   const url =#{QUERYLISTURL}
   return request(url, {
     method: 'POST',
-    body: JSON.stringify(params),
+    data: JSON.stringify(params),
   });
 }
 
@@ -16,7 +16,7 @@ export async function save(params) {
   const url =#{SAVEURL}
   return request(url, {
     method: 'PUT',
-    body: JSON.stringify(params),
+    data: JSON.stringify(params),
   });
 }
 
@@ -25,7 +25,7 @@ export async function update(params) {
   const url =#{UPDATEURL};
   return request(url, {
     method: 'PUT',
-    body: JSON.stringify(params),
+    data: JSON.stringify(params),
   });
 }
 
@@ -34,7 +34,7 @@ export async function del(params) {
   const url =#{DELETEURL};
   return request(url, {
     method: 'DELETE',
-    body: JSON.stringify(params),
+    data: JSON.stringify(params),
   });
 }
 

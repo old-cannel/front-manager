@@ -26,8 +26,6 @@ class HeaderView extends Component {
 
   componentDidMount() {
     document.addEventListener('scroll', this.handScroll, { passive: true });
-    const { dispatch } = this.props;
-    dispatch({ type: 'global/queryDict' });
   }
 
   componentWillUnmount() {
