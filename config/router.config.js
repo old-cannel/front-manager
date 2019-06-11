@@ -71,6 +71,17 @@ export default [
         ],
       },
       {
+        path: '/sys',
+        name: 'sys',
+        routes: [
+          {
+            path: '/sys/api',
+            name: 'api',
+            component: './Sys/Api/index',
+          },
+        ],
+      },
+      {
         component: '404',
       },
     ],
