@@ -10,7 +10,6 @@ export default {
   },
 
   effects: {
-    *fetchNotices(_, { call, put, select }) {},
     *clearNotices({ payload }, { put, select }) {
       yield put({
         type: 'saveClearedNotices',

@@ -6,11 +6,8 @@ export default {
   },
 
   effects: {
-    *fetch({ payload }, { call, put }) {},
-    *appendFetch({ payload }, { call, put }) {},
     *submit({ payload }, { call, put }) {
       let callback;
-
       const response = yield call(callback, payload); // post
       yield put({
         type: 'queryList',

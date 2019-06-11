@@ -5,9 +5,7 @@ export default {
     notice: [],
   },
 
-  effects: {
-    *fetchNotice(_, { call, put }) {},
-  },
+  effects: {},
 
   reducers: {
     saveNotice(state, action) {

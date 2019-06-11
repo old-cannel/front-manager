@@ -75,14 +75,7 @@ class HeaderView extends Component {
     }
   };
 
-  handleNoticeVisibleChange = visible => {
-    if (visible) {
-      const { dispatch } = this.props;
-      dispatch({
-        type: 'global/fetchNotices',
-      });
-    }
-  };
+  handleNoticeVisibleChange = () => {};
 
   handScroll = () => {
     const { autoHideHeader } = this.props;

@@ -1,5 +1,4 @@
 import { routerRedux } from 'dva/router';
-import { stringify } from 'qs';
 import { loginJwt } from '@/services/api';
 import { setAuthority } from '@/utils/authority';
 
@@ -11,7 +10,7 @@ export default {
   },
 
   effects: {
-    *login({ payload }, { call, put }) {
+    *login({ payload }, { call }) {
       const { code, result } = yield call(loginJwt, payload);
       if (code === 10000) {
         localStorage.setItem('authorization', result);
