@@ -36,11 +36,10 @@ class Detail extends Component {
                 {
                   <DictLabel
                     source={[
-                      { value: 'get', label: 'get' },
-                      { value: 'post', label: 'post' },
-                      { value: 'put', label: 'put' },
-                      { value: 'delete', label: 'delete' },
-                      { value: '' },
+                      { value: 'GET', label: 'GET' },
+                      { value: 'POST', label: 'POST' },
+                      { value: 'PUT', label: 'PUT' },
+                      { value: 'DELETE', label: 'DELETE' },
                     ]}
                     value={current.requestMethod}
                   />
