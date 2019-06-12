@@ -43,7 +43,6 @@ export default {
           );
           message.success(msg);
         } else {
-          message.success(msg);
           message.error(msg);
         }
       } else {

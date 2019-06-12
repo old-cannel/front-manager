@@ -32,15 +32,9 @@ const errorHandler = error => {
   const errortext = codeMessage[response.status] || response.statusText;
   const { status, url } = response;
   if (status === 401) {
-    if (response.url.indexOf('/loginjwt')) {
-      notification.error({
-        message: error.data.msg,
-      });
-    } else {
-      notification.error({
-        message: '未登录或登录已过期，请重新登录。',
-      });
-    }
+    notification.error({
+      message: error.data.msg,
+    });
     // @HACK
     /* eslint-disable no-underscore-dangle */
     window.g_app._store.dispatch({

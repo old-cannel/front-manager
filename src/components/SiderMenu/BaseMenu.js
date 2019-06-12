@@ -31,6 +31,7 @@ const getIcon = icon => {
 
 @connect(({ user }) => ({
   serviceMenus: user.serviceMenus,
+  currentUser: user.currentUser,
 }))
 class BaseMenu extends PureComponent {
   /**
@@ -49,13 +50,12 @@ class BaseMenu extends PureComponent {
   };
 
   hasMenu = menu => {
-    const { serviceMenus } = this.props;
+    const { serviceMenus, currentUser } = this.props;
     if (!serviceMenus || serviceMenus.length === 0) {
       return Object.assign(menu, { hideInMenu: true });
     }
     // 如果是超级管理员 显示所有菜单
-    const userInfo = JSON.parse(window.localStorage.getItem('userInfo'));
-    if (userInfo && userInfo.adminFlag === '1') {
+    if (currentUser && currentUser.adminFlag === '1') {
       return Object.assign(menu, { hideInMenu: false });
     }
     if (serviceMenus.filter(item => item.url === menu.path).length !== 0) {

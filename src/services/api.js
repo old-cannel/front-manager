@@ -1,7 +1,7 @@
 import { request, requestNoAuthorize } from '@/utils/request';
 
 // 接口请求前缀
-export const API_PREFIX = `/api/sys`;
+export const API_PREFIX = `/api/demo`;
 // 上传文件地址
 export const UPLOAD_URL = `/api/upload/files`;
 // 文件回显前缀
