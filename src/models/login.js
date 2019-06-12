@@ -1,9 +1,7 @@
 import { routerRedux } from 'dva/router';
-import { stringify } from 'qs';
-import { fakeAccountLogin, getFakeCaptcha } from '@/services/api';
+import { message } from 'antd';
+import { loginJwt, logoutJwt } from '@/services/api';
 import { setAuthority } from '@/utils/authority';
-import { getPageQuery } from '@/utils/utils';
-import { reloadAuthorized } from '@/utils/Authorized';
 
 export default {
   namespace: 'login',
@@ -13,55 +11,53 @@ export default {
   },
 
   effects: {
-    *login({ payload }, { call, put }) {
-      const response = yield call(fakeAccountLogin, payload);
-      yield put({
-        type: 'changeLoginStatus',
-        payload: response,
-      });
-      // Login successfully
-      if (response.status === 'ok') {
-        reloadAuthorized();
-        const urlParams = new URL(window.location.href);
-        const params = getPageQuery();
-        let { redirect } = params;
-        if (redirect) {
-          const redirectUrlParams = new URL(redirect);
-          if (redirectUrlParams.origin === urlParams.origin) {
-            redirect = redirect.substr(urlParams.origin.length);
-            if (redirect.match(/^\/.*#/)) {
-              redirect = redirect.substr(redirect.indexOf('#') + 1);
-            }
-          } else {
-            redirect = null;
-          }
-        }
-        yield put(routerRedux.replace(redirect || '/'));
+    *login({ payload }, { call }) {
+      const { code, result } = yield call(loginJwt, payload);
+      if (code === 10000) {
+        localStorage.setItem('authorization', result);
+        setTimeout(() => {}, 1000);
+        window.location.href = '/';
+      } else {
+        localStorage.setItem('authorization', '');
       }
     },
 
-    *getCaptcha({ payload }, { call }) {
-      yield call(getFakeCaptcha, payload);
-    },
-
-    *logout(_, { put }) {
-      yield put({
-        type: 'changeLoginStatus',
-        payload: {
-          status: false,
-          currentAuthority: 'guest',
-        },
-      });
-      reloadAuthorized();
-      const { redirect } = getPageQuery();
-      // redirect
-      if (window.location.pathname !== '/user/login' && !redirect) {
+    // 退出登录清除操作
+    *logout(_, { put, call }) {
+      if (localStorage.getItem('authorization')) {
+        const { code, msg } = yield call(logoutJwt);
+        if (code === 10000) {
+          localStorage.setItem('authorization', '');
+          yield put({
+            type: 'updateState',
+            payload: {
+              currentUser: {},
+              serviceMenus: [],
+              operationCodes: [],
+            },
+          });
+          yield put(
+            routerRedux.push({
+              pathname: '/user/login',
+            })
+          );
+          message.success(msg);
+        } else {
+          message.error(msg);
+        }
+      } else {
+        localStorage.setItem('authorization', '');
+        yield put({
+          type: 'updateState',
+          payload: {
+            currentUser: {},
+            serviceMenus: [],
+            operationCodes: [],
+          },
+        });
         yield put(
-          routerRedux.replace({
+          routerRedux.push({
             pathname: '/user/login',
-            search: stringify({
-              redirect: window.location.href,
-            }),
           })
         );
       }

@@ -8,6 +8,7 @@ import HeaderSearch from '../HeaderSearch';
 import HeaderDropdown from '../HeaderDropdown';
 import SelectLang from '../SelectLang';
 import styles from './index.less';
+import router from 'umi/router';
 
 export default class GlobalHeaderRight extends PureComponent {
   getNoticeData() {
@@ -57,21 +58,18 @@ export default class GlobalHeaderRight extends PureComponent {
   changeReadState = clickedItem => {
     const { id } = clickedItem;
     const { dispatch } = this.props;
-    dispatch({
-      type: 'global/changeNoticeReadState',
-      payload: id,
-    });
   };
 
   render() {
     const {
-      currentUser,
+      currentUser = {},
       fetchingNotices,
       onNoticeVisibleChange,
       onMenuClick,
       onNoticeClear,
       theme,
     } = this.props;
+
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
         <Menu.Item key="userCenter">
@@ -172,7 +170,7 @@ export default class GlobalHeaderRight extends PureComponent {
             showViewMore
           />
         </NoticeIcon>
-        {currentUser.name ? (
+        {currentUser.userName ? (
           <HeaderDropdown overlay={menu}>
             <span className={`${styles.action} ${styles.account}`}>
               <Avatar
@@ -181,7 +179,7 @@ export default class GlobalHeaderRight extends PureComponent {
                 src={currentUser.avatar}
                 alt="avatar"
               />
-              <span className={styles.name}>{currentUser.name}</span>
+              <span className={styles.name}>{currentUser.userName}</span>
             </span>
           </HeaderDropdown>
         ) : (

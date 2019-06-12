@@ -50,5 +50,7 @@ export default {
   'menu.base': 'base',
   'menu.base.businessManage': 'businessManage',
   'menu.base.brand': 'brand',
-  'menu.index.index': 'HOME PAGE'
-}
+  'menu.index.index': 'HOME PAGE',
+
+  'menu.sys.api': 'api',
+};

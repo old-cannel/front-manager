@@ -1,52 +1,44 @@
-import { query as queryUsers, queryCurrent } from '@/services/user';
+import { queryCurrent, queryAuthorize } from '@/services/api';
 
 export default {
   namespace: 'user',
 
   state: {
-    list: [],
-    currentUser: {},
+    currentUser: {}, // 用户信息
+    serviceMenus: [], // 用户菜单
+    operationCodes: [], // 用户操作权限
   },
 
   effects: {
-    *fetch(_, { call, put }) {
-      const response = yield call(queryUsers);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
+    *loadForLogin(_, { put }) {
+      yield put({ type: 'queryCurrent' });
+      yield put({ type: 'queryAuthorize' });
     },
-    *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
-      yield put({
-        type: 'saveCurrentUser',
-        payload: response,
-      });
+    // 用户信息
+    *queryCurrent(_, { call, put }) {
+      const { code, result } = yield call(queryCurrent);
+      if (code === 10000 && result) {
+        yield put({ type: 'updateState', payload: { currentUser: result } });
+      }
+    },
+    // 用户权限（菜单权限，操作权限）
+    *queryAuthorize(_, { call, put }) {
+      const { code, result } = yield call(queryAuthorize);
+      if (code === 10000 && result) {
+        yield put({
+          type: 'updateState',
+          payload: {
+            serviceMenus: result.menus,
+            operationCodes: result.operationCodes,
+          },
+        });
+      }
     },
   },
 
   reducers: {
-    save(state, action) {
-      return {
-        ...state,
-        list: action.payload,
-      };
-    },
-    saveCurrentUser(state, action) {
-      return {
-        ...state,
-        currentUser: action.payload || {},
-      };
-    },
-    changeNotifyCount(state, action) {
-      return {
-        ...state,
-        currentUser: {
-          ...state.currentUser,
-          notifyCount: action.payload.totalCount,
-          unreadCount: action.payload.unreadCount,
-        },
-      };
+    updateState(state, { payload }) {
+      return { ...state, ...payload };
     },
   },
 };

@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'dva';
 import classNames from 'classnames';
 import { Menu, Icon } from 'antd';
 import Link from 'umi/link';
@@ -28,7 +29,11 @@ const getIcon = icon => {
   return icon;
 };
 
-export default class BaseMenu extends PureComponent {
+@connect(({ user }) => ({
+  serviceMenus: user.serviceMenus,
+  currentUser: user.currentUser,
+}))
+class BaseMenu extends PureComponent {
   /**
    * 获得菜单子节点
    * @memberof SiderMenu
@@ -38,9 +43,25 @@ export default class BaseMenu extends PureComponent {
       return [];
     }
     return menusData
+      .map(item => this.hasMenu(item))
       .filter(item => item.name && !item.hideInMenu)
       .map(item => this.getSubMenuOrItem(item))
       .filter(item => item);
+  };
+
+  hasMenu = menu => {
+    const { serviceMenus, currentUser } = this.props;
+    if (!serviceMenus || serviceMenus.length === 0) {
+      return Object.assign(menu, { hideInMenu: true });
+    }
+    // 如果是超级管理员 显示所有菜单
+    if (currentUser && currentUser.adminFlag === '1') {
+      return Object.assign(menu, { hideInMenu: false });
+    }
+    if (serviceMenus.filter(item => item.url === menu.path).length !== 0) {
+      return Object.assign(menu, { hideInMenu: false });
+    }
+    return Object.assign(menu, { hideInMenu: true });
   };
 
   // Get the currently selected menu
@@ -181,3 +202,4 @@ export default class BaseMenu extends PureComponent {
     );
   }
 }
+export default BaseMenu;

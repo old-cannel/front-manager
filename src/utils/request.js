@@ -5,7 +5,6 @@
 import { extend } from 'umi-request';
 import { notification } from 'antd';
 import router from 'umi/router';
-import { isAntdPro } from './utils';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -32,17 +31,16 @@ const errorHandler = error => {
   const { response = {} } = error;
   const errortext = codeMessage[response.status] || response.statusText;
   const { status, url } = response;
-
   if (status === 401) {
     notification.error({
-      message: '未登录或登录已过期，请重新登录。',
+      message: error.data.msg,
     });
     // @HACK
     /* eslint-disable no-underscore-dangle */
     window.g_app._store.dispatch({
       type: 'login/logout',
     });
-    return;
+    return error.data;
   }
   notification.error({
     message: `请求错误 ${status}: ${url}`,
@@ -51,11 +49,11 @@ const errorHandler = error => {
   // environment should not be used
   if (status === 403) {
     router.push('/exception/403');
-    return;
+    return false;
   }
   if (status <= 504 && status >= 500) {
     router.push('/exception/500');
-    return;
+    return false;
   }
   if (status >= 404 && status < 422) {
     router.push('/exception/404');
@@ -65,17 +63,22 @@ const errorHandler = error => {
 /**
  * 配置request请求时的默认参数
  */
-const request = extend({
+
+export const request = extend({
   headers: {
-    'Content-Type': 'application/json; charset=utf-8', // unified headers
+    'Content-Type': 'application/json; charset=utf-8',
     Accept: 'application/json',
-    Authorization:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsInZhbGlkVGltZSI6IjE1NTkwMzYzNjkyODAiLCJ0aW1lT3V0IjoiMTU1OTAyOTE2OTI4MyJ9.eyJjb2RlIjoiMSIsImFkZFRpbWUiOjE1NTQyNzgyNDYwMDAsIm5vbkxvY2tlZCI6dHJ1ZSwic3JjT3JnQ29kZSI6IjEiLCJjcmVkZW50aWFsc05vbkV4cGlyZWQiOnRydWUsImFkZE1hcmsiOiIxIiwiZnVsbE5hbWUiOiJhZG1pbiIsImRlbEZsYWciOiIwIiwidXNlck5hbWUiOiJhZG1pbiIsImVuYWJsZWQiOnRydWUsIm1vYmlsZU51bSI6IjEzODU2Nzg1Njc4Iiwid29ya051bSI6IjAwMSIsIm5vbkV4cGlyZWQiOnRydWUsImFjY291bnROb25FeHBpcmVkIjp0cnVlLCJhZGRVc2VyQ29kZSI6IjEiLCJpZCI6IjEiLCJhZG1pbkZsYWciOiIxIiwiYWNjb3VudE5vbkxvY2tlZCI6dHJ1ZSwidXNlcm5hbWUiOiJhZG1pbiJ9.kEArKPwiWO19AVVqw-633GETP7uzkVoSfMNGWXQ5cXQ',
-    // 'Content-Type': 'application/json; charset=utf-8',
+    Authorization: localStorage.getItem('authorization')
+      ? localStorage.getItem('authorization')
+      : '',
   },
-  // errorHandler, // 默认错误处理
-  credentials: 'include', // 默认请求是否带上cookie
-  expirys: isAntdPro(),
+  errorHandler,
 });
 
-export default request;
+/**
+ * 请求不需要header的情况
+ * @type {RequestMethod}
+ */
+export const requestNoAuthorize = extend({
+  errorHandler,
+});

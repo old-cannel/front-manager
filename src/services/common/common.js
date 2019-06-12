@@ -1,7 +1,7 @@
 import request from '@/utils/request';
 
-const API_PREX = `/api/newproject`;
+const API_PREFIX = `/api/newproject`;
 
 export async function queryDict() {
-  return request(`${API_PREX}/dict/list`);
+  return request(`${API_PREFIX}/dict/list`);
 }

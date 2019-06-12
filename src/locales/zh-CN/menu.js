@@ -52,4 +52,6 @@ export default {
   'menu.base.businessManage': '商户管理',
   'menu.base.brand': '品牌管理',
   'menu.index.index': '首页',
-}
+
+  'menu.sys.api': 'Api管理',
+};

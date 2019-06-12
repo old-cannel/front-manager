@@ -23,6 +23,10 @@ export default [
     Routes: ['src/pages/Authorized'],
     routes: [
       {
+        path: '/',
+        redirect: '/auto/completeList',
+      },
+      {
         name: 'exception',
         icon: 'warning',
         path: '/exception',
@@ -63,6 +67,17 @@ export default [
             path: '/auto/completeList',
             name: 'frame',
             component: './Auto/index',
+          },
+        ],
+      },
+      {
+        path: '/sys',
+        name: 'sys',
+        routes: [
+          {
+            path: '/sys/api',
+            name: 'api',
+            component: './Sys/Api/index',
           },
         ],
       },

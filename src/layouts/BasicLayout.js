@@ -49,9 +49,10 @@ class BasicLayout extends React.Component {
       dispatch,
       route: { routes, path, authority },
     } = this.props;
-    dispatch({
-      type: 'user/fetchCurrent',
-    });
+    // 加载用户登录后信息
+    dispatch({ type: 'user/loadForLogin' });
+    // 加载字典
+    dispatch({ type: 'global/queryDict' });
     dispatch({
       type: 'setting/getSetting',
     });

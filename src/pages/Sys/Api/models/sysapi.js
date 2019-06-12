@@ -1,20 +1,19 @@
-#{IMPORTSERVER}
+import { queryList, save, update, get, del } from '@/services/sys/api/service';
 import { message } from 'antd';
 
 const initState = {
   pageKey: Math.random(),
-  list: [],//table list
+  list: [], // table list
   current: {},
-  pagination: {},//分页
-  filterKey: Math.random(),
+  pagination: {}, // 分页
 };
 
 export default {
-  namespace: '#{NAMESPACE}',
+  namespace: 'sysapi',
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen(location => {
-        if (location.pathname === '#{ROUTER}' || location.pathname === '#{ROUTER}/') {
+        if (location.pathname === '/sys/api' || location.pathname === '/sys/api/') {
           const state = { ...initState, ...{ pageKey: Math.random() } };
           dispatch({ type: 'updateState', payload: state });
         }
@@ -24,10 +23,10 @@ export default {
   state: initState,
 
   effects: {
-    //分页list
-    * queryList({ payload = {} }, { call, put }) {
+    // 分页list
+    *queryList({ payload = {} }, { call, put }) {
       const page = { size: 10, current: 1 };
-      let param = { ...page, ...payload };
+      const param = { ...page, ...payload };
       const { code, result } = yield call(queryList, param);
       if (result && code === 10000) {
         const pagination = {
@@ -39,45 +38,43 @@ export default {
       }
     },
 
-    //修改
-    * edit({ payload = {} }, { call, put }) {
+    // 修改
+    *edit({ payload = {} }, { call, put }) {
       const { code, result } = yield call(get, payload);
       if (code === 10000 && result) {
-        yield put({ type: 'updateState', payload: { current: result,editLoading:false } });
+        yield put({ type: 'updateState', payload: { current: result, editLoading: false } });
       }
     },
 
-    //新增保存
-    * save({ payload = {} }, { call }) {
+    // 新增保存
+    *save({ payload = {} }, { call }) {
       return yield call(save, payload);
     },
 
-    //修改保存
-    * update({ payload = {} }, { call }) {
+    // 修改保存
+    *update({ payload = {} }, { call }) {
       return yield call(update, payload);
     },
 
-    //删除
-    * delete({ payload = {} }, { call, put }) {
+    // 删除
+    *delete({ payload = {} }, { call, put }) {
       const result = yield call(del, payload);
       if (result && result.code === 10000) {
         message.success(result.msg);
-        yield put({ type: 'updateState', payload: { filterKey: Math.random() } });
         yield put({ type: 'queryList' });
-      }else{
+      } else {
         message.success(result.msg);
       }
-      return result
+      return result;
     },
 
-    //获取详情
-    * get({ payload = {} }, { call, put }) {
+    // 获取详情
+    *get({ payload = {} }, { call, put }) {
       const { code, result } = yield call(get, payload);
       if (code === 10000 && result) {
         yield put({ type: 'updateState', payload: { current: result } });
       }
     },
-
   },
 
   reducers: {

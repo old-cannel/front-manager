@@ -26,8 +26,6 @@ class HeaderView extends Component {
 
   componentDidMount() {
     document.addEventListener('scroll', this.handScroll, { passive: true });
-    const { dispatch } = this.props;
-    dispatch({ type: 'global/queryDict' });
   }
 
   componentWillUnmount() {
@@ -50,10 +48,6 @@ class HeaderView extends Component {
       })}`
     );
     const { dispatch } = this.props;
-    dispatch({
-      type: 'global/clearNotices',
-      payload: type,
-    });
   };
 
   handleMenuClick = ({ key }) => {
@@ -77,14 +71,7 @@ class HeaderView extends Component {
     }
   };
 
-  handleNoticeVisibleChange = visible => {
-    if (visible) {
-      const { dispatch } = this.props;
-      dispatch({
-        type: 'global/fetchNotices',
-      });
-    }
-  };
+  handleNoticeVisibleChange = () => {};
 
   handScroll = () => {
     const { autoHideHeader } = this.props;
