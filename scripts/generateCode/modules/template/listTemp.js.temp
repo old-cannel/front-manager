@@ -95,7 +95,7 @@ class List extends Component {
       if (result && result.code === 10000) {
         message.success(result.msg);
         this.setState({ addVisible: false });
-        dispatch({ type: '#{NAMESPACE}/updateState', payload: {  filterKey: Math.random() } });
+        dispatch({ type: '#{NAMESPACE}/updateState', payload: { current: {}, filterKey: Math.random() } });
         dispatch({ type: '#{NAMESPACE}/queryList' });
       } else {
         callback();
