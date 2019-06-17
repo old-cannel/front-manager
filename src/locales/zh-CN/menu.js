@@ -54,4 +54,9 @@ export default {
   'menu.index.index': '首页',
 
   'menu.sys.api': 'Api管理',
-};
+
+  'menu.sys.menu': '菜单管理',
+
+
+  'menu.sys.dict': '字典管理',
+}

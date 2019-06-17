@@ -4,7 +4,7 @@ import React from 'react';
 const { Paragraph } = Typography;
 const TextClamp = ({ children, width = 200, rows = 2 }) => {
   return (
-    <Paragraph title={children} style={{ width }} ellipsis={{ rows }}>
+    <Paragraph title={children} style={{ maxWidth: width }} ellipsis={{ rows }}>
       {children}{' '}
     </Paragraph>
   );

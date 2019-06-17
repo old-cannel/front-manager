@@ -150,14 +150,15 @@ class List extends Component {
           const operation = (
             <span>
               <a
+                style={{display:'none'}}
                 href="javascript:void(0)"
                 onClick={() => {
                   this.details(record);
                 }}
               >
                 详情
-              </a>{' '}
-              <Divider type="vertical" />
+              </a>
+
               <a
                 href="javascript:void(0)"
                 onClick={() => {

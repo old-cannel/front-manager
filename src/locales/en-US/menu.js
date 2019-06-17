@@ -53,4 +53,8 @@ export default {
   'menu.index.index': 'HOME PAGE',
 
   'menu.sys.api': 'api',
-};
+
+  'menu.sys.menu': 'menu',
+
+  'menu.sys.dict': 'dict',
+}
