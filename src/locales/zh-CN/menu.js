@@ -59,4 +59,5 @@ export default {
 
 
   'menu.sys.dict': '字典管理',
+  'menu.sys.role': '角色管理',
 }

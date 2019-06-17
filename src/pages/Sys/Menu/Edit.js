@@ -56,7 +56,7 @@ class Edit extends Component {
         const operations=this.editList.renderDate();
         let data = {
           id:values.id,
-          supCode: values.supCode,
+          supId: values.supId,
           name: values.name,
           url: values.url,
           sort: values.sort,
@@ -133,8 +133,8 @@ class Edit extends Component {
 
                 <Col span="12">
                   <FormItem label="上级菜单:" {...formItemLayout}>
-                    {getFieldDecorator('supCode', {
-                      initialValue: current.supCode,
+                    {getFieldDecorator('supId', {
+                      initialValue: current.supId,
                     })( <TreeSelect
                       disabled={title!=="1"}
                       showSearch

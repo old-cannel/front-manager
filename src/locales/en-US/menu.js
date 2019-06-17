@@ -57,4 +57,5 @@ export default {
   'menu.sys.menu': 'menu',
 
   'menu.sys.dict': 'dict',
+  'menu.sys.role': 'role',
 }

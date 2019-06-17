@@ -1,28 +1,19 @@
-import {queryList,save,update,get,del,loadApi,checkCode,checkUrl} from '@/services/sys/menu/service';
+import {queryList,save,update,get,del,getMenuAndOrganization,getRoleMenus} from '@/services/sys/role/service';
 import { message } from 'antd';
 
 const initState = {
   pageKey: Math.random(),
+  list: [],// table list
   current: {},
-  menuTreeData:[] // 菜单树
-};
-
-const treeData = list => {
-  list.forEach(item => {
-    item.title = item.name;
-    item.value = item.id;
-    if (item.children) {
-      treeData(item.children);
-    }
-  });
+  pagination: {},// 分页
 };
 
 export default {
-  namespace: 'sysmenu',
+  namespace: 'sysrole',
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen(location => {
-        if (location.pathname === '/sys/menu' || location.pathname === '/sys/menu/') {
+        if (location.pathname === '/sys/role' || location.pathname === '/sys/role/') {
           const state = { ...initState, ...{ pageKey: Math.random() } };
           dispatch({ type: 'updateState', payload: state });
         }
@@ -35,15 +26,15 @@ export default {
     // 分页list
     * queryList({ payload = {} }, { call, put }) {
       const page = { size: 10, current: 1 };
-      const param = { ...page, ...payload };
+      let param = { ...page, ...payload };
       const { code, result } = yield call(queryList, param);
       if (result && code === 10000) {
-        treeData(result)
-        let baseMenu = { id: '-1',  name: '平台菜单',url:"",code:'-1',supId:'-1',title:"平台菜单",value:'-1'};
-        if(result && result.length>0){
-          baseMenu.children=result
-        }
-        yield put({ type: 'updateState', payload: { menuTreeData:[baseMenu] } });
+        const pagination = {
+          current: param ? Number(param.current) : 1,
+          pageSize: param ? Number(param.size) : 10,
+          total: result.total,
+        };
+        yield put({ type: 'updateState', payload: { list: result.records, pagination } });
       }
     },
 
@@ -78,28 +69,14 @@ export default {
     },
 
     // 获取详情
-    * get({ payload = {} }, { call, put }) {
-      const { code, result } = yield call(get, payload);
-      if (code === 10000 && result) {
-        yield put({ type: 'updateState', payload: { current: result } });
-      }
+    * getRoleMenus({ payload = {} }, { call }) {
+      return  yield call(getRoleMenus, payload);
     },
 
-    // 获取api
-    * loadApi(_, { call }) {
-      return  yield call(loadApi);
+    * getMenuAndOrganization({ payload = {} }, { call }) {
+      return yield call(getMenuAndOrganization, payload);
     },
-
-    // 验证编码是否唯一
-    * checkCode({payload} , { call }) {
-      return  yield call(checkCode,payload);
-    },
-
-    // 验证Url是否唯一
-    * checkUrl({payload} , { call }) {
-      return  yield call(checkUrl,payload);
-    },
-
+    
   },
 
   reducers: {

@@ -34,23 +34,15 @@ class Detail extends Component {
       <div>
         <Drawer
           title="详情"
-          width={740}
+          width={550}
           placement="right"
           onClose={this.cancel}
           visible={visible}
         >
           <Spin spinning={loading}>
-            <DescriptionList col="2" size="large" style={{ marginBottom: 32,paddingBottom:20 }}>
-              <Description term="菜单名称">{current.name}</Description>
-              <Description term="URL">{current.url}</Description>
-              <Description term="排序">{current.sort}</Description>
-              <Description term="显示标识0否，1是">{current.showFlag}</Description>
-              <Description term="备注">{current.remark}</Description>
-              <Description term="上级编码">{current.supId}</Description>
-              <Description term="上级名称">{current.supName}</Description>
-              <Description term="上级编码集合">{current.subIds}</Description>
-              <Description term="上级名称集合">{current.supNames}</Description>
-              <Description term="深度,默认是1">{current.deep}</Description>
+            <DescriptionList col="1" size="large" style={{ marginBottom: 32,paddingBottom:20 }}>
+              <Description term="角色名称">{current.name}</Description>
+              <Description term="状态">{current.status}</Description>
             </DescriptionList>
           </Spin>
           <div className="drawerFooter">

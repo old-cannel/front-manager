@@ -47,7 +47,7 @@ class List extends Component {
   addNext = record => {
     this.setState({ editTitle: '1', editVisible: true });
     const { dispatch } = this.props;
-    dispatch({ type: 'sysmenu/updateState', payload: { current:{supCode:record.code,supUrl:record.url} } });
+    dispatch({ type: 'sysmenu/updateState', payload: { current:{supId:record.code,supUrl:record.url} } });
   };
 
   // list change
@@ -156,18 +156,29 @@ class List extends Component {
       render: (text, record) => {
         const operation =
           <span>
-            <a href="javascript:void(0)" onClick={() => { this.edit(record); }}>修改</a> <Divider type="vertical" />
-            <Popconfirm
-              title="您确认删除吗？"
-              onConfirm={() => {
-                this.confirmDel(record.id);
-              }}
-              okText="确认"
-              placement="left"
-              cancelText="取消"
-            >
-              <a href="javascript:void(0)">删除</a>
-            </Popconfirm><Divider type="vertical" /><a href="javascript:void(0)" onClick={() => { this.addNext(record); }}>添加下级</a>
+            {
+              record.id!=="-1" && <span><a href="javascript:void(0)" onClick={() => { this.edit(record); }}>修改</a> <Divider type="vertical" /></span>
+            }
+            {
+              record.id!=="-1" &&
+              <span>
+                <Popconfirm
+                  title="您确认删除吗？"
+                  onConfirm={() => {
+                    this.confirmDel(record.id);
+                  }}
+                  okText="确认"
+                  placement="left"
+                  cancelText="取消"
+                >
+                  <a href="javascript:void(0)">删除</a>
+                </Popconfirm><Divider type="vertical" />
+              </span>
+            }
+
+            {
+              <a href="javascript:void(0)" onClick={() => { this.addNext(record); }}>添加下级</a>
+            }
           </span>;
         return operation;
       },
