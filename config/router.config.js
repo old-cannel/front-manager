@@ -96,7 +96,12 @@ export default [{
             "path": "/sys/area",
             "name": "area",
             "component": "./Sys/Area/index"
-          }
+          },
+          {
+            "path": "/sys/user",
+            "name": "user",
+            "component": "./Sys/User/index"
+          },
         ]
       },
       {

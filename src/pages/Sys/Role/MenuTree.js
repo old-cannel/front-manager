@@ -49,7 +49,7 @@ class MenuTree extends Component {
 
 
   renderDate=()=>{
-    const { checkedKeys, halfCheckedKeys } = this.state;
+    const { checkedKeys=[], halfCheckedKeys=[] } = this.state;
     return [...checkedKeys, ...halfCheckedKeys].filter(item=>item!=="-1");
   }
 

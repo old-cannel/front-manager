@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Button,Divider,Popconfirm,Table,message, } from 'antd';
-import DictLabel from '@/components/Dict/DictLabel';
+import TextClamp from '@/components/TextClamp/index';
 import Filter from './Filter';
 import Add from './Add';
 import Edit from './Edit';
 import Details from './Details';
 
-@connect(({ loading,sysorganization }) => ({
-  pagination: sysorganization.pagination,
-  list: sysorganization.list,
-  current: sysorganization.current,
-  detailsLoading: loading.effects['sysorganization/get'],
-  loading: loading.effects['sysorganization/queryList'],
-  filterKey: sysorganization.filterKey,
-  allList: sysorganization.allList,
-  optionsArea:sysorganization.optionsArea,
+@connect(({ loading,sysuser }) => ({
+  pagination: sysuser.pagination,
+  list: sysuser.list,
+  current: sysuser.current,
+  detailsLoading: loading.effects['sysuser/get'],
+  loading: loading.effects['sysuser/queryList'],
+  filterKey: sysuser.filterKey,
+  roleList: sysuser.roleList,
+  orgList:sysuser.orgList,
 }))
 
 class List extends Component {
@@ -25,43 +25,35 @@ class List extends Component {
     this.state = {
       editVisible: false,
       addVisible: false,
-      code:'',
+      
     };
   }
 
   componentDidMount() {
     const { dispatch } = this.props;
-    dispatch({ type: 'sysorganization/queryList' });
+    dispatch({ type: 'sysuser/queryList' });
   }
 
   // 新增
   add = () => {
     const {dispatch}=this.props
-    dispatch({type:'sysorganization/editInit'})
-    dispatch({ type: 'sysorganization/updateState', payload: { current: {} } });
-    this.setState({ addVisible: true,code:'' });
+    dispatch({type:'sysuser/initEdit'})
+    this.setState({ addVisible: true });
   };
 
   // 编辑
   edit = record => {
     this.setState({ editVisible: true });
     const { dispatch } = this.props;
-    dispatch({ type: 'sysorganization/updateState' });
-    dispatch({type:'sysorganization/editInit'})
-    dispatch({ type: 'sysorganization/edit', payload: { id: record.id } });
-  };
-
-  addNext = record => {
-    const { dispatch } = this.props;
-    dispatch({ type: 'sysorganization/editInit' });
-    dispatch({ type: 'sysorganization/updateState', payload: { current: {} } });
-    this.setState({ addVisible: true, code: record.code, });
+    dispatch({ type: 'sysuser/updateState' });
+    dispatch({type:'sysuser/initEdit'})
+    dispatch({ type: 'sysuser/edit', payload: { id: record.id } });
   };
 
   // 删除
   confirmDel = (id) => {
     const { dispatch } = this.props;
-    dispatch({ type: 'sysorganization/delete', payload: { id } });
+    dispatch({ type: 'sysuser/delete', payload: { id } });
   };
 
 
@@ -69,7 +61,7 @@ class List extends Component {
   details = record => {
     const { dispatch } = this.props;
     this.setState({ detailVisible: true });
-    dispatch({ type: 'sysorganization/get', payload: { id: record.id } });
+    dispatch({ type: 'sysuser/get', payload: { id: record.id } });
   };
 
   // list change
@@ -81,18 +73,18 @@ class List extends Component {
       current: page.current,
       ...searchParam,
     };
-    dispatch({ type: 'sysorganization/queryList', payload });
+    dispatch({ type: 'sysuser/queryList', payload });
   };
 
   // 修改
   update = (values, callback) => {
     const { dispatch } = this.props;
-    dispatch({ type: 'sysorganization/update', payload: values }).then((result) => {
+    dispatch({ type: 'sysuser/update', payload: values }).then((result) => {
       if (result && result.code === 10000) {
         message.success(result.msg);
         this.setState({ editVisible: false });
-        dispatch({ type: 'sysorganization/updateState', payload: { current: {}, filterKey: Math.random() } });
-        dispatch({ type: 'sysorganization/queryList' });
+        dispatch({ type: 'sysuser/updateState', payload: { current: {}, filterKey: Math.random() } });
+        dispatch({ type: 'sysuser/queryList' });
       } else {
         callback();
         message.error(result.msg);
@@ -103,17 +95,53 @@ class List extends Component {
   // 新增
   save = (values, callback) => {
     const { dispatch } = this.props;
-    dispatch({ type: 'sysorganization/save', payload: values }).then((result) => {
+    dispatch({ type: 'sysuser/save', payload: values }).then((result) => {
       if (result && result.code === 10000) {
         message.success(result.msg);
-        this.setState({ addVisible: false ,code:''});
-        dispatch({ type: 'sysorganization/updateState', payload: { current: {}, filterKey: Math.random() } });
-        dispatch({ type: 'sysorganization/queryList' });
+        this.setState({ addVisible: false });
+        dispatch({ type: 'sysuser/updateState', payload: { current: {}, filterKey: Math.random() } });
+        dispatch({ type: 'sysuser/queryList' });
       } else {
         callback();
         message.error(result.msg);
       }
     });
+  };
+
+  checkWorkNum = (rule, value, callback,id) => {
+    if (value) {
+      const { dispatch } = this.props;
+      dispatch({
+        type: 'sysuser/checkWorkNum',
+        payload: { workNum: value, id: id || '' },
+      }).then(({ result }) => {
+        if (result > 0) {
+          callback('工号已存在');
+        } else {
+          callback();
+        }
+      });
+    } else {
+      callback();
+    }
+  };
+
+  checkUserName = (rule, value, callback,id) => {
+    if (value) {
+      const { dispatch } = this.props;
+      dispatch({
+        type: 'sysuser/checkUserName',
+        payload: { userName: value, id: id || '' },
+      }).then(({ result }) => {
+        if (result > 0) {
+          callback('用户名已存在');
+        } else {
+          callback();
+        }
+      });
+    } else {
+      callback();
+    }
   };
 
 
@@ -122,50 +150,61 @@ class List extends Component {
   render() {
     const {
       list, loading, pagination, dispatch, current,
-      detailsLoading,filterKey,allList,optionsArea
+      detailsLoading,filterKey,roleList,orgList,
     } = this.props;
-    const { editVisible, detailVisible, addVisible,code } = this.state;
+    const { editVisible, detailVisible, addVisible } = this.state;
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
       ...pagination,
     };
     const columns = [{
-          title: '机构名称',
-          dataIndex:'name',
-          key: 'name',
+          title: '编码',
+          dataIndex:'userCode',
+          key: 'userCode',
         },{
-          title: '机构编码',
-          dataIndex:'code',
-          key: 'code',
+          title: '用户名',
+          dataIndex:'userName',
+          key: 'userName',
+          render:text=><TextClamp>{text}</TextClamp>
         },{
-          title: '机构类型',
-          dataIndex:'orgType',
-          key: 'orgType',
-          render:text=>{
-            return <DictLabel type="org_type" value={text} />
-          }
-        },{
-          title: '负责人',
-          dataIndex:'principalCode',
-          key: 'principalCode',
+          title: '姓名',
+          dataIndex:'fullName',
+          key: 'fullName',
+          render:text=><TextClamp>{text}</TextClamp>
         },{
           title: '手机号',
           dataIndex:'mobileNum',
           key: 'mobileNum',
         },{
-          title: '归属区域',
-          dataIndex:'srcAreaCode',
-          key: 'srcAreaCode',
+          title: '邮箱',
+          dataIndex:'email',
+          key: 'email',
         },{
-          title: '详细地址',
-          dataIndex:'address',
-          key: 'address',
+          title: '工号',
+          dataIndex:'workNum',
+          key: 'workNum',
+        },{
+          title: '所属机构',
+          dataIndex:'srcOrgName',
+          key: 'srcOrgName',
+        },{
+          title: '状态',
+          dataIndex:'enabled',
+          key: 'enabled',
+          render:(text)=>{
+            return text?"正常":'冻结'
+          }
+        },{
+          title: '入职时间',
+          dataIndex:'entryTime',
+          key: 'entryTime',
         },{
           title: '操作',
           render:(text,record)=>{
             const operation =
               <span>
+                <a href="javascript:void(0)" onClick={()=>{this.details(record)}}>详情</a> <Divider type="vertical" />
                 <a href="javascript:void(0)" onClick={()=>{this.edit(record)}}>修改</a> <Divider 
                   type="vertical"
                 />
@@ -177,7 +216,6 @@ class List extends Component {
                 >
                   <a href="javascript:void(0)">删除</a>
                 </Popconfirm>
-                <Divider type="vertical" /><a href="javascript:void(0)" onClick={()=>{this.addNext(record)}}>添加下级机构</a>
               </span>
             return  operation
           }
@@ -185,7 +223,7 @@ class List extends Component {
     
     return (
       <div>
-        <Filter key={filterKey} ref={this.filterRef} />
+        <Filter orgList={orgList} key={filterKey} ref={this.filterRef} />
         <div style={{ marginTop: 10 }}>
           <Button
             onClick={() => {
@@ -199,6 +237,7 @@ class List extends Component {
         </div>
         <Table
           key={JSON.stringify(loading)}
+          
           onChange={this.tableChange}
           loading={loading}
           columns={columns}
@@ -208,12 +247,14 @@ class List extends Component {
         />
         {
           editVisible &&  <Edit
-            allList={allList}
-            optionsArea={optionsArea}
+            checkWorkNum={this.checkWorkNum}
+            checkUserName={this.checkUserName}
+            orgList={orgList}
+            roleList={roleList}
             visible={editVisible}
             current={current}
             onCancel={() => {
-              dispatch({ type: 'sysorganization/updateState', payload: { current: {} } });
+              dispatch({ type: 'sysuser/updateState', payload: { current: {} } });
               this.setState({ editVisible: false });
             }}
             onOk={(values, callback) => {
@@ -224,12 +265,13 @@ class List extends Component {
 
         {
           addVisible && <Add
-            code={code}
-            optionsArea={optionsArea}
+            checkWorkNum={this.checkWorkNum}
+            checkUserName={this.checkUserName}
+            orgList={orgList}
+            roleList={roleList}
             visible={addVisible}
-            allList={allList}
             onCancel={() => {
-              this.setState({ addVisible: false,code:'' });
+              this.setState({ addVisible: false });
             }}
             onOk={(values, callback) => {
               this.save(values, callback);
@@ -242,7 +284,7 @@ class List extends Component {
           visible={detailVisible}
           current={current}
           onCancel={() => {
-            dispatch({ type: 'sysorganization/updateState', payload: { current: {} } });
+            dispatch({ type: 'sysuser/updateState', payload: { current: {} } });
             this.setState({ detailVisible: false });
           }}
         />

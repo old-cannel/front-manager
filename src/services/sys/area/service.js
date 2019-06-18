@@ -44,14 +44,25 @@ export async function get(params) {
   return request(url);
 }
 
-// 获取详情
+
 export async function listTree() {
   const url =`${API_PREFIX}/sys/area/listTree`;
+  return request(url);
+}
+
+export async function listTreeHasCounty() {
+  const url =`${API_PREFIX}/sys/area/listTreeHasCounty`;
   return request(url);
 }
 
 // 获取详情
 export async function checkCode(params) {
   const url =`${API_PREFIX}/sys/area/checkCode?code=${params.code}&id=${params.id}`;
+  return request(url);
+}
+
+// 获取详情
+export async function getAreaByType(params) {
+  const url =`${API_PREFIX}/sys/area/getAreaByType?type=${params.type}&code=${params.code}`;
   return request(url);
 }

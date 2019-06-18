@@ -1,5 +1,7 @@
-import {queryList,save,update,get,del,checkCode,treeList} from '@/services/sys/organization/service';
-import {listTreeHasCounty} from '@/services/sys/area/service';
+import {queryList,save,update,get,del,checkWorkNum,checkUserName} from '@/services/sys/user/service';
+import {treeList} from '@/services/sys/organization/service';
+import {roleList} from '@/services/sys/role/service';
+
 import { message } from 'antd';
 
 const initState = {
@@ -8,10 +10,9 @@ const initState = {
   current: {},
   pagination: {},// 分页
   filterKey: Math.random(),
-  allList:[],
-  optionsArea:[]
+  roleList:[],
+  orgList:[],
 };
-
 const treeData = list => {
   list.forEach(item => {
     item.title = item.name;
@@ -23,13 +24,14 @@ const treeData = list => {
 };
 
 export default {
-  namespace: 'sysorganization',
+  namespace: 'sysuser',
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen(location => {
-        if (location.pathname === '/sys/organization' || location.pathname === '/sys/organization/') {
+        if (location.pathname === '/sys/user' || location.pathname === '/sys/user/') {
           const state = { ...initState, ...{ pageKey: Math.random() } };
           dispatch({ type: 'updateState', payload: state });
+          dispatch({ type: 'initEdit' });
         }
       });
     },
@@ -90,27 +92,29 @@ export default {
         yield put({ type: 'updateState', payload: { current: result } });
       }
     },
-    // 编码验证
-    * checkCode({ payload = {} }, { call }) {
-     return yield call(checkCode, payload);
-    },
-    * treeList({ payload = {} }, { call, put }) {
+
+    * initEdit ({ payload = {} }, { call, put }) {
       const { code, result } = yield call(treeList, payload);
       if (code === 10000) {
         treeData(result)
-        yield put({ type: 'updateState', payload: { allList: result } });
+        yield put({ type: 'updateState', payload: { orgList: result } });
+      }
+      const roleListResult = yield call(roleList, payload);
+      if(roleListResult.code===10000){
+        yield put({ type: 'updateState', payload: { roleList: roleListResult.result } });
       }
     },
-    * editInit({ payload = {} }, {call,  put }) {
-      yield put({type:'treeList',payload});
-      const result=yield call(listTreeHasCounty,{type:1,code:''});
-      if(result.code===10000){
-        result.result.forEach(item => {
-          item.isLeaf = false;
-        });
-        yield put({ type: 'updateState', payload: { optionsArea: result.result } });
-      }
+
+    // 验证工号唯一性
+    * checkWorkNum ({ payload = {} }, { call }) {
+      return  yield call(checkWorkNum, payload);
     },
+
+    // 验证用户名唯一性
+    * checkUserName ({ payload = {} }, { call }) {
+      return  yield call(checkUserName, payload);
+    },
+
   },
 
   reducers: {

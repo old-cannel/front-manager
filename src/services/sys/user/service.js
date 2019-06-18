@@ -4,7 +4,7 @@ import { API_PREFIX } from '@/services/api';
 
 // 分页
 export async function queryList(params) {
-  const url =`${API_PREFIX}/sys/role?size=${params.size?params.size:10}&current=${params.current}`
+  const url =`${API_PREFIX}/sys/user?size=${params.size?params.size:10}&current=${params.current}`
   return request(url, {
     method: 'POST',
     data: JSON.stringify(params),
@@ -13,7 +13,7 @@ export async function queryList(params) {
 
 // 保存
 export async function save(params) {
-  const url =`${API_PREFIX}/sys/role/add`
+  const url =`${API_PREFIX}/sys/user/add`
   return request(url, {
     method: 'PUT',
     data: JSON.stringify(params),
@@ -22,7 +22,7 @@ export async function save(params) {
 
 // 修改
 export async function update(params) {
-  const url =`${API_PREFIX}/sys/role/update`;
+  const url =`${API_PREFIX}/sys/user/update`;
   return request(url, {
     method: 'PUT',
     data: JSON.stringify(params),
@@ -31,7 +31,7 @@ export async function update(params) {
 
 // 删除
 export async function del(params) {
-  const url =`${API_PREFIX}/sys/role`;
+  const url =`${API_PREFIX}/sys/user`;
   return request(url, {
     method: 'DELETE',
     data: JSON.stringify(params),
@@ -40,23 +40,16 @@ export async function del(params) {
 
 // 获取详情
 export async function get(params) {
-  const url =`${API_PREFIX}/sys/role/${params.id}`;
+  const url =`${API_PREFIX}/sys/user/${params.id}`;
   return request(url);
 }
 
-export async function roleList() {
-  const url =`${API_PREFIX}/sys/role/roleList`;
+
+export async function checkWorkNum(params) {
+  const url =`${API_PREFIX}/sys/user/checkWorkNum?id=${params.id}&workNum=${params.workNum}`;
   return request(url);
 }
-
-// 角色下的菜单
-export async function getRoleMenus(params) {
-  const url =`${API_PREFIX}/sys/role/roleMenus/${params.id}`;
-  return request(url);
-}
-
-// 获取菜单和操作
-export async function getMenuAndOrganization() {
-  const url =`${API_PREFIX}/sys/menu/getMenuAndOrganization`;
+export async function checkUserName(params) {
+  const url =`${API_PREFIX}/sys/user/checkUserName?id=${params.id}&userName=${params.userName}`;
   return request(url);
 }

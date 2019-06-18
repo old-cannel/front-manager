@@ -43,3 +43,15 @@ export async function get(params) {
   const url =`${API_PREFIX}/sys/organization/${params.id}`;
   return request(url);
 }
+
+// 验证编码
+export async function checkCode(params) {
+  const url =`${API_PREFIX}/sys/organization/checkCode?id=${params.id}&code=${params.code}`;
+  return request(url);
+}
+
+// 验证编码
+export async function treeList() {
+  const url =`${API_PREFIX}/sys/organization/treeList`;
+  return request(url);
+}

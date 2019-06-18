@@ -142,7 +142,7 @@ class Edit extends Component {
                       style={{  width: 250 }}
                       dropdownStyle={{ maxHeight: 200, overflow: 'auto' }}
                       treeData={menuTreeData}
-                      placeholder="请选择上级菜单"
+                      placeholder="请选择机构"
                       filterTreeNode={(inputValue, treeNode) => {
                         return treeNode.props.title.indexOf(inputValue) > -1;
                       }}

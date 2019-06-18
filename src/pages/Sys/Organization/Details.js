@@ -44,9 +44,9 @@ class Detail extends Component {
             <DescriptionList col="2" size="large" style={{ marginBottom: 32,paddingBottom:20 }}>
               <Description term="机构名称">{current.name}</Description>
               <Description term="机构类型">{<DictLabel type="org_type" value={current.orgType} />}</Description>
-              <Description term="负责人">{current.principal}</Description>
+              <Description term="负责人">{current.principalCode}</Description>
               <Description term="手机号">{current.mobileNum}</Description>
-              <Description term="归属区域">{current.srcAreaId}</Description>
+              <Description term="归属区域">{current.srcAreaCode}</Description>
               <Description term="详细地址">{current.address}</Description>
               <Description term="上级机构编码">{current.supCode}</Description>
               <Description term="上级机构名称">{current.supName}</Description>

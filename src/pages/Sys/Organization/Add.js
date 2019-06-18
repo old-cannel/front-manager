@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Input, Select, Row, Col, Form, Button, Drawer, Spin, TreeSelect } from 'antd';
+import { Input, Select, Row, Col, Form, Button, Drawer, Spin, TreeSelect,Cascader  } from 'antd';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -43,7 +43,11 @@ class Add extends Component {
       let data = values;
       if (!err) {
         if (onOk) {
-
+          if(data.srcAreaCode &&  data.srcAreaCode.length>0){
+            data.srcAreaCode=data.srcAreaCode[data.srcAreaCode.length-1]
+          }else{
+            data.srcAreaCode=""
+          }
           onOk(data, () => {
             this.setState({ loading: false });
           });
@@ -54,12 +58,33 @@ class Add extends Component {
     });
   };
 
+  checkCode=(rule, value, callback)=>{
+    if(value){
+      const { dispatch, form: { getFieldsValue } } = this.props;
+      dispatch({
+        type: 'sysorganization/checkCode',
+        payload: { code:getFieldsValue().supCode+getFieldsValue().code, id: getFieldsValue().id ? getFieldsValue().id : '' },
+      }).then(({ result }) => {
+        if (result > 0) {
+          callback('编码已经存在');
+        } else {
+          callback();
+        }
+      });
+    }else{
+      callback();
+    }
+  }
+
   render() {
     const {
       visible,
       onCancel,
       list,
-      form: { getFieldDecorator },
+      code,
+      optionsArea,
+      allList,
+      form: { getFieldDecorator,getFieldsValue },
     } = this.props;
     const { loading } = this.state;
     return (
@@ -80,14 +105,14 @@ class Add extends Component {
                 <Col span="24">
                   <FormItem label="上级机构:" {...formItemLayout}>
                     {getFieldDecorator('supCode', {
-                      initialValue: '',
+                      initialValue: code || null,
                     })( <TreeSelect
                       showSearch
                       allowClear
                       style={{  width: 250 }}
                       dropdownStyle={{ maxHeight: 250, overflow: 'auto' }}
-                      treeData={list}
-                      placeholder="请选择上级菜单"
+                      treeData={allList}
+                      placeholder="请选择上级机构"
                       filterTreeNode={(inputValue, treeNode) => {
                         return treeNode.props.title.indexOf(inputValue) > -1;
                       }}
@@ -95,6 +120,18 @@ class Add extends Component {
                     />)}
                   </FormItem>
                 </Col>
+
+                <Col span="24">
+                  <FormItem label="机构编号:" {...formItemLayout}>
+                    {getFieldDecorator('code', {
+                      rules: [
+                        { 'required': true, 'message': '机构编号不能为空' },
+                        { validator: this.checkCode },
+                      ],
+                    })(<Input addonBefore={getFieldsValue().supCode} maxLength={50} style={{ maxWidth: 250 }} placeholder='请输入机构编号' />)}
+                  </FormItem>
+                </Col>
+
 
                 <Col span="24">
                   <FormItem label="机构名称:" {...formItemLayout}>
@@ -125,7 +162,7 @@ class Add extends Component {
                 </Col>
                 <Col span="24">
                   <FormItem label="负责人:" {...formItemLayout}>
-                    {getFieldDecorator('principal', {
+                    {getFieldDecorator('principalCode', {
                       rules: [],
                     })(<Input maxLength={20} style={{  width: 250 }} placeholder='请输入负责人' />)}
                   </FormItem>
@@ -133,15 +170,23 @@ class Add extends Component {
                 <Col span="24">
                   <FormItem label="手机号:" {...formItemLayout}>
                     {getFieldDecorator('mobileNum', {
-                      rules: [],
+                      rules: [
+                        { pattern: /^1[0123456789]\d{9}$/,
+                          message: '请正确填写您的手机号码!',
+                        }
+                      ],
                     })(<Input maxLength={20} style={{  width: 250 }} placeholder='请输入手机号' />)}
                   </FormItem>
                 </Col>
                 <Col span="24">
                   <FormItem label="归属区域:" {...formItemLayout}>
-                    {getFieldDecorator('srcAreaId', {
-                      rules: [],
-                    })(<Input maxLength={32} style={{  width: 250 }} placeholder='请输入归属区域' />)}
+                    {getFieldDecorator('srcAreaCode', {
+                    })(<Cascader
+                      options={optionsArea}
+                      changeOnSelect
+                      fieldNames={{ label: 'name', value: 'code', children: 'children' }}
+                      style={{  width: 250 }}
+                      placeholder='请选择归属区域' />)}
                   </FormItem>
                 </Col>
                 <Col span="24">
