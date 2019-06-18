@@ -87,6 +87,16 @@ export default [{
             "name": "role",
             "component": "./Sys/Role/index"
           },
+          {
+            "path": "/sys/organization",
+            "name": "organization",
+            "component": "./Sys/Organization/index"
+          },
+          {
+            "path": "/sys/area",
+            "name": "area",
+            "component": "./Sys/Area/index"
+          }
         ]
       },
       {

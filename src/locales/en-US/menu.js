@@ -58,4 +58,7 @@ export default {
 
   'menu.sys.dict': 'dict',
   'menu.sys.role': 'role',
+
+  'menu.sys.organization': 'organization',
+  'menu.sys.area': 'area',
 }

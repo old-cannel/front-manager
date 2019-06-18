@@ -1,17 +1,22 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Button,Divider,Popconfirm,Table,message, } from 'antd';
-import Filter from './Filter';
+import DictLabel from '@/components/Dict/DictLabel';
 import TextClamp from '@/components/TextClamp/index';
+
+
+import Filter from './Filter';
 import Add from './Add';
 import Edit from './Edit';
 
-@connect(({ loading,sysdict }) => ({
-  pagination: sysdict.pagination,
-  list: sysdict.list,
-  current: sysdict.current,
-  loading: loading.effects['sysdict/queryList'],
-  filterKey: sysdict.filterKey,
+
+@connect(({ loading,sysarea }) => ({
+  list: sysarea.list,
+  current: sysarea.current,
+  loading: loading.effects['sysarea/queryList'],
+  filterKey: sysarea.filterKey,
+  editLoading: sysarea.editLoading ,
+  allList: sysarea.allList ,
 }))
 
 class List extends Component {
@@ -21,17 +26,19 @@ class List extends Component {
     this.state = {
       editVisible: false,
       addVisible: false,
-      type:'',
+      supCode:'',
     };
   }
 
   componentDidMount() {
     const { dispatch } = this.props;
-    dispatch({ type: 'sysdict/queryList' });
+    dispatch({ type: 'sysarea/queryList' });
   }
 
   // 新增
   add = () => {
+    const {dispatch}=this.props
+    dispatch({type:"sysarea/listTree"})
     this.setState({ addVisible: true });
   };
 
@@ -39,20 +46,26 @@ class List extends Component {
   edit = record => {
     this.setState({ editVisible: true });
     const { dispatch } = this.props;
-    dispatch({ type: 'sysdict/updateState' });
-    dispatch({ type: 'sysdict/edit', payload: { id: record.id } });
-  };
-
-  addKeyValue= record => {
-    this.setState({ addVisible: true ,type:record.type});
+    dispatch({type:"sysarea/listTree"})
+    dispatch({ type: 'sysarea/updateState' });
+    dispatch({ type: 'sysarea/edit', payload: { id: record.id } });
   };
 
   // 删除
   confirmDel = (id) => {
     const { dispatch } = this.props;
-    dispatch({ type: 'sysdict/delete', payload: { id } });
+    dispatch({ type: 'sysarea/delete', payload: { id } });
   };
 
+
+
+
+  // 下级区域
+  addNext = (record) => {
+    const { dispatch } = this.props;
+    dispatch({ type: 'sysarea/listTree' });
+    this.setState({ addVisible: true, supCode: record.code });
+  };
 
   // list change
   tableChange = page => {
@@ -63,19 +76,18 @@ class List extends Component {
       current: page.current,
       ...searchParam,
     };
-    dispatch({ type: 'sysdict/queryList', payload });
+    dispatch({ type: 'sysarea/queryList', payload });
   };
 
   // 修改
   update = (values, callback) => {
     const { dispatch } = this.props;
-    dispatch({ type: 'sysdict/update', payload: values }).then((result) => {
+    dispatch({ type: 'sysarea/update', payload: values }).then((result) => {
       if (result && result.code === 10000) {
         message.success(result.msg);
         this.setState({ editVisible: false });
-        dispatch({ type: 'sysdict/updateState', payload: { current: {}, filterKey: Math.random() } });
-        dispatch({ type: 'sysdict/queryList' });
-        dispatch({ type: 'sysdict/getAllDict' });
+        dispatch({ type: 'sysarea/updateState', payload: { current: {}, filterKey: Math.random() } });
+        dispatch({ type: 'sysarea/queryList' });
       } else {
         callback();
         message.error(result.msg);
@@ -86,13 +98,12 @@ class List extends Component {
   // 新增
   save = (values, callback) => {
     const { dispatch } = this.props;
-    dispatch({ type: 'sysdict/save', payload: values }).then((result) => {
+    dispatch({ type: 'sysarea/save', payload: values }).then((result) => {
       if (result && result.code === 10000) {
         message.success(result.msg);
-        this.setState({ addVisible: false,type:'' });
-        dispatch({ type: 'sysdict/updateState', payload: {  filterKey: Math.random() } });
-        dispatch({ type: 'sysdict/queryList' });
-        dispatch({ type: 'sysdict/getAllDict' });
+        this.setState({ addVisible: false,supCode: "" });
+        dispatch({ type: 'sysarea/updateState', payload: { current: {}, filterKey: Math.random() } });
+        dispatch({ type: 'sysarea/queryList' });
       } else {
         callback();
         message.error(result.msg);
@@ -104,42 +115,37 @@ class List extends Component {
 
   render() {
     const {
-      list, loading, pagination, dispatch, current,filterKey,
+      list, loading, dispatch, current,filterKey,editLoading,allList,
     } = this.props;
-    const { editVisible, addVisible,type } = this.state;
-    const paginationProps = {
-      showSizeChanger: true,
-      showQuickJumper: true,
-      ...pagination,
-    };
+    const { editVisible, addVisible,supCode } = this.state;
+
+
     const columns = [{
-          title: '字典类型',
+          title: '区域名称',
+          dataIndex:'name',
+          key: 'name',
+        },{
+          title: '区域编码',
+          dataIndex:'code',
+          key: 'code',
+        },{
+          title: '区域类型',
           dataIndex:'type',
           key: 'type',
-        },{
-          title: '字典标签',
-          dataIndex:'dictKey',
-          key: 'dictKey',
-        },{
-          title: '字典值',
-          dataIndex:'dictValue',
-          key: 'dictValue',
-          render: text => <TextClamp>{text}</TextClamp>,
-        },{
-          title: '排序',
-          dataIndex:'sort',
-          key: 'sort',
+          render:text=>{
+            return <DictLabel type="area_type" value={text} />
+          }
         },{
           title: '备注',
           dataIndex:'remark',
           key: 'remark',
-          render: text => <TextClamp>{text}</TextClamp>,
+          render:text=><TextClamp>{text}</TextClamp>
         },{
           title: '操作',
           render:(text,record)=>{
             const operation =
               <span>
-                <a href="javascript:void(0)" onClick={()=>{this.edit(record)}}>修改</a> <Divider
+                <a href="javascript:void(0)" onClick={()=>{this.edit(record)}}>修改</a> <Divider 
                   type="vertical"
                 />
                 <Popconfirm
@@ -150,14 +156,12 @@ class List extends Component {
                 >
                   <a href="javascript:void(0)">删除</a>
                 </Popconfirm>
-                 <Divider
-                   type="vertical"
-                 /><a href="javascript:void(0)" onClick={()=>{this.addKeyValue(record)}}>添加键值</a>
+                <Divider type="vertical" /><a href="javascript:void(0)" onClick={()=>{this.addNext(record)}}>添加下级区域</a>
               </span>
             return  operation
           }
         },]
-
+    
     return (
       <div>
         <Filter key={filterKey} ref={this.filterRef} />
@@ -170,24 +174,23 @@ class List extends Component {
           >
             新增
           </Button>
-
+          
         </div>
         <Table
           key={JSON.stringify(loading)}
-
           onChange={this.tableChange}
           loading={loading}
           columns={columns}
           rowKey={record => record.id}
           dataSource={list}
-          pagination={paginationProps}
+          pagination={{ hideOnSinglePage: true, pageSize: 99999999 }}
         />
         {
           editVisible &&  <Edit
             visible={editVisible}
             current={current}
             onCancel={() => {
-              dispatch({ type: 'sysdict/updateState', payload: { current: {} } });
+              dispatch({ type: 'sysarea/updateState', payload: { current: {} } });
               this.setState({ editVisible: false });
             }}
             onOk={(values, callback) => {
@@ -198,10 +201,12 @@ class List extends Component {
 
         {
           addVisible && <Add
-            type={type}
+            supCode={supCode}
+            allList={allList}
+            editLoading={editLoading}
             visible={addVisible}
             onCancel={() => {
-              this.setState({ addVisible: false ,type:''});
+              this.setState({ addVisible: false, supCode: "" });
             }}
             onOk={(values, callback) => {
               this.save(values, callback);

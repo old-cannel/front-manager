@@ -60,4 +60,7 @@ export default {
 
   'menu.sys.dict': '字典管理',
   'menu.sys.role': '角色管理',
+
+  'menu.sys.organization': '组织架构',
+  'menu.sys.area': '区域管理',
 }

@@ -52,7 +52,8 @@ class Add extends Component {
   };
 
   checkType = (rule, value, callback) => {
-    if (value) {
+    const { type } = this.props;
+    if (value && !type) {
       const { dispatch } = this.props;
       dispatch({
         type: 'sysdict/checkType',
@@ -73,6 +74,7 @@ class Add extends Component {
     const {
       visible,
       onCancel,
+      type,
       form: { getFieldDecorator },
     } = this.props;
     const { loading } = this.state;
@@ -94,13 +96,13 @@ class Add extends Component {
                 <Col span="24">
                   <FormItem label="字典类型:" {...formItemLayout}>
                     {getFieldDecorator('type', {
-                      initialValue: '',
+                      initialValue: type,
                       rules: [
                         { 'required': true, 'message': '字典类型不能为空' },
                         { validator: this.checkType },
                       ],
                     })(
-                      <Input maxLength={10} style={{ width: 230 }} placeholder='请输入字典类型' />)}
+                      <Input disabled={type} maxLength={10} style={{ width: 230 }} placeholder='请输入字典类型' />)}
                   </FormItem>
                 </Col>
                 <Col span="24">
