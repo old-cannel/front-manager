@@ -73,9 +73,9 @@ class ClassForm extends React.Component {
   // 复选框切换
   checkboxChange = (e, record, type) => {
     const {columnList = []} = this.state;
-    let flag = 0;
+    let flag = '0';
     if (e.target.checked) {
-      flag = 1;
+      flag = '1';
     }
     for (let i = 0; i < columnList.length; i+=1) {
       if (columnList[i].tableColumn === record.tableColumn) {
