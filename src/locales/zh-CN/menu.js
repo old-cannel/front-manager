@@ -64,4 +64,6 @@ export default {
   'menu.sys.organization': '组织架构',
   'menu.sys.area': '区域管理',
   'menu.sys.user': '用户管理',
+
+  'menu.sys.log': '系统日志',
 }

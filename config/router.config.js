@@ -102,6 +102,11 @@ export default [{
             "name": "user",
             "component": "./Sys/User/index"
           },
+          {
+            "path": "/sys/log",
+            "name": "log",
+            "component": "./Sys/Log/index"
+          }
         ]
       },
       {

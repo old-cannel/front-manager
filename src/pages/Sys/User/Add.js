@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Input, Row, Col, Form, Button, Drawer, Spin, TreeSelect ,Select,Radio,Checkbox,DatePicker } from 'antd';
+import { Input, Row, Col, Form, Button, Drawer, Spin, TreeSelect ,Select,Radio,Checkbox,DatePicker,Upload ,Icon} from 'antd';
 import moment from 'moment';
 import {formatTime} from '../../../utils/utils'
+import { FILE_DISPLAY_PREFIX, UPLOAD_URL } from '../../../services/api';
 
 
 
@@ -36,6 +37,7 @@ class Add extends Component {
     super(props);
     this.state = {
       loading: false,
+      imageUrl:''
     };
   }
 
@@ -51,6 +53,7 @@ class Add extends Component {
   // 保存
   submitForm = () => {
     this.setState({ loading: true });
+    const {imageUrl}=this.state
     const { form: { validateFields }, onOk } = this.props;
     validateFields((err, values) => {
       let data = values;
@@ -59,6 +62,7 @@ class Add extends Component {
           if(data.entryTime){
             data.entryTime= moment(data.entryTime).format('YYYY-MM-DD HH:mm:ss')
           }
+          data.userHeader= imageUrl
           onOk(data, () => {
             this.setState({ loading: false });
           });
@@ -84,6 +88,16 @@ class Add extends Component {
     }
   };
 
+  handleChange = info => {
+    if (info.file.status === 'uploading') {
+      return;
+    }
+    if (info.file.status === 'done' && info.file.response.code===10000) {
+      this.setState({imageUrl: info.file.response.result[0]})
+    }
+  };
+
+
 
   render() {
     const {
@@ -95,7 +109,13 @@ class Add extends Component {
       roleList,
       form: { getFieldDecorator },
     } = this.props;
-    const { loading } = this.state;
+    const { loading,imageUrl } = this.state;
+    const uploadButton = (
+      <div>
+        <Icon type={this.state.loading ? 'loading' : 'plus'} />
+        <div className="ant-upload-text">Upload</div>
+      </div>
+    );
     return (
       <div>
         <Drawer
@@ -116,18 +136,40 @@ class Add extends Component {
                     {getFieldDecorator('workNum', {
                       rules: [
                         { 'required': true, 'message': '工号不能为空' },
-                        { validator: checkWorkNum },
+                        { validator:  (rule, value, callback)=>{checkWorkNum(rule, value, callback,'')} },
                       ],
                     })(<Input maxLength={20} style={{ width: 250 }} placeholder='请输入工号'  />)}
                   </FormItem>
                 </Col>
 
                 <Col span="12">
+                  <FormItem label="员工头像:" {...formItemLayout}>
+                    {getFieldDecorator('userHeader', {
+                    })(
+                      <Upload
+                        name="file"
+                        listType="picture-card"
+                        className="avatar-uploader"
+                        showUploadList={false}
+                        action={UPLOAD_URL}
+                        onChange={this.handleChange}
+                      >
+                        {
+                          imageUrl ? <img style={{width:100,height:100,objectFit: "cover"}} src={FILE_DISPLAY_PREFIX+imageUrl} /> : uploadButton
+                        }
+                      </Upload>)}
+                  </FormItem>
+                </Col>
+
+
+
+
+                <Col span="12">
                   <FormItem label="用户名:" {...formItemLayout}>
                     {getFieldDecorator('userName', {
                       rules: [
                         { 'required': true, 'message': '用户名不能为空' },
-                        { validator: checkUserName },
+                        { validator:  (rule, value, callback)=>checkUserName(rule, value, callback,'') },
                       ],
                     })(<Input maxLength={50} style={{ width: 250 }} placeholder='请输入用户名' />)}
                   </FormItem>

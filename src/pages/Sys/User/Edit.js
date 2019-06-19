@@ -1,7 +1,22 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Input, Row, Col, Form, Button, Drawer, Spin, TreeSelect, DatePicker, Select, Radio, Checkbox } from 'antd';
+import {
+  Input,
+  Row,
+  Col,
+  Form,
+  Button,
+  Drawer,
+  Spin,
+  TreeSelect,
+  DatePicker,
+  Select,
+  Radio,
+  Checkbox,
+  Upload, Icon,
+} from 'antd';
 import moment from 'moment';
+import { UPLOAD_URL ,FILE_DISPLAY_PREFIX} from '../../../services/api';
 
 
 const {TextArea}=Input
@@ -33,6 +48,7 @@ class Edit extends Component {
     super(props);
     this.state = {
       loading: false,
+      imageUrl:''
     };
   }
 
@@ -48,7 +64,8 @@ class Edit extends Component {
   // 保存
   submitForm = () => {
     this.setState({ loading: true });
-    const { form: { validateFields }, onOk } = this.props;
+    const { form: { validateFields }, onOk,current } = this.props;
+    const {imageUrl}=this.state
     validateFields((err, values) => {
       let data = values;
       if (!err) {
@@ -56,6 +73,7 @@ class Edit extends Component {
           if(data.entryTime){
             data.entryTime= moment(data.entryTime).format('YYYY-MM-DD HH:mm:ss')
           }
+          data.userHeader= imageUrl || current.userHeader
           onOk(data, () => {
             this.setState({ loading: false });
           });
@@ -66,6 +84,15 @@ class Edit extends Component {
     });
   };
 
+  handleChange = info => {
+    if (info.file.status === 'uploading') {
+      return;
+    }
+    if (info.file.status === 'done' && info.file.response.code===10000) {
+      this.setState({imageUrl: info.file.response.result[0]})
+    }
+  };
+
   render() {
     const {
       visible,
@@ -74,10 +101,15 @@ class Edit extends Component {
       checkUserName,
       orgList,
       roleList,
-      form: { getFieldDecorator },
+      form: { getFieldDecorator},
     } = this.props;
-    const { loading } = this.state;
-
+    const { loading,imageUrl } = this.state;
+    const uploadButton = (
+      <div>
+        <Icon type={this.state.loading ? 'loading' : 'plus'} />
+        <div className="ant-upload-text">Upload</div>
+      </div>
+    );
     return (
       <div>
         <Drawer
@@ -110,6 +142,25 @@ class Edit extends Component {
                     })(<Input maxLength={20} style={{ width: 250 }} placeholder='请输入工号'  />)}
                   </FormItem>
                 </Col>
+
+                <Col span="12">
+                  <FormItem label="员工头像:" {...formItemLayout}>
+                    {getFieldDecorator('userHeader', {
+                      initialValue:current.userHeader,
+                    })(
+                      <Upload
+                        name="file"
+                        listType="picture-card"
+                        className="avatar-uploader"
+                        showUploadList={false}
+                        action={UPLOAD_URL}
+                        onChange={this.handleChange}
+                      >
+                        {(imageUrl || current.userHeader) ? <img style={{width:100,height:100,objectFit: "cover"}} src={FILE_DISPLAY_PREFIX+(imageUrl || current.userHeader)} /> : uploadButton}
+                      </Upload>)}
+                  </FormItem>
+                </Col>
+
 
                 <Col span="12">
                   <FormItem label="用户名:" {...formItemLayout}>

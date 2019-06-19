@@ -62,4 +62,6 @@ export default {
   'menu.sys.organization': 'organization',
   'menu.sys.area': 'area',
   'menu.sys.user': 'user',
+
+  'menu.sys.log': 'log',
 }
