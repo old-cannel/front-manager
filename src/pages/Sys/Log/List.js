@@ -98,7 +98,7 @@ class List extends Component {
             const operation =
               <span>
                 <Authorize code="SYS_LOG_DETAILS">
-                  <a href="javascript:void(0)" onClick={()=>{this.details(record)}}>详情</a> <Divider type="vertical" />
+                  <a href="javascript:void(0)" onClick={()=>{this.details(record)}}>详情</a>
                 </Authorize>
               </span>
             return  operation
