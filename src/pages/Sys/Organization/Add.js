@@ -80,7 +80,7 @@ class Add extends Component {
     const {
       visible,
       onCancel,
-      list,
+      managerUsers,
       code,
       optionsArea,
       allList,
@@ -164,7 +164,22 @@ class Add extends Component {
                   <FormItem label="负责人:" {...formItemLayout}>
                     {getFieldDecorator('principalCode', {
                       rules: [],
-                    })(<Input maxLength={20} style={{  width: 250 }} placeholder='请输入负责人' />)}
+                    })(
+                      <Select
+                        showSearch
+                        style={{ width: 250 }}
+                        placeholder="请输入负责人"
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                          option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
+                      >
+                        {
+                         managerUsers.map(item=>{
+                          return <Option value={item.userCode}>{item.fullName}</Option>
+                        })
+                      }
+                      </Select>)}
                   </FormItem>
                 </Col>
                 <Col span="24">

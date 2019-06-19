@@ -62,6 +62,7 @@ class Edit extends Component {
       visible,
       current,
       allList,
+      managerUsers,
       optionsArea,
       form: { getFieldDecorator,getFieldsValue },
     } = this.props;
@@ -151,7 +152,22 @@ class Edit extends Component {
                     {getFieldDecorator('principalCode', {
                       initialValue: current.principalCode,
                       rules: [],
-                    })(<Input maxLength={20} style={{ width: 250 }} placeholder='请输入负责人' />)}
+                    })(
+                      <Select
+                        showSearch
+                        style={{ width: 250 }}
+                        placeholder="请输入负责人"
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                          option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
+                      >
+                        {
+                          managerUsers.map(item=>{
+                            return <Option value={item.userCode}>{item.fullName}</Option>
+                          })
+                        }
+                      </Select>)}
                   </FormItem>
                 </Col>
                 <Col span="24">
@@ -173,7 +189,8 @@ class Edit extends Component {
                       changeOnSelect
                       fieldNames={{ label: 'name', value: 'code', children: 'children' }}
                       style={{  width: 250 }}
-                      placeholder='请选择归属区域' />)}
+                      placeholder='请选择归属区域'
+                    />)}
                   </FormItem>
                 </Col>
                 <Col span="24">

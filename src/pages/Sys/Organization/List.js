@@ -6,6 +6,7 @@ import Filter from './Filter';
 import Add from './Add';
 import Edit from './Edit';
 import Details from './Details';
+import TextClamp from '@/components/TextClamp/index';
 
 @connect(({ loading,sysorganization }) => ({
   pagination: sysorganization.pagination,
@@ -16,6 +17,7 @@ import Details from './Details';
   filterKey: sysorganization.filterKey,
   allList: sysorganization.allList,
   optionsArea:sysorganization.optionsArea,
+  managerUsers:sysorganization.managerUsers,
 }))
 
 class List extends Component {
@@ -122,7 +124,7 @@ class List extends Component {
   render() {
     const {
       list, loading, pagination, dispatch, current,
-      detailsLoading,filterKey,allList,optionsArea
+      detailsLoading,filterKey,allList,optionsArea,managerUsers
     } = this.props;
     const { editVisible, detailVisible, addVisible,code } = this.state;
     const paginationProps = {
@@ -134,6 +136,7 @@ class List extends Component {
           title: '机构名称',
           dataIndex:'name',
           key: 'name',
+          render:text=><TextClamp>{text}</TextClamp>
         },{
           title: '机构编码',
           dataIndex:'code',
@@ -147,20 +150,22 @@ class List extends Component {
           }
         },{
           title: '负责人',
-          dataIndex:'principalCode',
-          key: 'principalCode',
+          dataIndex:'fullName',
+          key: 'fullName',
         },{
           title: '手机号',
           dataIndex:'mobileNum',
           key: 'mobileNum',
         },{
           title: '归属区域',
-          dataIndex:'srcAreaCode',
-          key: 'srcAreaCode',
+          dataIndex:'addressName',
+          key: 'addressName',
+          render:text=><TextClamp>{text}</TextClamp>
         },{
           title: '详细地址',
           dataIndex:'address',
           key: 'address',
+          render:text=><TextClamp>{text}</TextClamp>
         },{
           title: '操作',
           render:(text,record)=>{
@@ -208,6 +213,7 @@ class List extends Component {
         />
         {
           editVisible &&  <Edit
+            managerUsers={managerUsers}
             allList={allList}
             optionsArea={optionsArea}
             visible={editVisible}
@@ -224,6 +230,7 @@ class List extends Component {
 
         {
           addVisible && <Add
+            managerUsers={managerUsers}
             code={code}
             optionsArea={optionsArea}
             visible={addVisible}

@@ -53,3 +53,9 @@ export async function checkUserName(params) {
   const url =`${API_PREFIX}/sys/user/checkUserName?id=${params.id}&userName=${params.userName}`;
   return request(url);
 }
+
+export async function getUserAllList() {
+  const url =`${API_PREFIX}/sys/user/allList`;
+  return request(url);
+}
+

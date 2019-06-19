@@ -1,5 +1,6 @@
 import {queryList,save,update,get,del,checkCode,treeList} from '@/services/sys/organization/service';
 import {listTreeHasCounty} from '@/services/sys/area/service';
+import {getUserAllList} from '@/services/sys/user/service';
 import { message } from 'antd';
 
 const initState = {
@@ -9,7 +10,8 @@ const initState = {
   pagination: {},// 分页
   filterKey: Math.random(),
   allList:[],
-  optionsArea:[]
+  optionsArea:[],
+  managerUsers:[]
 };
 
 const treeData = list => {
@@ -103,12 +105,20 @@ export default {
     },
     * editInit({ payload = {} }, {call,  put }) {
       yield put({type:'treeList',payload});
+      yield put({type:'getUserAllList',payload});
       const result=yield call(listTreeHasCounty,{type:1,code:''});
       if(result.code===10000){
         result.result.forEach(item => {
           item.isLeaf = false;
         });
         yield put({ type: 'updateState', payload: { optionsArea: result.result } });
+      }
+    },
+
+    * getUserAllList({ payload = {} }, {call,  put }) {
+      const {code,result}=yield call(getUserAllList,payload);
+      if(code===10000){
+        yield put({ type: 'updateState', payload: { managerUsers: result } });
       }
     },
   },
