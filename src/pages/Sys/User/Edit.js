@@ -156,7 +156,7 @@ class Edit extends Component {
                         action={UPLOAD_URL}
                         onChange={this.handleChange}
                       >
-                        {(imageUrl || current.userHeader) ? <img style={{width:100,height:100,objectFit: "cover"}} src={FILE_DISPLAY_PREFIX+(imageUrl || current.userHeader)} /> : uploadButton}
+                        {(imageUrl || current.userHeader) ? <img alt="员工头像" style={{width:100,height:100,objectFit: "cover"}} src={FILE_DISPLAY_PREFIX+(imageUrl || current.userHeader)} /> : uploadButton}
                       </Upload>)}
                   </FormItem>
                 </Col>
@@ -319,7 +319,7 @@ class Edit extends Component {
             <Button onClick={this.cancel} style={{ marginRight: 8 }}>
               取消
             </Button>
-            <Button onClick={this.submitForm} type="primary">
+            <Button loading={loading} onClick={this.submitForm} type="primary">
               保存
             </Button>
           </div>

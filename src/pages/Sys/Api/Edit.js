@@ -89,7 +89,7 @@ class Edit extends Component {
                       rules: [{ required: true, message: '编号不能为空' }],
                     })(
                       <Input
-                        disabled={true}
+                        disabled
                         maxLength={64}
                         style={{ maxWidth: 200 }}
                         placeholder="请输入编号"
@@ -144,7 +144,7 @@ class Edit extends Component {
             <Button onClick={this.cancel} style={{ marginRight: 8 }}>
               取消
             </Button>
-            <Button onClick={this.submitForm} type="primary">
+            <Button loading={loading} onClick={this.submitForm} type="primary">
               保存
             </Button>
           </div>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import DescriptionList from '@/components/DescriptionList';
 import { Button, Drawer, Spin } from 'antd';
+import { FILE_DISPLAY_PREFIX } from '../../../services/api';
 
 const { Description } = DescriptionList;
 
@@ -43,6 +44,7 @@ class Detail extends Component {
             <DescriptionList col="2" size="large" style={{ marginBottom: 32, paddingBottom: 20 }}>
               <Description term="编码">{current.userCode}</Description>
               <Description term="工号">{current.workNum}</Description>
+              <Description term="员工头像"><img alt="员工头像" style={{width:100,height:100,objectFit: "cover"}} src={FILE_DISPLAY_PREFIX+current.userHeader} /></Description>
               <Description term="用户名">{current.userName}</Description>
               <Description term="姓名">{current.fullName}</Description>
               <Description term="身份证号">{current.idNum}</Description>

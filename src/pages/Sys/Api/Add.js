@@ -123,7 +123,7 @@ class Add extends Component {
             <Button onClick={this.cancel} style={{ marginRight: 8 }}>
               取消
             </Button>
-            <Button onClick={this.submitForm} type="primary">
+            <Button loading={loading} onClick={this.submitForm} type="primary">
               保存
             </Button>
           </div>

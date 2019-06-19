@@ -155,7 +155,7 @@ class Add extends Component {
                         onChange={this.handleChange}
                       >
                         {
-                          imageUrl ? <img style={{width:100,height:100,objectFit: "cover"}} src={FILE_DISPLAY_PREFIX+imageUrl} /> : uploadButton
+                          imageUrl ? <img alt="员工头像" style={{width:100,height:100,objectFit: "cover"}} src={FILE_DISPLAY_PREFIX+imageUrl} /> : uploadButton
                         }
                       </Upload>)}
                   </FormItem>
