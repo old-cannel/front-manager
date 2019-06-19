@@ -6,6 +6,7 @@ import Filter from './Filter';
 import Add from './Add';
 import Edit from './Edit';
 import Details from './Details';
+import Authorize from '@/components/Authorize/Authorize'
 
 @connect(({ loading,sysuser }) => ({
   pagination: sysuser.pagination,
@@ -204,18 +205,24 @@ class List extends Component {
           render:(text,record)=>{
             const operation =
               <span>
-                <a href="javascript:void(0)" onClick={()=>{this.details(record)}}>详情</a> <Divider type="vertical" />
-                <a href="javascript:void(0)" onClick={()=>{this.edit(record)}}>修改</a> <Divider 
-                  type="vertical"
-                />
-                <Popconfirm
-                  title="您确认删除吗？"
-                  onConfirm={()=>{this.confirmDel(record.id)}}
-                  okText="确认"
-                  cancelText="取消"
-                >
-                  <a href="javascript:void(0)">删除</a>
-                </Popconfirm>
+                <Authorize code="SYS_ROLE_DETAILS">
+                  <a href="javascript:void(0)" onClick={()=>{this.details(record)}}>详情</a> <Divider type="vertical" />
+                </Authorize>
+                <Authorize code="SYS_ROLE_UPDATE">
+                  <a href="javascript:void(0)" onClick={()=>{this.edit(record)}}>修改</a> <Divider
+                    type="vertical"
+                  />
+                </Authorize>
+                <Authorize code="SYS_ROLE_DELETE">
+                  <Popconfirm
+                    title="您确认删除吗？"
+                    onConfirm={()=>{this.confirmDel(record.id)}}
+                    okText="确认"
+                    cancelText="取消"
+                  >
+                    <a href="javascript:void(0)">删除</a>
+                  </Popconfirm>
+                </Authorize>
               </span>
             return  operation
           }
@@ -224,17 +231,18 @@ class List extends Component {
     return (
       <div>
         <Filter orgList={orgList} key={filterKey} ref={this.filterRef} />
-        <div style={{ marginTop: 10 }}>
-          <Button
-            onClick={() => {
-              this.add();
-            }}
-            type="primary"
-          >
-            新增
-          </Button>
-          
-        </div>
+        <Authorize code="SYS_ROLE_ADD">
+          <div style={{ marginTop: 10 }}>
+            <Button
+              onClick={() => {
+                this.add();
+              }}
+              type="primary"
+            >
+              新增
+            </Button>
+          </div>
+        </Authorize>
         <Table
           key={JSON.stringify(loading)}
           

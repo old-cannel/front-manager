@@ -4,7 +4,7 @@ import { Input, Row, Col, Form, Button, Drawer, Spin, TreeSelect ,Select,Radio,C
 import moment from 'moment';
 import {formatTime} from '../../../utils/utils'
 import { FILE_DISPLAY_PREFIX, UPLOAD_URL } from '../../../services/api';
-
+import Authorize from '@/components/Authorize/Authorize'
 
 
 const {TextArea}=Input
@@ -339,9 +339,11 @@ class Add extends Component {
             <Button onClick={this.cancel} style={{ marginRight: 8 }}>
               取消
             </Button>
-            <Button loading={loading} onClick={this.submitForm} type="primary">
-              保存
-            </Button>
+            <Authorize code="SYS_USER_ADD">
+              <Button loading={loading} onClick={this.submitForm} type="primary">
+                保存
+              </Button>
+            </Authorize>
           </div>
         </Drawer>
       </div>

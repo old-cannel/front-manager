@@ -6,6 +6,7 @@ import TextClamp from '@/components/TextClamp/index';
 import Add from './Add';
 import Edit from './Edit';
 import Details from './Details';
+import Authorize from '@/components/Authorize/Authorize'
 
 @connect(({ loading, sysapi }) => ({
   pagination: sysapi.pagination,
@@ -158,26 +159,29 @@ class List extends Component {
               >
                 详情
               </a>
+              <Authorize code="SYS_API_UPDATE">
+                <a
+                  href="javascript:void(0)"
+                  onClick={() => {
+                    this.edit(record);
+                  }}
+                >
+                  修改
+                </a>
+                <Divider type="vertical" />
+              </Authorize>
 
-              <a
-                href="javascript:void(0)"
-                onClick={() => {
-                  this.edit(record);
-                }}
-              >
-                修改
-              </a>{' '}
-              <Divider type="vertical" />
-              <Popconfirm
-                title="您确认删除吗？"
-                onConfirm={() => {
-                  this.confirmDel(record.id);
-                }}
-                okText="确认"
-                cancelText="取消"
-              >
-                <a href="javascript:void(0)">删除</a>
-              </Popconfirm>
+              <Authorize code="SYS_API_DELETE">
+                <Popconfirm
+                  title="您确认删除吗？"
+                  onConfirm={() => {
+                      this.confirmDel(record.id);
+                    }}
+                  okText="确认"
+                  cancelText="取消">
+                  <a href="javascript:void(0)">删除</a>
+                </Popconfirm>
+              </Authorize>
             </span>
           );
           return operation;
@@ -187,16 +191,19 @@ class List extends Component {
 
     return (
       <div>
-        <div style={{ marginTop: 10 }}>
-          <Button
-            onClick={() => {
-              this.add();
-            }}
-            type="primary"
-          >
-            新增
-          </Button>
-        </div>
+        <Authorize code="SYS_API_ADD">
+          <div style={{ marginTop: 10 }}>
+            <Button
+              onClick={() => {
+                this.add();
+              }}
+              type="primary"
+            >
+              新增
+            </Button>
+          </div>
+        </Authorize>
+
         <Table
           key={JSON.stringify(loading)}
           onChange={this.tableChange}

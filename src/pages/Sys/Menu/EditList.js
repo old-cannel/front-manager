@@ -142,7 +142,7 @@ class EditList extends Component {
                   placeholder="请选择api"
                   optionFilterProp="children"
                   filterOption={(input, option) =>
-                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0 ||  option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
                   }
                 >
                   {

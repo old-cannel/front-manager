@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import {Divider,Table,message, } from 'antd';
-
+import {Divider,Table, } from 'antd';
+import Authorize from '@/components/Authorize/Authorize'
 
 import Filter from './Filter';
 import Details from './Details';
@@ -97,7 +97,9 @@ class List extends Component {
           render:(text,record)=>{
             const operation =
               <span>
-                <a href="javascript:void(0)" onClick={()=>{this.details(record)}}>详情</a> <Divider type="vertical" />
+                <Authorize code="SYS_LOG_DETAILS">
+                  <a href="javascript:void(0)" onClick={()=>{this.details(record)}}>详情</a> <Divider type="vertical" />
+                </Authorize>
               </span>
             return  operation
           }

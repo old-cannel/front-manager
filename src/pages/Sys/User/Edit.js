@@ -17,7 +17,7 @@ import {
 } from 'antd';
 import moment from 'moment';
 import { UPLOAD_URL ,FILE_DISPLAY_PREFIX} from '../../../services/api';
-
+import Authorize from '@/components/Authorize/Authorize'
 
 const {TextArea}=Input
 const {Option}=Select
@@ -319,9 +319,11 @@ class Edit extends Component {
             <Button onClick={this.cancel} style={{ marginRight: 8 }}>
               取消
             </Button>
-            <Button loading={loading} onClick={this.submitForm} type="primary">
-              保存
-            </Button>
+            <Authorize code="SYS_USER_UPDATE">
+              <Button loading={loading} onClick={this.submitForm} type="primary">
+                保存
+              </Button>
+            </Authorize>
           </div>
         </Drawer>
       </div>

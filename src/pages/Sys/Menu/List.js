@@ -4,6 +4,7 @@ import { Button, Divider, Popconfirm, Table, message } from 'antd';
 import TextClamp from '@/components/TextClamp/index';
 import Edit from './Edit';
 import Details from './Details';
+import Authorize from '@/components/Authorize/Authorize'
 
 @connect(({ loading, sysmenu }) => ({
   current: sysmenu.current,
@@ -47,7 +48,7 @@ class List extends Component {
   addNext = record => {
     this.setState({ editTitle: '1', editVisible: true });
     const { dispatch } = this.props;
-    dispatch({ type: 'sysmenu/updateState', payload: { current:{supId:record.code,supUrl:record.url} } });
+    dispatch({ type: 'sysmenu/updateState', payload: { current:{supId:record.id,supUrl:record.url} } });
   };
 
   // list change
@@ -156,28 +157,32 @@ class List extends Component {
       render: (text, record) => {
         const operation =
           <span>
-            {
-              record.id!=="-1" && <span><a href="javascript:void(0)" onClick={() => { this.edit(record); }}>修改</a> <Divider type="vertical" /></span>
-            }
-            {
-              record.id!=="-1" &&
-              <span>
-                <Popconfirm
-                  title="您确认删除吗？"
-                  onConfirm={() => {
-                    this.confirmDel(record.id);
-                  }}
-                  okText="确认"
-                  placement="left"
-                  cancelText="取消"
-                >
-                  <a href="javascript:void(0)">删除</a>
-                </Popconfirm><Divider type="vertical" />
-              </span>
-            }
+            <Authorize code="SYS_MENU_EDIT">
+              {
+                record.id!=="-1" && <span><a href="javascript:void(0)" onClick={() => { this.edit(record); }}>修改</a> <Divider type="vertical" /></span>
+              }
+            </Authorize>
+            <Authorize code="SYS_MENU_DELETE">
+              {
+                record.id!=="-1" &&
+                <span>
+                  <Popconfirm
+                    title="您确认删除吗？"
+                    onConfirm={() => {
+                      this.confirmDel(record.id);
+                    }}
+                    okText="确认"
+                    placement="left"
+                    cancelText="取消"
+                  >
+                    <a href="javascript:void(0)">删除</a>
+                  </Popconfirm><Divider type="vertical" />
+                </span>
+              }
+            </Authorize>
 
             {
-              <a href="javascript:void(0)" onClick={() => { this.addNext(record); }}>添加下级</a>
+              <Authorize code="SYS_MENU_EDIT"><a href="javascript:void(0)" onClick={() => { this.addNext(record); }}>添加下级</a></Authorize>
             }
           </span>;
         return operation;
@@ -186,17 +191,18 @@ class List extends Component {
 
     return (
       <div>
-        <div style={{ marginTop: 10 }}>
-          <Button
-            onClick={() => {
-              this.add();
-            }}
-            type="primary"
-          >
-            新增
-          </Button>
-
-        </div>
+        <Authorize code="SYS_MENU_EDIT">
+          <div style={{ marginTop: 10 }}>
+            <Button
+              onClick={() => {
+                this.add();
+              }}
+              type="primary"
+            >
+              新增
+            </Button>
+          </div>
+        </Authorize>
         <Table
           key={JSON.stringify(loading)}
           defaultExpandedRowKeys={this.expandedRowKeys()}

@@ -39,6 +39,7 @@ module.exports = {
     'no-script-url': 'off', //href="javascript:void(0)"
     'prefer-const':0,
     'no-param-reassign':0,
+    'react/jsx-closing-bracket-location':20,
 
   },
   settings: {

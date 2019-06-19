@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Button,Divider,Popconfirm,Table,message, } from 'antd';
-
+import Authorize from '@/components/Authorize/Authorize'
 import Add from './Add';
 import Edit from './Edit';
 
@@ -128,17 +128,21 @@ class List extends Component {
           render:(text,record)=>{
             const operation =
               <span>
-                <a href="javascript:void(0)" onClick={()=>{this.edit(record)}}>修改</a> <Divider 
-                  type="vertical"
-                />
-                <Popconfirm
-                  title="您确认删除吗？"
-                  onConfirm={()=>{this.confirmDel(record.id)}}
-                  okText="确认"
-                  cancelText="取消"
-                >
-                  <a href="javascript:void(0)">删除</a>
-                </Popconfirm>
+                <Authorize code="SYS_ROLE_UPDATE">
+                  <a href="javascript:void(0)" onClick={()=>{this.edit(record)}}>修改</a> <Divider
+                    type="vertical"
+                  />
+                </Authorize>
+                <Authorize code="SYS_ROLE_DELETE">
+                  <Popconfirm
+                    title="您确认删除吗？"
+                    onConfirm={()=>{this.confirmDel(record.id)}}
+                    okText="确认"
+                    cancelText="取消"
+                  >
+                    <a href="javascript:void(0)">删除</a>
+                  </Popconfirm>
+                </Authorize>
               </span>
             return  operation
           }
@@ -146,17 +150,19 @@ class List extends Component {
     
     return (
       <div>
-        <div style={{ marginTop: 10 }}>
-          <Button
-            onClick={() => {
-              this.add();
-            }}
-            type="primary"
-          >
-            新增
-          </Button>
-          
-        </div>
+        <Authorize code="SYS_ROLE_ADD">
+          <div style={{ marginTop: 10 }}>
+            <Button
+              onClick={() => {
+                this.add();
+              }}
+              type="primary"
+            >
+              新增
+            </Button>
+
+          </div>
+        </Authorize>
         <Table
           key={JSON.stringify(loading)}
           

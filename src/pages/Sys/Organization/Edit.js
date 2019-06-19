@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Input, Select, Row, Col, Form, Button, Drawer, Spin, TreeSelect, Cascader } from 'antd';
+import Authorize from '@/components/Authorize/Authorize'
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -208,9 +209,11 @@ class Edit extends Component {
             <Button onClick={this.cancel} style={{ marginRight: 8 }}>
               取消
             </Button>
-            <Button loading={loading} onClick={this.submitForm} type="primary">
-              保存
-            </Button>
+            <Authorize code="SYS_ORGANIZATION_UPDATE">
+              <Button loading={loading} onClick={this.submitForm} type="primary">
+                保存
+              </Button>
+            </Authorize>
           </div>
         </Drawer>
       </div>

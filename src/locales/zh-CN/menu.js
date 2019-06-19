@@ -53,7 +53,7 @@ export default {
   'menu.base.brand': '品牌管理',
   'menu.index.index': '首页',
 
-  'menu.sys.api': 'Api管理',
+  'menu.sys.api': 'API管理',
 
   'menu.sys.menu': '菜单管理',
 

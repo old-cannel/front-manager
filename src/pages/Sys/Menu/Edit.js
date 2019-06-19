@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Input, Row, Col, Form, Button, Drawer, Spin,TreeSelect,Radio,InputNumber    } from 'antd';
 import EditList from './EditList'
+import Authorize from '@/components/Authorize/Authorize'
 
 const FormItem = Form.Item;
 
@@ -142,7 +143,7 @@ class Edit extends Component {
                       style={{  width: 250 }}
                       dropdownStyle={{ maxHeight: 200, overflow: 'auto' }}
                       treeData={menuTreeData}
-                      placeholder="请选择机构"
+                      placeholder="请选择上级菜单"
                       filterTreeNode={(inputValue, treeNode) => {
                         return treeNode.props.title.indexOf(inputValue) > -1;
                       }}
@@ -217,9 +218,11 @@ class Edit extends Component {
             <Button onClick={this.cancel} style={{ marginRight: 8 }}>
               取消
             </Button>
-            <Button loading={loading} onClick={this.submitForm} type="primary">
-              保存
-            </Button>
+            <Authorize code="SYS_MENU_EDIT">
+              <Button loading={loading} onClick={this.submitForm} type="primary">
+                保存
+              </Button>
+            </Authorize>
           </div>
         </Drawer>
       </div>
