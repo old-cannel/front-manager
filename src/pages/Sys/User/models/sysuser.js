@@ -1,4 +1,4 @@
-import {queryList,save,update,get,del,checkWorkNum,checkUserName} from '@/services/sys/user/service';
+import {queryList,save,update,get,del,checkWorkNum,checkUserName,enabled,resetPassword} from '@/services/sys/user/service';
 import {treeList} from '@/services/sys/organization/service';
 import {roleList} from '@/services/sys/role/service';
 
@@ -113,6 +113,25 @@ export default {
     // 验证用户名唯一性
     * checkUserName ({ payload = {} }, { call }) {
       return  yield call(checkUserName, payload);
+    },
+
+    // 启用禁用
+    * enabled ({ payload = {} }, { call,put }) {
+       const {code,msg}=yield call(enabled, payload);
+       if(code===10000){
+         message.info(msg)
+         yield put({type:'queryList'})
+       }else{
+         message.error(msg)
+       }
+    },
+    * resetPassword ({ payload = {} }, { call,put }) {
+       const {code,msg}=yield call(resetPassword, payload);
+       if(code===10000){
+         message.info(msg)
+       }else{
+         message.error(msg)
+       }
     },
 
   },

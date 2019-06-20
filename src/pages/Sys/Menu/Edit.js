@@ -177,7 +177,7 @@ class Edit extends Component {
                         { 'required': true, 'message': 'URL不能为空' },
                         { validator: this.checkUrl },
                       ],
-                    })(<Input addonBefore={prefix || current.supUrl} maxLength={256} style={{  width: 250 }} placeholder='请输入URL' />)}
+                    })(<Input addonBefore={prefix || current.supUrl} maxLength={256} style={{  width: 250 }} placeholder='请输入以/开头的路径' />)}
                   </FormItem>
                 </Col>
                 <Col span="12">

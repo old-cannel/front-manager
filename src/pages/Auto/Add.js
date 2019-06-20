@@ -1,4 +1,5 @@
 import React from 'react';
+import Authorize from '@/components/Authorize/Authorize'
 import {
   Form, Drawer, Table, Input, Select,
   Button, message, Radio, Tree, Modal, Checkbox
@@ -654,9 +655,11 @@ class ClassForm extends React.Component {
           <Button onClick={closeDrawer} style={{marginRight: 8}}>
             取消
           </Button>
-          <Button onClick={submit} loading={modalLoading} type="primary">
-            保存
-          </Button>
+          <Authorize code="CODE_GENERATE_ADD">
+            <Button onClick={submit} loading={modalLoading} type="primary">
+              保存
+            </Button>
+          </Authorize>
         </div>
       </Drawer>
     );

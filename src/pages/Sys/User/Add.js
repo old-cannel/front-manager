@@ -60,7 +60,7 @@ class Add extends Component {
       if (!err) {
         if (onOk) {
           if(data.entryTime){
-            data.entryTime= moment(data.entryTime).format('YYYY-MM-DD HH:mm:ss')
+            data.entryTime= moment(data.entryTime).format('YYYY-MM-DD')
           }
           data.userHeader= imageUrl
           onOk(data, () => {
@@ -271,11 +271,10 @@ class Add extends Component {
                 <Col span="12">
                   <FormItem label="入职时间:" {...formItemLayout}>
                     {getFieldDecorator('entryTime', {
-                      initialValue:moment(formatTime(new Date()), 'YYYY-MM-DD HH:mm:ss')
+                      initialValue:moment(formatTime(new Date()), 'YYYY-MM-DD')
                     })( <DatePicker
                       style={{ width: 250 }}
-                      format="YYYY-MM-DD HH:mm:ss"
-                      showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
+                      format="YYYY-MM-DD"
                     />)}
                   </FormItem>
                 </Col>

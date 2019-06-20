@@ -71,7 +71,7 @@ class Edit extends Component {
       if (!err) {
         if (onOk) {
           if(data.entryTime){
-            data.entryTime= moment(data.entryTime).format('YYYY-MM-DD HH:mm:ss')
+            data.entryTime= moment(data.entryTime).format('YYYY-MM-DD')
           }
           data.userHeader= imageUrl || current.userHeader
           onOk(data, () => {
@@ -251,11 +251,10 @@ class Edit extends Component {
                 <Col span="12">
                   <FormItem label="入职时间:" {...formItemLayout}>
                     {getFieldDecorator('entryTime', {
-                     initialValue:current.entryTime ? moment(current.entryTime, 'YYYY-MM-DD HH:mm:ss'):null
+                     initialValue:current.entryTime ? moment(current.entryTime, 'YYYY-MM-DD'):null
                     })( <DatePicker
                       style={{ width: 250 }}
-                      format="YYYY-MM-DD HH:mm:ss"
-                      showTime
+                      format="YYYY-MM-DD"
                     />)}
                   </FormItem>
                 </Col>

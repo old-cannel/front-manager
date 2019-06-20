@@ -83,7 +83,7 @@ const formatJsonCode = path => {
 };
 
 /**
- * 根据生成的code 动态引入需要加载的ant design 代码
+ * 根据生成的code 动态引入需要加载的Simpo 代码
  * @param content 生成的代码
  */
 const importAD = content => {

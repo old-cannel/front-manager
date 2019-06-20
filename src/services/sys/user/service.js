@@ -38,6 +38,24 @@ export async function del(params) {
   });
 }
 
+// 启用禁用
+export async function enabled(params) {
+  const url =`${API_PREFIX}/sys/user/enabled`;
+  return request(url, {
+    method: 'post',
+    data: JSON.stringify(params),
+  });
+}
+
+// 启用禁用
+export async function resetPassword(params) {
+  const url =`${API_PREFIX}/sys/user/resetPassword`;
+  return request(url, {
+    method: 'post',
+    data: JSON.stringify(params),
+  });
+}
+
 // 获取详情
 export async function get(params) {
   const url =`${API_PREFIX}/sys/user/${params.id}`;

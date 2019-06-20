@@ -57,6 +57,18 @@ class List extends Component {
     dispatch({ type: 'sysuser/delete', payload: { id } });
   };
 
+  // 启用禁用
+  confirmEnabled = (payload) => {
+    const { dispatch } = this.props;
+    dispatch({ type: 'sysuser/enabled', payload });
+  };
+
+  // 重置密码
+  confirmPassword = (payload) => {
+    const { dispatch } = this.props;
+    dispatch({ type: 'sysuser/resetPassword', payload });
+  };
+
 
   // 详情
   details = record => {
@@ -221,6 +233,43 @@ class List extends Component {
                     cancelText="取消"
                   >
                     <a href="javascript:void(0)">删除</a>
+                  </Popconfirm>
+                  <Divider type="vertical" />
+                </Authorize>
+                {
+                  record.enabled &&
+                  <Authorize code="SYS_ROLE_ENABLED">
+                    <Popconfirm
+                      title="确认冻结该用户吗？"
+                      onConfirm={() => {
+                        this.confirmEnabled({id:record.id,enabled:false});
+                      }}
+                      okText="确认"
+                      cancelText="取消"
+                    >
+                      <a href="javascript:void(0)">冻结</a>
+                    </Popconfirm>
+                    <Divider type="vertical" />
+                  </Authorize>
+                }
+                {
+                  !record.enabled &&
+                  <Authorize code="SYS_ROLE_UNENABLED">
+                    <a href="javascript:void(0)" onClick={()=>{this.confirmEnabled({id:record.id,enabled:true})}}>解冻</a>
+                    <Divider type="vertical" />
+                  </Authorize>
+                }
+
+                <Authorize code="SYS_ROLE_ENABLED">
+                  <Popconfirm
+                    title="确认重置密码吗？"
+                    onConfirm={() => {
+                      this.confirmPassword({ id: record.id});
+                    }}
+                    okText="确认"
+                    cancelText="取消"
+                  >
+                    <a href="javascript:void(0)">重置密码</a>
                   </Popconfirm>
                 </Authorize>
               </span>

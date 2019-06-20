@@ -5,6 +5,7 @@ import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import moment from 'moment';
 import ClassForm from './Add';
+import Authorize from '@/components/Authorize/Authorize'
 
 import styles from './index.less';
 
@@ -68,9 +69,11 @@ class TableList extends PureComponent {
     {
       title: '操作',
       render: (text, record) => (
-        <Fragment>
-          <a onClick={() => this.handleRemove({ id: record.id })}>删除</a>
-        </Fragment>
+        <Authorize code="CODE_GENERATE_DEL">
+          <Fragment>
+            <a onClick={() => this.handleRemove({ id: record.id })}>删除</a>
+          </Fragment>
+        </Authorize>
       ),
     },
   ];
@@ -365,9 +368,11 @@ class TableList extends PureComponent {
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
-                新建
-              </Button>
+              <Authorize code="CODE_GENERATE_ADD">
+                <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+                  新建
+                </Button>
+              </Authorize>
               <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
                 重置
               </Button>

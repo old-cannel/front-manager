@@ -21,8 +21,8 @@ class Filter extends Component {
   searchHandle = () => {
     const searchParam = this.getFieldsValue();
     if (searchParam.enterDate && searchParam.enterDate.length === 2) {
-      searchParam.searchBeginTime = moment(searchParam.enterDate[0]).format('YYYY-MM-DD HH:mm:ss');
-      searchParam.searchEndTime = moment(searchParam.enterDate[1]).format('YYYY-MM-DD HH:mm:ss');
+      searchParam.searchBeginTime = moment(searchParam.enterDate[0]).format('YYYY-MM-DD');
+      searchParam.searchEndTime = moment(searchParam.enterDate[1]).format('YYYY-MM-DD');
       searchParam.enterDate = '';
     }
     searchParam.enterDate = '';
@@ -109,8 +109,7 @@ class Filter extends Component {
             <FilterItem type="rangePicker" label="入职时间:">
               {getFieldDecorator('enterDate')(
                 <RangePicker
-                  format="YYYY-MM-DD HH:mm:ss"
-                  showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
+                  format="YYYY-MM-DD"
                   placeholder={['开始时间', '结束时间']}
                 />
               )}

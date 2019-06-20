@@ -1,6 +1,6 @@
 module.exports = {
   navTheme: 'dark', // theme for nav menu
-  primaryColor: '#1890FF', // primary color of ant design
+  primaryColor: '#1890FF', // primary color of Simpo
   layout: 'sidemenu', // nav menu position: sidemenu or topmenu
   contentWidth: 'Fluid', // layout of content: Fluid or Fixed, only works when layout is topmenu
   fixedHeader: false, // sticky header
@@ -9,7 +9,7 @@ module.exports = {
   menu: {
     disableLocal: false,
   },
-  title: 'Ant Design Pro',
+  title: 'Simpo Pro',
   pwa: false,
   // Your custom iconfont Symbol script Url
   // eg：//at.alicdn.com/t/font_1039637_btcrd5co4w.js
