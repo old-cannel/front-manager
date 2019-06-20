@@ -19,11 +19,11 @@ class Filter extends Component {
   searchHandle = () => {
     const searchParam = this.getFieldsValue();
     if (searchParam.addTime && searchParam.addTime.length === 2) {
-      searchParam.searchBeginTime = moment(searchParam.addTime[0]).format('YYYY-MM-DD HH:mm:ss');
-      searchParam.searchEndTime = moment(searchParam.addTime[1]).format('YYYY-MM-DD HH:mm:ss');
+      searchParam.addEndTime = moment(searchParam.addTime[1]).format('YYYY-MM-DD HH:mm:ss');
+      searchParam.addTime = moment(searchParam.addTime[0]).format('YYYY-MM-DD HH:mm:ss');
+    }else{
       searchParam.addTime = '';
     }
-    searchParam.addTime = '';
     const { dispatch } = this.props;
     const payload = {
       ...searchParam,

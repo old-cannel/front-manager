@@ -173,7 +173,7 @@ class List extends Component {
     return (
       <div>
         <Filter key={filterKey} ref={this.filterRef} />
-        <div style={{ marginTop: 10 }}>
+        <div className="tableTopBut">
           <Authorize code="SYS_AREA_ADD">
             <Button
               onClick={() => {

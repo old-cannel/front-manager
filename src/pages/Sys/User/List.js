@@ -232,7 +232,7 @@ class List extends Component {
       <div>
         <Filter orgList={orgList} key={filterKey} ref={this.filterRef} />
         <Authorize code="SYS_ROLE_ADD">
-          <div style={{ marginTop: 10 }}>
+          <div className="tableTopBut">
             <Button
               onClick={() => {
                 this.add();

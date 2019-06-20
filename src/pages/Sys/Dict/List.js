@@ -166,7 +166,7 @@ class List extends Component {
       <div>
         <Filter key={filterKey} ref={this.filterRef} />
         <Authorize code="SYS_DICT_ADD">
-          <div style={{ marginTop: 10 }}>
+          <div className="tableTopBut">
             <Button
               onClick={() => {
                 this.add();

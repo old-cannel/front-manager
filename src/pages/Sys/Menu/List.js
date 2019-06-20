@@ -192,7 +192,7 @@ class List extends Component {
     return (
       <div>
         <Authorize code="SYS_MENU_EDIT">
-          <div style={{ marginTop: 10 }}>
+          <div className="tableTopBut">
             <Button
               onClick={() => {
                 this.add();
