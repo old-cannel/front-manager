@@ -44,14 +44,10 @@ export default {
   'menu.editor.koni': '拓扑编辑器',
   'menu.sys': '系统管理',
 
-  'menu.sys.test': '用户管理',
-  'menu.auto': '生成代码管理',
-  'menu.auto.frame': '生成代码',
-  'menu.sys.task': '任务管理',
-  'menu.base': '基础数据管理',
-  'menu.base.businessManage': '商户管理',
-  'menu.base.brand': '品牌管理',
-  'menu.index.index': '首页',
+
+  'menu.auto': '代码生成管理',
+  'menu.auto.frame': '代码生成',
+
 
   'menu.sys.api': 'API管理',
 
