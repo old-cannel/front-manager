@@ -53,7 +53,7 @@ class Filter extends Component {
               {getFieldDecorator('type', {
                 initialValue: '',
               })(
-                <Select defaultValue='' style={{ width: 200 }}>
+                <Select style={{ width: 200 }}>
                   <Option value=''>全部</Option>
                   {
                     allList.map(item=>{

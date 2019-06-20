@@ -104,7 +104,6 @@ class Add extends Component {
                       rules: [{ required: true, message: '请求方法不能为空' }],
                     })(
                       <Select
-                        defaultValue=""
                         style={{ maxWidth: 200 }}
                         placeholder="请选择请求方法"
                       >

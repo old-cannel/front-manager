@@ -138,7 +138,7 @@ class Edit extends Component {
                         { 'required': true, 'message': '机构类型不能为空' },
                       ],
                     })(
-                      <Select defaultValue='' style={{ width: 250 }} placeholder='请选择机构类型'>
+                      <Select style={{ width: 250 }} placeholder='请选择机构类型'>
                         <Option value=''>请选择</Option>
                         {
                           (this.props.dictInfo || []).filter(filterItem => filterItem.type === 'org_type').map(item => {

@@ -69,7 +69,6 @@ class Filter extends Component {
               {getFieldDecorator('addTime')(
                 <RangePicker
                   format="YYYY-MM-DD HH:mm:ss"
-                  showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
                   placeholder={['开始时间', '结束时间']}
                 />
               )}
