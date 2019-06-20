@@ -543,7 +543,7 @@ const renderFilterFormItem = (item, editLength) => {
       formItem = `
         <FilterItem type="rangePicker" label="${item.columnName}:">
                 {getFieldDecorator('${item.javaName}', {
-                })(<RangePicker  format="YYYY-MM-DD HH:mm:ss" showTime />)}
+                })(<RangePicker  format="YYYY-MM-DD" />)}
         </FilterItem>\r\n`;
       dataHandle += `     if (searchParam.${item.javaName} && searchParam.${
         item.javaName
