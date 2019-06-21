@@ -155,7 +155,7 @@ class Edit extends Component {
                         { 'required': true, 'message': 'URL不能为空' },
                         { validator: this.checkUrl },
                       ],
-                    })(<Input maxLength={256} style={{  width: 250 }} placeholder='请输入以/开头且与上下级层级一致的URL' />)}
+                    })(<Input maxLength={256} style={{  width: 250 }} placeholder='请输入以/开头且与上下级一致的URL' />)}
                   </FormItem>
                 </Col>
                 <Col span="12">
