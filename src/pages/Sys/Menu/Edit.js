@@ -148,14 +148,14 @@ class Edit extends Component {
                   </FormItem>
                 </Col>
                 <Col span="12">
-                  <FormItem label="URL:" {...formItemLayout} extra="URL需要保证与上下级的URL一致">
+                  <FormItem label="URL:" {...formItemLayout}>
                     {getFieldDecorator('url', {
                       initialValue: current.url,
                       rules: [
                         { 'required': true, 'message': 'URL不能为空' },
                         { validator: this.checkUrl },
                       ],
-                    })(<Input maxLength={256} style={{  width: 250 }} placeholder='请输入以/开头的路径' />)}
+                    })(<Input maxLength={256} style={{  width: 250 }} placeholder='请输入以/开头且与上下级层级一致的URL' />)}
                   </FormItem>
                 </Col>
                 <Col span="12">
