@@ -25,6 +25,7 @@ const errorHandler = error => {
     });
     return error.data;
   }
+  message.info(error.data.msg)
   // environment should not be used
   if (status === 403) {
     router.push('/exception/403');
@@ -42,7 +43,6 @@ const errorHandler = error => {
 /**
  * 配置request请求时的默认参数
  */
-
 export const request = extend({
   headers: {
     'Content-Type': 'application/json; charset=utf-8',
