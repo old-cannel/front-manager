@@ -217,15 +217,15 @@ class List extends Component {
           render:(text,record)=>{
             const operation =
               <span>
-                <Authorize code="SYS_ROLE_DETAILS">
+                <Authorize code="SYS_USER_DETAILS">
                   <a href="javascript:void(0)" onClick={()=>{this.details(record)}}>详情</a> <Divider type="vertical" />
                 </Authorize>
-                <Authorize code="SYS_ROLE_UPDATE">
+                <Authorize code="SYS_USER_UPDATE">
                   <a href="javascript:void(0)" onClick={()=>{this.edit(record)}}>修改</a> <Divider
                     type="vertical"
                   />
                 </Authorize>
-                <Authorize code="SYS_ROLE_DELETE">
+                <Authorize code="SYS_USER_DELETE">
                   <Popconfirm
                     title="您确认删除吗？"
                     onConfirm={()=>{this.confirmDel(record.id)}}
@@ -238,7 +238,7 @@ class List extends Component {
                 </Authorize>
                 {
                   record.enabled &&
-                  <Authorize code="SYS_ROLE_ENABLED">
+                  <Authorize code="SYS_USER_ENABLED">
                     <Popconfirm
                       title="确认冻结该用户吗？"
                       onConfirm={() => {
@@ -254,13 +254,13 @@ class List extends Component {
                 }
                 {
                   !record.enabled &&
-                  <Authorize code="SYS_ROLE_UNENABLED">
+                  <Authorize code="SYS_USER_ENABLED">
                     <a href="javascript:void(0)" onClick={()=>{this.confirmEnabled({id:record.id,enabled:true})}}>解冻</a>
                     <Divider type="vertical" />
                   </Authorize>
                 }
 
-                <Authorize code="SYS_ROLE_ENABLED">
+                <Authorize code="SYS_USER_RESETPASSWORD">
                   <Popconfirm
                     title="确认重置密码吗？"
                     onConfirm={() => {
@@ -276,11 +276,10 @@ class List extends Component {
             return  operation
           }
         },]
-    
     return (
       <div>
         <Filter orgList={orgList} key={filterKey} ref={this.filterRef} />
-        <Authorize code="SYS_ROLE_ADD">
+        <Authorize code="SYS_USER_ADD">
           <div className="tableTopBut">
             <Button
               onClick={() => {

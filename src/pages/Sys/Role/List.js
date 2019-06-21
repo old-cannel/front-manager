@@ -4,6 +4,7 @@ import { Button,Divider,Popconfirm,Table,message, } from 'antd';
 import Authorize from '@/components/Authorize/Authorize'
 import Add from './Add';
 import Edit from './Edit';
+import DictLabel from '@/components/Dict/DictLabel';
 
 @connect(({ loading,sysrole }) => ({
   pagination: sysrole.pagination,
@@ -115,6 +116,7 @@ class List extends Component {
           title: '状态',
           dataIndex:'status',
           key: 'status',
+          render:text=><DictLabel source={[  { value: '0', label: '禁用' },  { value: '1', label: '启用' } ]} value={text} />
         },{
           title: '创建人',
           dataIndex:'userName',

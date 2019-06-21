@@ -5,6 +5,7 @@ import TextClamp from '@/components/TextClamp/index';
 import Edit from './Edit';
 import Details from './Details';
 import Authorize from '@/components/Authorize/Authorize'
+import DictLabel from '@/components/Dict/DictLabel';
 
 @connect(({ loading, sysmenu }) => ({
   current: sysmenu.current,
@@ -147,6 +148,7 @@ class List extends Component {
       title: '可见',
       dataIndex: 'showFlag',
       key: 'showFlag',
+      render:text=><DictLabel source={[  { value: '1', label: '显示' },  { value: '0', label: '隐藏' } ]} value={text} />
     }, {
       title: '备注',
       dataIndex: 'remark',
