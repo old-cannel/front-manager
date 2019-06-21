@@ -48,7 +48,7 @@ class List extends Component {
   addNext = record => {
     this.setState({ editTitle: '1', editVisible: true });
     const { dispatch } = this.props;
-    dispatch({ type: 'sysmenu/updateState', payload: { current:{supId:record.id,supUrl:record.url} } });
+    dispatch({ type: 'sysmenu/updateState', payload: { current:{supId:record.id} } });
   };
 
   // list change

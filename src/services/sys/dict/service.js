@@ -52,9 +52,6 @@ export async function checkType(params) {
 
 // 获取详情
 export async function getAllDict() {
-  const url =`${API_PREFIX}/sys/dict/list`;
-  return request(url,{
-    method: 'POST',
-    data: JSON.stringify({}),
-  });
+  const url =`${API_PREFIX}/sys/dict/allType`;
+  return request(url);
 }

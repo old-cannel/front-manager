@@ -57,7 +57,7 @@ class Filter extends Component {
                   <Option value=''>全部</Option>
                   {
                     allList.map(item=>{
-                       return <Option key={item.id} value={item.type}>{item.type}</Option>
+                       return <Option key={item} value={item}>{item}</Option>
                     })
                   }
                 </Select>)}

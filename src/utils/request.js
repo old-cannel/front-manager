@@ -25,7 +25,6 @@ const errorHandler = error => {
     });
     return error.data;
   }
-   message.info(error.data.msg)
   // environment should not be used
   if (status === 403) {
     router.push('/exception/403');

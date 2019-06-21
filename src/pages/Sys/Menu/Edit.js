@@ -24,7 +24,6 @@ class Edit extends Component {
     this.state = {
       loading: false,
       apiList:[],
-      prefix:'',
     };
   }
 
@@ -76,23 +75,9 @@ class Edit extends Component {
     });
   };
 
-
-  // 验证字典类型是否已经存在
   checkUrl = (rule, value, callback) => {
-    if (value) {
-      const { dispatch, form: { getFieldsValue }, current } = this.props;
-      let { prefix } = this.state;
-      prefix = prefix || (current.supUrl ? current.supUrl : '');
-      dispatch({
-        type: 'sysmenu/checkUrl',
-        payload: { url: prefix + getFieldsValue().url, id: getFieldsValue().id ? getFieldsValue().id : '' },
-      }).then(({ result }) => {
-        if (result > 0) {
-          callback('URL已经存在');
-        } else {
-          callback();
-        }
-      });
+    if (value && value.substring(0,1)!=="/") {
+      callback('url需要 / 开头');
     } else {
       callback();
     }
@@ -109,7 +94,7 @@ class Edit extends Component {
       form,
       form: { getFieldDecorator },
     } = this.props;
-    const { loading,apiList,prefix } = this.state;
+    const { loading,apiList } = this.state;
     return (
       <div>
         <Drawer
@@ -147,13 +132,6 @@ class Edit extends Component {
                       filterTreeNode={(inputValue, treeNode) => {
                         return treeNode.props.title.indexOf(inputValue) > -1;
                       }}
-                      onChange={(a,b,v)=>{
-                        if(v && v.triggerNode){
-                          this.setState({ prefix: v.triggerNode.props.url });
-                        }else{
-                          this.setState({ prefix: '' });
-                        }
-                      }}
                       treeDefaultExpandAll
                     />)}
                   </FormItem>
@@ -170,14 +148,14 @@ class Edit extends Component {
                   </FormItem>
                 </Col>
                 <Col span="12">
-                  <FormItem label="URL:" {...formItemLayout}>
+                  <FormItem label="URL:" {...formItemLayout} extra="URL需要保证与上下级的URL一致">
                     {getFieldDecorator('url', {
                       initialValue: current.url,
                       rules: [
                         { 'required': true, 'message': 'URL不能为空' },
                         { validator: this.checkUrl },
                       ],
-                    })(<Input addonBefore={prefix || current.supUrl} maxLength={256} style={{  width: 250 }} placeholder='请输入以/开头的路径' />)}
+                    })(<Input maxLength={256} style={{  width: 250 }} placeholder='请输入以/开头的路径' />)}
                   </FormItem>
                 </Col>
                 <Col span="12">
