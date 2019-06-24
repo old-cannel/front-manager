@@ -3,9 +3,7 @@ import { API_PREFIX } from '@/services/api';
 
 // 分页
 export async function queryList(params) {
-  const url = `${API_PREFIX}/sys/api?size=${params.size ? params.size : 10}&current=${
-    params.current
-  }`;
+  const url = `${API_PREFIX}/sys/api/list`;
   return request(url, {
     method: 'POST',
     data: JSON.stringify(params),

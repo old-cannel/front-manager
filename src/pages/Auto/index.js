@@ -172,7 +172,7 @@ class TableList extends PureComponent {
   // 打开/关闭抽屉
   handleModalVisible = (flag) => {
     const { dispatch,menu } = this.props;
-    if (!!flag) {
+    if (flag) {
       dispatch({
         type: 'auto/tableList'
       });
@@ -307,6 +307,9 @@ class TableList extends PureComponent {
               <Button type="primary" htmlType="submit" onClick={this.handleSearch}>
                 查询
               </Button>
+              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
+                重置查询
+              </Button>
             </span>
           </Col>
         </Row>
@@ -373,9 +376,6 @@ class TableList extends PureComponent {
                   新建
                 </Button>
               </Authorize>
-              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
-                重置
-              </Button>
             </div>
             <StandardTable
               rowKey="id"

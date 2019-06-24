@@ -9,7 +9,6 @@ import Details from './Details';
 import Authorize from '@/components/Authorize/Authorize'
 
 @connect(({ loading, sysapi }) => ({
-  pagination: sysapi.pagination,
   list: sysapi.list,
   current: sysapi.current,
   detailsLoading: loading.effects['sysapi/get'],
@@ -98,13 +97,8 @@ class List extends Component {
   };
 
   render() {
-    const { list, loading, pagination, dispatch, current, detailsLoading } = this.props;
+    const { list, loading, dispatch, current, detailsLoading } = this.props;
     const { editVisible, detailVisible, addVisible } = this.state;
-    const paginationProps = {
-      showSizeChanger: true,
-      showQuickJumper: true,
-      ...pagination,
-    };
     const columns = [
       {
         title: '编号',
@@ -211,7 +205,7 @@ class List extends Component {
           columns={columns}
           rowKey={record => record.id}
           dataSource={list}
-          pagination={paginationProps}
+          pagination={{ hideOnSinglePage: true, pageSize: 99999999 }}
         />
         {editVisible && (
           <Edit
