@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { formatMessage } from 'umi-plugin-react/locale';
-import { Layout, message } from 'antd';
+import { Layout, message,Modal } from 'antd';
 import Animate from 'rc-animate';
 import { connect } from 'dva';
 import router from 'umi/router';
 import GlobalHeader from '@/components/GlobalHeader';
 import TopNavHeader from '@/components/TopNavHeader';
+import UpdatePassword from '../pages/User/UpdatePassword'
 import styles from './Header.less';
 
 const { Header } = Layout;
@@ -19,6 +20,8 @@ class HeaderView extends Component {
     if (!props.autoHideHeader && !state.visible) {
       return {
         visible: true,
+        updatePasswordVisible:false,
+
       };
     }
     return null;
@@ -47,7 +50,6 @@ class HeaderView extends Component {
         id: `component.globalHeader.${type}`,
       })}`
     );
-    const { dispatch } = this.props;
   };
 
   handleMenuClick = ({ key }) => {
@@ -56,9 +58,8 @@ class HeaderView extends Component {
       router.push('/account/center');
       return;
     }
-    if (key === 'triggerError') {
-      router.push('/exception/trigger');
-      return;
+    if (key === 'updatePassword') {
+      this.setState({ updatePasswordVisible: true });
     }
     if (key === 'userinfo') {
       router.push('/account/settings/base');
@@ -102,10 +103,45 @@ class HeaderView extends Component {
     }
   };
 
+  onOkUpdatePassword = (payload, rollback) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'user/updatePassword',
+      payload: { password: payload.password, oldPassword: payload.oldPassword },
+    }).then(({ code, msg }) => {
+      if (code === 10000) {
+        this.setState({ updatePasswordVisible: false });
+        message.success(msg);
+        rollback();
+        Modal.success({
+          title: '提示',
+          content: '密码已经修改成功，请重新登录',
+          maskClosable: true,
+          onOk: () => {
+            dispatch({
+              type: 'login/logout',
+            });
+          },
+          onCancel: () => {
+            dispatch({
+              type: 'login/logout',
+            });
+          },
+        });
+      } else {
+        message.error(msg);
+      }
+    });
+  };
+
+  onCancel = () => {
+    this.setState({ updatePasswordVisible: false });
+  };
+
   render() {
     const { isMobile, handleMenuCollapse, setting } = this.props;
     const { navTheme, layout, fixedHeader } = setting;
-    const { visible } = this.state;
+    const { visible,updatePasswordVisible } = this.state;
     const isTop = layout === 'topmenu';
     const width = this.getHeadWidth();
     const HeaderDom = visible ? (
@@ -113,6 +149,11 @@ class HeaderView extends Component {
         style={{ padding: 0, width, zIndex: 2 }}
         className={fixedHeader ? styles.fixedHeader : ''}
       >
+        <UpdatePassword
+          onOk={this.onOkUpdatePassword}
+          visible={updatePasswordVisible}
+          onCancel={this.onCancel}
+        />
         {isTop && !isMobile ? (
           <TopNavHeader
             theme={navTheme}
