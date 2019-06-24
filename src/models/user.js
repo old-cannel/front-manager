@@ -25,6 +25,8 @@ export default {
     *updatePassword({payload={}}, { call }) {
       return yield call(updatePassword,payload);
     },
+
+
     // 用户权限（菜单权限，操作权限）
     *queryAuthorize(_, { call, put }) {
       const { code, result } = yield call(queryAuthorize);

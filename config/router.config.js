@@ -106,7 +106,13 @@ export default [{
             "path": "/sys/log",
             "name": "log",
             "component": "./Sys/Log/index"
-          }
+          },
+          {
+            "path": "/sys/personal",
+            "name": "personal",
+            "hideInMenu":true,
+            "component": "./Sys/User/PersonalData"
+          },
         ]
       },
       {

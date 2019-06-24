@@ -77,3 +77,8 @@ export async function getUserAllList() {
   return request(url);
 }
 
+export async function getUserInfo() {
+  const url =`${API_PREFIX}/sys/user/getUserInfo`;
+  return request(url);
+}
+

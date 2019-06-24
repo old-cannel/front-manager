@@ -61,6 +61,10 @@ class HeaderView extends Component {
     if (key === 'updatePassword') {
       this.setState({ updatePasswordVisible: true });
     }
+    if (key === 'personalData') {
+      router.push('/sys/personal');
+      return;
+    }
     if (key === 'userinfo') {
       router.push('/account/settings/base');
       return;
@@ -154,6 +158,7 @@ class HeaderView extends Component {
           visible={updatePasswordVisible}
           onCancel={this.onCancel}
         />
+
         {isTop && !isMobile ? (
           <TopNavHeader
             theme={navTheme}
