@@ -8,7 +8,7 @@ import HeaderSearch from '../HeaderSearch';
 import HeaderDropdown from '../HeaderDropdown';
 import SelectLang from '../SelectLang';
 import styles from './index.less';
-import router from 'umi/router';
+import { FILE_DISPLAY_PREFIX } from '@/services/api';
 
 export default class GlobalHeaderRight extends PureComponent {
   getNoticeData() {
@@ -54,11 +54,7 @@ export default class GlobalHeaderRight extends PureComponent {
     });
     return unreadMsg;
   };
-
-  changeReadState = clickedItem => {
-    const { id } = clickedItem;
-    const { dispatch } = this.props;
-  };
+  
 
   render() {
     const {
@@ -125,7 +121,6 @@ export default class GlobalHeaderRight extends PureComponent {
           count={currentUser.unreadCount}
           onItemClick={(item, tabProps) => {
             console.log(item, tabProps); // eslint-disable-line
-            this.changeReadState(item, tabProps);
           }}
           loading={fetchingNotices}
           locale={{
@@ -172,7 +167,7 @@ export default class GlobalHeaderRight extends PureComponent {
               <Avatar
                 size="small"
                 className={styles.avatar}
-                src={currentUser.avatar}
+                src={FILE_DISPLAY_PREFIX+currentUser.userHeader}
                 alt="avatar"
               />
               <span className={styles.name}>{currentUser.userName}</span>
