@@ -36,7 +36,9 @@ export default {
   'menu.account': '个人页',
   'menu.account.center': '个人中心',
   'menu.account.settings': '个人设置',
+  'menu.account.selfInfo': '个人资料',
   'menu.account.trigger': '触发报错',
+  'menu.account.updatePassword': '修改密码',
   'menu.account.logout': '退出登录',
   'menu.editor': '图形编辑器',
   'menu.editor.flow': '流程编辑器',
@@ -60,6 +62,6 @@ export default {
   'menu.sys.organization': '组织架构',
   'menu.sys.area': '区域管理',
   'menu.sys.user': '用户管理',
-
+  'menu.sys.personal': '个人资料',
   'menu.sys.log': '系统日志',
 }

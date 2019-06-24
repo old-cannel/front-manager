@@ -1,4 +1,4 @@
-import {queryList,save,update,get,del,checkWorkNum,checkUserName,enabled,resetPassword} from '@/services/sys/user/service';
+import {queryList,save,update,get,del,checkWorkNum,checkUserName,enabled,resetPassword,getUserInfo} from '@/services/sys/user/service';
 import {treeList} from '@/services/sys/organization/service';
 import {roleList} from '@/services/sys/role/service';
 
@@ -132,6 +132,9 @@ export default {
        }else{
          message.error(msg)
        }
+    },
+    * getUserInfo (_, { call }) {
+      return yield call(getUserInfo)
     },
 
   },
