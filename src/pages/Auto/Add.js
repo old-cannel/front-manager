@@ -1,4 +1,5 @@
 import React from 'react';
+import Authorize from '@/components/Authorize/Authorize'
 import {
   Form, Drawer, Table, Input, Select,
   Button, message, Radio, Tree, Modal, Checkbox
@@ -73,9 +74,9 @@ class ClassForm extends React.Component {
   // 复选框切换
   checkboxChange = (e, record, type) => {
     const {columnList = []} = this.state;
-    let flag = 0;
+    let flag = '0';
     if (e.target.checked) {
-      flag = 1;
+      flag = '1';
     }
     for (let i = 0; i < columnList.length; i+=1) {
       if (columnList[i].tableColumn === record.tableColumn) {
@@ -264,6 +265,7 @@ class ClassForm extends React.Component {
       hasPage,
       tableType,
       routerList,
+      changeModalLoadingStatus,
       ...drawerProps
     } = this.props;
     const {
@@ -278,21 +280,25 @@ class ClassForm extends React.Component {
       columnList = []
     } = this.state;
     const submit = () => {
+      const {changeModalLoadingStatus}=this.props
+      changeModalLoadingStatus(true);
       validateFields((errors, values) => {
         const info = values;
         if (errors) {
+          changeModalLoadingStatus(false);
           return;
         }
         // 路由非空验证
         if (!info.parentRouter) {
           message.error("请选择路由");
+          changeModalLoadingStatus(false);
           return;
         }
         // 表字段验证
         let errorFlag = 0;
         if (hasPage === "1" && columnList) {
           if (!info.tableName) {
-            message.error("请选择数据库表");
+            changeModalLoadingStatus(false);
             return;
           }
           const componentType = ["Radio", "Select", "Checkbox"];
@@ -325,6 +331,7 @@ class ClassForm extends React.Component {
             }
           }
           if (errorFlag === 1) {
+            changeModalLoadingStatus(false);
             return;
           }
           for (let i = 0; i < columnList.length; i+=1) {
@@ -518,7 +525,7 @@ class ClassForm extends React.Component {
       render: (text,detail) => <Input value={text} onChange={e => { this.columnNameChange(e, "componentData", detail) }} />
     }];
     return (
-      <Drawer {...drawerProps} onClose={closeDrawer} destroyOnClose>
+      <Drawer maskClosable={false} {...drawerProps} onClose={closeDrawer} destroyOnClose>
         <Form {...formItemLayout} style={tableStyle}>
           <Form.Item label="生成方式">
             {getFieldDecorator('hasPage', {
@@ -654,9 +661,11 @@ class ClassForm extends React.Component {
           <Button onClick={closeDrawer} style={{marginRight: 8}}>
             取消
           </Button>
-          <Button onClick={submit} loading={modalLoading} type="primary">
-            保存
-          </Button>
+          <Authorize code="CODE_GENERATE_ADD">
+            <Button onClick={submit} loading={modalLoading} type="primary">
+              保存
+            </Button>
+          </Authorize>
         </div>
       </Drawer>
     );

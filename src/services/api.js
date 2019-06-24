@@ -43,3 +43,13 @@ export async function queryAuthorize() {
     method: 'POST',
   });
 }
+
+/**
+ * 修改密码
+ */
+export async function updatePassword(params) {
+  return request(`${API_PREFIX}/sys/user/updatePassword`, {
+    method: 'POST',
+    data: JSON.stringify(params),
+  });
+}

@@ -5,6 +5,7 @@ import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import moment from 'moment';
 import ClassForm from './Add';
+import Authorize from '@/components/Authorize/Authorize'
 
 import styles from './index.less';
 
@@ -68,9 +69,11 @@ class TableList extends PureComponent {
     {
       title: '操作',
       render: (text, record) => (
-        <Fragment>
-          <a onClick={() => this.handleRemove({ id: record.id })}>删除</a>
-        </Fragment>
+        <Authorize code="CODE_GENERATE_DEL">
+          <Fragment>
+            <a onClick={() => this.handleRemove({ id: record.id })}>删除</a>
+          </Fragment>
+        </Authorize>
       ),
     },
   ];
@@ -169,7 +172,7 @@ class TableList extends PureComponent {
   // 打开/关闭抽屉
   handleModalVisible = (flag) => {
     const { dispatch,menu } = this.props;
-    if (!!flag) {
+    if (flag) {
       dispatch({
         type: 'auto/tableList'
       });
@@ -192,12 +195,14 @@ class TableList extends PureComponent {
         ...fields,
       },
       success: () => {
+        this.changeModalLoadingStatus(false);
         message.success('添加成功');
         this.handleSearch();
         // this.changeModalLoadingStatus(false);
         this.handleModalVisible(false);
       },
       fail: () => {
+        this.changeModalLoadingStatus(false);
         message.error('添加失败');
         // this.changeModalLoadingStatus(false);
       },
@@ -216,6 +221,7 @@ class TableList extends PureComponent {
         this.addFramePage(fields);
       },
       fail: res => {
+        this.changeModalLoadingStatus(false);
         message.error(res.result);
         // this.changeModalLoadingStatus(false);
       },
@@ -228,6 +234,12 @@ class TableList extends PureComponent {
       type: 'auto/addFrame',
       payload: {
         ...fields,
+      },
+      success: () => {
+        this.changeModalLoadingStatus(false);
+      },
+      fail: res => {
+        this.changeModalLoadingStatus(false);
       },
     });
   };
@@ -259,7 +271,7 @@ class TableList extends PureComponent {
   // 更改抽屉保存按钮加载状态
   changeModalLoadingStatus = flag => {
     this.setState({
-      modalLoading: !!flag,
+      modalLoading: flag,
     });
   };
 
@@ -303,6 +315,9 @@ class TableList extends PureComponent {
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit" onClick={this.handleSearch}>
                 查询
+              </Button>
+              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
+                重置查询
               </Button>
             </span>
           </Col>
@@ -356,6 +371,11 @@ class TableList extends PureComponent {
       },
       onFramePage:value=>{
         this.addFramePage(value);
+      },
+      changeModalLoadingStatus :flag => {
+        this.setState({
+          modalLoading: flag,
+        });
       }
     };
 
@@ -365,12 +385,11 @@ class TableList extends PureComponent {
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
-                新建
-              </Button>
-              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
-                重置
-              </Button>
+              <Authorize code="CODE_GENERATE_ADD">
+                <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+                  新建
+                </Button>
+              </Authorize>
             </div>
             <StandardTable
               rowKey="id"

@@ -42,15 +42,22 @@ export default {
   'menu.editor.flow': 'Flow Editor',
   'menu.editor.mind': 'Mind Editor',
   'menu.editor.koni': 'Koni Editor',
-  sys: 'sysManager',
+  'menu.sys': 'system Manager',
 
-  'menu.sys.test': 'userManager',
 
-  'menu.sys.task': 'task',
-  'menu.base': 'base',
-  'menu.base.businessManage': 'businessManage',
-  'menu.base.brand': 'brand',
-  'menu.index.index': 'HOME PAGE',
+  'menu.auto': 'Generate Code Manager',
+  'menu.auto.frame': 'Generate Code',
 
   'menu.sys.api': 'api',
-};
+
+  'menu.sys.menu': 'menu',
+
+  'menu.sys.dict': 'dict',
+  'menu.sys.role': 'role',
+
+  'menu.sys.organization': 'organization',
+  'menu.sys.area': 'area',
+  'menu.sys.user': 'user',
+
+  'menu.sys.log': 'log',
+}

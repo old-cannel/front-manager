@@ -164,10 +164,50 @@ class BasicLayout extends React.Component {
   }
 }
 
-export default connect(({ global, setting, menu: menuModel }) => ({
+
+const setMenuDataSort=(menuData,serviceMenus)=>{
+  menuData.forEach(item=>{
+    const serverMenu=serviceMenus.find(serverMenuItem=>item.path===serverMenuItem.url);
+    if(serverMenu && (serverMenu.sort || serverMenu.sort===0)){
+      item.sort=serverMenu.sort
+    }
+    if(item.routes && item.routes){
+      setMenuDataSort(item.routes,serviceMenus)
+    }
+    if(item.children && item.children){
+      setMenuDataSort(item.children,serviceMenus)
+    }
+  })
+}
+const menuDataSort=(menuData)=>{
+  menuData.sort((a, b) => {
+    if (a.sort < b.sort) {
+      return 1;
+    }
+    if (a.sort > b.sort) {
+      return -1;
+    }
+    return a.name < b.name ? -1 :1;
+  });
+  menuData.forEach(item=>{
+    if(item.children){
+      menuDataSort(item.children);
+    }
+  })
+}
+
+const sorted = (menuData, serviceMenus) => {
+  if(serviceMenus && serviceMenus.length>0){
+    setMenuDataSort(menuData,serviceMenus);
+    menuDataSort(menuData,serviceMenus);
+  }
+  return menuData;
+};
+
+export default connect(({ global, setting, menu: menuModel,user }) => ({
   collapsed: global.collapsed,
   layout: setting.layout,
-  menuData: menuModel.menuData,
+  menuData: sorted(menuModel.menuData,user.serviceMenus),
   breadcrumbNameMap: menuModel.breadcrumbNameMap,
   ...setting,
 }))(props => (

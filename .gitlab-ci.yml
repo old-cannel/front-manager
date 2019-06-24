@@ -1,0 +1,30 @@
+variables:
+  GIT_STRATEGY: fetch
+stages:
+  - build
+  - deploy
+
+scda-admin-build:
+  stage: build
+  script:
+    - echo "当前操作目录："
+    - echo "$(pwd)"
+    - echo "开始执行 build.sh"
+    - sh ./build.sh
+    - echo "结束执行 build.sh"
+  only:
+    - master
+  tags:
+    - admin-product
+scda-admin-deploy:
+  stage: deploy
+  script:
+    - echo "开始执行 deploy.sh"
+    - sh ./deploy.sh
+    - echo "结束执行 deploy.sh"
+  only:
+    - master
+  tags:
+    - admin-product
+  dependencies:
+    - scda-admin-build

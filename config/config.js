@@ -89,6 +89,11 @@ export default {
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },
+    '/api/demo/sys': {
+      target: 'http://localhost:68',
+      changeOrigin: true,
+      pathRewrite: { '^/api/demo': '' },
+    },
     '/api/upload/files': {
       target: 'http://localhost:69',
       changeOrigin: true,

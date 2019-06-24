@@ -36,7 +36,9 @@ export default {
   'menu.account': '个人页',
   'menu.account.center': '个人中心',
   'menu.account.settings': '个人设置',
+  'menu.account.selfInfo': '个人资料',
   'menu.account.trigger': '触发报错',
+  'menu.account.updatePassword': '修改密码',
   'menu.account.logout': '退出登录',
   'menu.editor': '图形编辑器',
   'menu.editor.flow': '流程编辑器',
@@ -44,14 +46,22 @@ export default {
   'menu.editor.koni': '拓扑编辑器',
   'menu.sys': '系统管理',
 
-  'menu.sys.test': '用户管理',
-  'menu.auto': '生成代码管理',
-  'menu.auto.frame': '生成代码',
-  'menu.sys.task': '任务管理',
-  'menu.base': '基础数据管理',
-  'menu.base.businessManage': '商户管理',
-  'menu.base.brand': '品牌管理',
-  'menu.index.index': '首页',
 
-  'menu.sys.api': 'Api管理',
-};
+  'menu.auto': '代码生成管理',
+  'menu.auto.frame': '代码生成',
+
+
+  'menu.sys.api': 'API管理',
+
+  'menu.sys.menu': '菜单管理',
+
+
+  'menu.sys.dict': '字典管理',
+  'menu.sys.role': '角色管理',
+
+  'menu.sys.organization': '组织架构',
+  'menu.sys.area': '区域管理',
+  'menu.sys.user': '用户管理',
+  'menu.sys.personal': '个人资料',
+  'menu.sys.log': '系统日志',
+}

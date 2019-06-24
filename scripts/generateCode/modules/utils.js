@@ -83,7 +83,7 @@ const formatJsonCode = path => {
 };
 
 /**
- * 根据生成的code 动态引入需要加载的ant design 代码
+ * 根据生成的code 动态引入需要加载的Simpo 代码
  * @param content 生成的代码
  */
 const importAD = content => {
@@ -543,7 +543,7 @@ const renderFilterFormItem = (item, editLength) => {
       formItem = `
         <FilterItem type="rangePicker" label="${item.columnName}:">
                 {getFieldDecorator('${item.javaName}', {
-                })(<RangePicker  format="YYYY-MM-DD HH:mm:ss" showTime />)}
+                })(<RangePicker  format="YYYY-MM-DD" />)}
         </FilterItem>\r\n`;
       dataHandle += `     if (searchParam.${item.javaName} && searchParam.${
         item.javaName

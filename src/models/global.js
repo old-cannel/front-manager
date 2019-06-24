@@ -14,7 +14,7 @@ export default {
       const result = yield call(queryDict);
       if (result && result.code === 10000) {
         const dicts = result.result.map(item => {
-          return { ...item, ...{ value: item.dictKey, label: item.dictValue } };
+          return { ...item, ...{ value: item.dictValue, label: item.dictKey } };
         });
         yield put({
           type: 'global/updateDictInfo',

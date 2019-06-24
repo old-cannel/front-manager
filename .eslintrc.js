@@ -37,6 +37,11 @@ module.exports = {
     'react/destructuring-assignment': '0',
     'no-empty-pattern': 0, //可以使用{}对象
     'no-script-url': 'off', //href="javascript:void(0)"
+    'prefer-const':0,
+    'no-param-reassign':0,
+    'react/jsx-closing-bracket-location':20,
+    'no-restricted-syntax':0
+
   },
   settings: {
     polyfills: ['fetch', 'promises', 'url', 'object-assign'],

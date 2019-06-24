@@ -1,7 +1,8 @@
-import request from '@/utils/request';
-
-const API_PREFIX = `/api/newproject`;
+import {request} from '@/utils/request';
+import {API_PREFIX} from '@/services/api'
 
 export async function queryDict() {
-  return request(`${API_PREFIX}/dict/list`);
+  return request(`${API_PREFIX}/dictCommon/list`);
 }
+
+

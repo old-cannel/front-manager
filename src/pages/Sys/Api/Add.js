@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Input, Select, Row, Col, Form, Button, Drawer, Spin } from 'antd';
+import Authorize from '@/components/Authorize/Authorize'
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -103,7 +104,6 @@ class Add extends Component {
                       rules: [{ required: true, message: '请求方法不能为空' }],
                     })(
                       <Select
-                        defaultValue=""
                         style={{ maxWidth: 200 }}
                         placeholder="请选择请求方法"
                       >
@@ -123,9 +123,11 @@ class Add extends Component {
             <Button onClick={this.cancel} style={{ marginRight: 8 }}>
               取消
             </Button>
-            <Button onClick={this.submitForm} type="primary">
-              保存
-            </Button>
+            <Authorize code="SYS_API_ADD">
+              <Button loading={loading} onClick={this.submitForm} type="primary">
+                保存
+              </Button>
+            </Authorize>
           </div>
         </Drawer>
       </div>

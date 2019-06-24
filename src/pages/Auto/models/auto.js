@@ -44,10 +44,9 @@ export default {
   },
 
   effects: {
-    *fetch({}, {call, put}) {
-      const response = yield call(queryList, {});
+    *fetch({payload={}}, {call, put}) {
+      const response = yield call(queryList, payload);
       if (response.code !== 10000) {
-        message.error('数据加载失败');
         return;
       }
       yield put({
