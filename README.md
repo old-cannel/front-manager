@@ -12,5 +12,6 @@
       \<Authorize code="SYS_ROLE_UPDATE"\>    
         \<a href="javascript:void(0)" onClick={()=>{this.edit(record)}}\>修改\</a\>   
       \</Authorize\>  
-
+#统一的错误处理
+	对于请求返回的非10000响应码，错误提示已做统一处理，不需要单独处理。
 
