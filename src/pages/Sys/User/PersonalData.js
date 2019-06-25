@@ -69,6 +69,15 @@ class PersonalData extends Component {
     });
   };
 
+  handleChange = info => {
+    if (info.file.status === 'uploading') {
+      return;
+    }
+    if (info.file.status === 'done' && info.file.response.code===10000) {
+      this.setState({imageUrl: info.file.response.result[0]})
+    }
+  };
+
 
   render() {
     const {

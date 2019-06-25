@@ -27,7 +27,7 @@ class List extends Component {
     this.state = {
       editVisible: false,
       addVisible: false,
-      code:'',
+      supId:'',
     };
   }
 
@@ -41,7 +41,7 @@ class List extends Component {
     const {dispatch}=this.props
     dispatch({type:'sysorganization/editInit'})
     dispatch({ type: 'sysorganization/updateState', payload: { current: {} } });
-    this.setState({ addVisible: true,code:'' });
+    this.setState({ addVisible: true,supId:'' });
   };
 
   // 编辑
@@ -57,7 +57,7 @@ class List extends Component {
     const { dispatch } = this.props;
     dispatch({ type: 'sysorganization/editInit' });
     dispatch({ type: 'sysorganization/updateState', payload: { current: {} } });
-    this.setState({ addVisible: true, code: record.code, });
+    this.setState({ addVisible: true, supId: record.id, });
   };
 
   // 删除
@@ -126,7 +126,7 @@ class List extends Component {
       list, loading, dispatch, current,
       detailsLoading,filterKey,allList,optionsArea,managerUsers
     } = this.props;
-    const { editVisible, detailVisible, addVisible,code } = this.state;
+    const { editVisible, detailVisible, addVisible,supId } = this.state;
     const columns = [{
           title: '机构名称',
           dataIndex:'name',
@@ -235,12 +235,12 @@ class List extends Component {
         {
           addVisible && <Add
             managerUsers={managerUsers}
-            code={code}
+            supId={supId}
             optionsArea={optionsArea}
             visible={addVisible}
             allList={allList}
             onCancel={() => {
-              this.setState({ addVisible: false,code:'' });
+              this.setState({ addVisible: false,supId:'' });
             }}
             onOk={(values, callback) => {
               this.save(values, callback);

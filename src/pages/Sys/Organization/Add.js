@@ -61,10 +61,10 @@ class Add extends Component {
 
   checkCode=(rule, value, callback)=>{
     if(value){
-      const { dispatch, form: { getFieldsValue } } = this.props;
+      const { dispatch } = this.props;
       dispatch({
         type: 'sysorganization/checkCode',
-        payload: { code:getFieldsValue().supCode+getFieldsValue().code, id: getFieldsValue().id ? getFieldsValue().id : '' },
+        payload: { code:value ,id : '' },
       }).then(({ result }) => {
         if (result > 0) {
           callback('编码已经存在');
@@ -82,10 +82,10 @@ class Add extends Component {
       visible,
       onCancel,
       managerUsers,
-      code,
+      supId,
       optionsArea,
       allList,
-      form: { getFieldDecorator,getFieldsValue },
+      form: { getFieldDecorator },
     } = this.props;
     const { loading } = this.state;
     return (
@@ -105,8 +105,8 @@ class Add extends Component {
               <Row>
                 <Col span="24">
                   <FormItem label="上级机构:" {...formItemLayout}>
-                    {getFieldDecorator('supCode', {
-                      initialValue: code || null,
+                    {getFieldDecorator('supId', {
+                      initialValue: supId || null,
                     })( <TreeSelect
                       showSearch
                       allowClear
@@ -129,7 +129,7 @@ class Add extends Component {
                         { 'required': true, 'message': '机构编号不能为空' },
                         { validator: this.checkCode },
                       ],
-                    })(<Input addonBefore={getFieldsValue().supCode} maxLength={50} style={{ maxWidth: 250 }} placeholder='请输入机构编号' />)}
+                    })(<Input maxLength={50} style={{ maxWidth: 250 }} placeholder='请输入机构编号' />)}
                   </FormItem>
                 </Col>
 

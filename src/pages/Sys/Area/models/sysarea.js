@@ -13,7 +13,7 @@ const initState = {
 const treeData = list => {
   list.forEach(item => {
     item.title = item.name;
-    item.value = item.code;
+    item.value = item.id;
     if (item.children) {
       treeData(item.children);
     }

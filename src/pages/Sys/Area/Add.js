@@ -53,10 +53,10 @@ class Add extends Component {
 
   checkCode=(rule, value, callback)=>{
       if(value){
-        const { dispatch, form: { getFieldsValue } } = this.props;
+        const { dispatch } = this.props;
         dispatch({
           type: 'sysarea/checkCode',
-          payload: { code:getFieldsValue().supCode+getFieldsValue().code, id: getFieldsValue().id ? getFieldsValue().id : '' },
+          payload: { code:value, id: '' },
         }).then(({ result }) => {
           if (result > 0) {
             callback('编码已经存在');
@@ -75,7 +75,7 @@ class Add extends Component {
       onCancel,
       editLoading,
       allList,
-      supCode,
+      supId,
       form: { getFieldDecorator,getFieldsValue },
     } = this.props;
     const { loading } = this.state;
@@ -96,8 +96,8 @@ class Add extends Component {
               <Row>
                 <Col span="24">
                   <FormItem label="上级区域:" {...formItemLayout}>
-                    {getFieldDecorator('supCode', {
-                      initialValue: supCode || null,
+                    {getFieldDecorator('supId', {
+                      initialValue: supId || null,
                     })( <TreeSelect
                       showSearch
                       allowClear
@@ -120,7 +120,7 @@ class Add extends Component {
                         { 'required': true, 'message': '区域编码不能为空' },
                         { validator: this.checkCode },
                       ],
-                    })(<Input addonBefore={getFieldsValue().supCode} maxLength={50} style={{ maxWidth: 250 }} placeholder='请输入区域编码' />)}
+                    })(<Input maxLength={50} style={{ maxWidth: 250 }} placeholder='请输入区域编码' />)}
                   </FormItem>
 
                   <FormItem label="区域名称:" {...formItemLayout}>

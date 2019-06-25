@@ -82,7 +82,7 @@ class Filter extends Component {
             </FilterItem>
 
             <FilterItem label="所属机构:">
-              {getFieldDecorator('srcOrgCode', {
+              {getFieldDecorator('srcOrgId', {
              })(<TreeSelect
                showSearch
                allowClear

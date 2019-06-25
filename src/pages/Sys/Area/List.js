@@ -27,7 +27,7 @@ class List extends Component {
     this.state = {
       editVisible: false,
       addVisible: false,
-      supCode:'',
+      supId:'',
     };
   }
 
@@ -65,7 +65,7 @@ class List extends Component {
   addNext = (record) => {
     const { dispatch } = this.props;
     dispatch({ type: 'sysarea/listTree' });
-    this.setState({ addVisible: true, supCode: record.code });
+    this.setState({ addVisible: true, supId: record.id });
   };
 
   // list change
@@ -102,7 +102,7 @@ class List extends Component {
     dispatch({ type: 'sysarea/save', payload: values }).then((result) => {
       if (result && result.code === 10000) {
         message.success(result.msg);
-        this.setState({ addVisible: false,supCode: "" });
+        this.setState({ addVisible: false,supId: "" });
         dispatch({ type: 'sysarea/updateState', payload: { current: {}, filterKey: Math.random() } });
         dispatch({ type: 'sysarea/queryList' });
       } else {
@@ -129,7 +129,7 @@ class List extends Component {
     const {
       list, loading, dispatch, current,filterKey,editLoading,allList,
     } = this.props;
-    const { editVisible, addVisible,supCode } = this.state;
+    const { editVisible, addVisible,supId } = this.state;
 
 
     const columns = [{
@@ -223,12 +223,12 @@ class List extends Component {
 
         {
           addVisible && <Add
-            supCode={supCode}
+            supId={supId}
             allList={allList}
             editLoading={editLoading}
             visible={addVisible}
             onCancel={() => {
-              this.setState({ addVisible: false, supCode: "" });
+              this.setState({ addVisible: false, supId: "" });
             }}
             onOk={(values, callback) => {
               this.save(values, callback);
