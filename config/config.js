@@ -29,20 +29,20 @@ const plugins = [
       },
       pwa: pwa
         ? {
-            workboxPluginMode: 'InjectManifest',
-            workboxOptions: {
-              importWorkboxFrom: 'local',
-            },
-          }
+          workboxPluginMode: 'InjectManifest',
+          workboxOptions: {
+            importWorkboxFrom: 'local',
+          },
+        }
         : false,
       ...(!TEST && os.platform() === 'darwin'
         ? {
-            dll: {
-              include: ['dva', 'dva/router', 'dva/saga', 'dva/fetch'],
-              exclude: ['@babel/runtime', 'netlify-lambda'],
-            },
-            hardSource: false,
-          }
+          dll: {
+            include: ['dva', 'dva/router', 'dva/saga', 'dva/fetch'],
+            exclude: ['@babel/runtime', 'netlify-lambda'],
+          },
+          hardSource: false,
+        }
         : {}),
     },
   ],
@@ -84,21 +84,41 @@ export default {
     'primary-color': primaryColor,
   },
   proxy: {
+    /**单工程服务代理配置 start**/
+    /* '/api/demo': {
+       target: 'http://localhost:67',
+       changeOrigin: true,
+       pathRewrite: { '^/api': '' },
+     },
+     '/api/demo/sys': {
+       target: 'http://localhost:68',
+       changeOrigin: true,
+       pathRewrite: { '^/api/demo': '' },
+     },
+     '/api/upload/files': {
+       target: 'http://localhost:69',
+       changeOrigin: true,
+       pathRewrite: { '^/api': '' },
+     },*/
+    /**单工程服务代理配置 end**/
+    /**微服务代理配置 start**/
     '/api/demo': {
-      target: 'http://localhost:67',
+      target: 'http://localhost:80',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },
     '/api/demo/sys': {
-      target: 'http://localhost:68',
+      target: 'http://localhost:80',
       changeOrigin: true,
       pathRewrite: { '^/api/demo': '' },
     },
     '/api/upload/files': {
-      target: 'http://localhost:69',
+      target: 'http://localhost:80',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },
+
+    /**微服务代理配置 end**/
     //代码生成代理
     '/createFile': {
       target: 'http://localhost:9229',
