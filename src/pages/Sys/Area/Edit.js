@@ -54,12 +54,30 @@ class Edit extends Component {
     });
   };
 
+  checkCode=(rule, value, callback,id)=>{
+    if(value){
+      const { dispatch } = this.props;
+      dispatch({
+        type: 'sysarea/checkCode',
+        payload: { code:value, id },
+      }).then(({ result }) => {
+        if (result > 0) {
+          callback('编码已经存在');
+        } else {
+          callback();
+        }
+      });
+    }else{
+      callback();
+    }
+  }
+
   render() {
     const {
       visible,
       current,
       allList,
-      form: { getFieldDecorator,getFieldsValue },
+      form: { getFieldDecorator },
     } = this.props;
     const { loading } = this.state;
 
@@ -84,10 +102,10 @@ class Edit extends Component {
 
                 <Col span="24">
                   <FormItem label="上级区域:" {...formItemLayout}>
-                    {getFieldDecorator('supCode', {
-                      initialValue: current.supCode || null,
+                    {getFieldDecorator('supId', {
+                      initialValue: current.supId || null,
                     })(<TreeSelect
-                      disabled={true}
+                      disabled
                       showSearch
                       allowClear
                       style={{ width: 250 }}
@@ -105,12 +123,12 @@ class Edit extends Component {
                 <Col span="24">
                   <FormItem label="区域编码:" {...formItemLayout}>
                     {getFieldDecorator('code', {
-                      initialValue: current.code ? ( current.code.replace(getFieldsValue().supCode,"")) :null,
+                      initialValue: current.code ,
                       rules: [
                         { 'required': true, 'message': '区域编码不能为空' },
-                        { validator: this.checkCode },
+                        { validator: (rule, value, callback)=>this.checkCode(rule, value, callback,current.id) },
                       ],
-                    })(<Input addonBefore={getFieldsValue().supCode} maxLength={50} style={{ maxWidth: 250 }} placeholder='请输入区域编码' />)}
+                    })(<Input maxLength={50} style={{ maxWidth: 250 }} placeholder='请输入区域编码' />)}
                   </FormItem>
 
                   <FormItem label="区域名称:" {...formItemLayout}>

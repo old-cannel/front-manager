@@ -3,11 +3,11 @@ import { API_PREFIX } from '@/services/api';
 
 
 // 分页
-export async function queryList(params) {
-  const url =`${API_PREFIX}/sys/organization?size=${params.size?params.size:10}&current=${params.current}`
+export async function queryList({}) {
+  const url =`${API_PREFIX}/sys/organization/list`
   return request(url, {
     method: 'POST',
-    data: JSON.stringify(params),
+    data: JSON.stringify({}),
   });
 }
 

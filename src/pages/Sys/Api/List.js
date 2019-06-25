@@ -96,6 +96,63 @@ class List extends Component {
     });
   };
 
+  checkName=(rule, value, callback,id)=>{
+    if(value){
+      const { dispatch} = this.props;
+      dispatch({
+        type: 'sysapi/checkName',
+        payload: { name:value, id },
+      }).then(({ result }) => {
+        if (result > 0) {
+          callback('api名称已经存在');
+        } else {
+          callback();
+        }
+      });
+    }else{
+      callback();
+    }
+  }
+
+  checkUrl=(rule, value, callback,id,requestMethod)=>{
+    if(value && requestMethod){
+      const { dispatch} = this.props;
+      dispatch({
+        type: 'sysapi/checkUrl',
+        payload: { path:value, id,requestMethod },
+      }).then(({ result }) => {
+        if (result > 0) {
+          callback('url已经存在');
+        } else {
+          callback();
+        }
+      });
+    }else{
+      callback();
+    }
+  }
+
+  checkMethod=(rule, value, callback,id,url)=>{
+    if(value && url){
+      const { dispatch} = this.props;
+      dispatch({
+        type: 'sysapi/checkUrl',
+        payload: { path:url, id,requestMethod:value },
+      }).then(({ result }) => {
+        if (result > 0) {
+          callback('请求方法已存在');
+        } else {
+          callback();
+        }
+      });
+    }else{
+      callback();
+    }
+  }
+
+
+
+
   render() {
     const { list, loading, dispatch, current, detailsLoading } = this.props;
     const { editVisible, detailVisible, addVisible } = this.state;
@@ -209,6 +266,9 @@ class List extends Component {
         />
         {editVisible && (
           <Edit
+            checkName={this.checkName}
+            checkMethod={this.checkMethod}
+            checkUrl={this.checkUrl}
             visible={editVisible}
             current={current}
             onCancel={() => {
@@ -223,6 +283,9 @@ class List extends Component {
 
         {addVisible && (
           <Add
+            checkName={this.checkName}
+            checkMethod={this.checkMethod}
+            checkUrl={this.checkUrl}
             visible={addVisible}
             onCancel={() => {
               this.setState({ addVisible: false });

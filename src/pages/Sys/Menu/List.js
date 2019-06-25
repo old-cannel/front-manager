@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Button, Divider, Popconfirm, Table, message } from 'antd';
+import { Button, Divider, Popconfirm, Table, message,Tooltip,Icon } from 'antd';
 import TextClamp from '@/components/TextClamp/index';
 import Edit from './Edit';
 import Details from './Details';
@@ -133,7 +133,7 @@ class List extends Component {
       dataIndex: 'name',
       key: 'name',
     }, {
-      title: '菜单编码',
+      title: "菜单编码",
       dataIndex: 'code',
       key: 'code',
     }, {

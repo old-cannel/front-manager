@@ -90,7 +90,7 @@ class ClassForm extends React.Component {
   // 路由输入
   changeRouterName = value => {
     this.setState({
-      tempRouter: value.target.value.replace(/[^a-zA-Z]/g, "")
+      tempRouter: value.target.value
     });
   };
 
@@ -104,7 +104,7 @@ class ClassForm extends React.Component {
   // 英文名称输入
   changeEngValue = value => {
     this.setState({
-      tempEngValue: value.target.value.replace(/[^a-zA-Z]/g, "")
+      tempEngValue: value.target.value
     });
   };
 
@@ -146,7 +146,13 @@ class ClassForm extends React.Component {
     if (!tempRouter) {
       message.error("路由不能为空");
       return;
-    } if (tempRouter.indexOf("/") >= 0) {
+    }
+    if (/[^a-zA-Z]/g.test(tempRouter)) {
+      message.error("路由不能包含中文");
+      return;
+    }
+
+    if (tempRouter.indexOf("/") >= 0) {
       message.error("路由中禁止输入/");
       return;
     }
@@ -164,6 +170,11 @@ class ClassForm extends React.Component {
       message.error("英文名称不能为空");
       return;
     }
+    if ( /[^a-zA-Z]/g.test(tempEngValue)) {
+      message.error("英文名称不能包含其他字符");
+      return;
+    }
+
     this.setState({
       visible: false,
       parentRouter: tempParentRouter[0],
@@ -294,6 +305,8 @@ class ClassForm extends React.Component {
           changeModalLoadingStatus(false);
           return;
         }
+
+
         // 表字段验证
         let errorFlag = 0;
         if (hasPage === "1" && columnList) {

@@ -245,7 +245,7 @@ class Add extends Component {
 
                 <Col span="12">
                   <FormItem label="所属机构:" {...formItemLayout}>
-                    {getFieldDecorator('srcOrgCode', {
+                    {getFieldDecorator('srcOrgId', {
                     })( <TreeSelect
                       showSearch
                       allowClear

@@ -223,8 +223,8 @@ class Edit extends Component {
 
                 <Col span="12">
                   <FormItem label="所属机构:" {...formItemLayout}>
-                    {getFieldDecorator('srcOrgCode', {
-                      initialValue: current.srcOrgCode || null,
+                    {getFieldDecorator('srcOrgId', {
+                      initialValue: current.srcOrgId || null,
                     })( <TreeSelect
                       showSearch
                       allowClear

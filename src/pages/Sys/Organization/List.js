@@ -10,7 +10,6 @@ import TextClamp from '@/components/TextClamp/index';
 import Authorize from '@/components/Authorize/Authorize'
 
 @connect(({ loading,sysorganization }) => ({
-  pagination: sysorganization.pagination,
   list: sysorganization.list,
   current: sysorganization.current,
   detailsLoading: loading.effects['sysorganization/get'],
@@ -28,7 +27,7 @@ class List extends Component {
     this.state = {
       editVisible: false,
       addVisible: false,
-      code:'',
+      supId:'',
     };
   }
 
@@ -42,7 +41,7 @@ class List extends Component {
     const {dispatch}=this.props
     dispatch({type:'sysorganization/editInit'})
     dispatch({ type: 'sysorganization/updateState', payload: { current: {} } });
-    this.setState({ addVisible: true,code:'' });
+    this.setState({ addVisible: true,supId:'' });
   };
 
   // 编辑
@@ -58,7 +57,7 @@ class List extends Component {
     const { dispatch } = this.props;
     dispatch({ type: 'sysorganization/editInit' });
     dispatch({ type: 'sysorganization/updateState', payload: { current: {} } });
-    this.setState({ addVisible: true, code: record.code, });
+    this.setState({ addVisible: true, supId: record.id, });
   };
 
   // 删除
@@ -124,20 +123,14 @@ class List extends Component {
 
   render() {
     const {
-      list, loading, pagination, dispatch, current,
+      list, loading, dispatch, current,
       detailsLoading,filterKey,allList,optionsArea,managerUsers
     } = this.props;
-    const { editVisible, detailVisible, addVisible,code } = this.state;
-    const paginationProps = {
-      showSizeChanger: true,
-      showQuickJumper: true,
-      ...pagination,
-    };
+    const { editVisible, detailVisible, addVisible,supId } = this.state;
     const columns = [{
           title: '机构名称',
           dataIndex:'name',
           key: 'name',
-          render:text=><TextClamp>{text}</TextClamp>
         },{
           title: '机构编码',
           dataIndex:'code',
@@ -213,13 +206,14 @@ class List extends Component {
           </div>
         </Authorize>
         <Table
+          defaultExpandAllRows
           key={JSON.stringify(loading)}
           onChange={this.tableChange}
           loading={loading}
           columns={columns}
           rowKey={record => record.id}
           dataSource={list}
-          pagination={paginationProps}
+          pagination={{ hideOnSinglePage: true, pageSize: 99999999 }}
         />
         {
           editVisible &&  <Edit
@@ -241,12 +235,12 @@ class List extends Component {
         {
           addVisible && <Add
             managerUsers={managerUsers}
-            code={code}
+            supId={supId}
             optionsArea={optionsArea}
             visible={addVisible}
             allList={allList}
             onCancel={() => {
-              this.setState({ addVisible: false,code:'' });
+              this.setState({ addVisible: false,supId:'' });
             }}
             onOk={(values, callback) => {
               this.save(values, callback);

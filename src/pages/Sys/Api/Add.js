@@ -61,7 +61,10 @@ class Add extends Component {
     const {
       visible,
       onCancel,
-      form: { getFieldDecorator },
+      checkName,
+      checkUrl,
+      checkMethod,
+      form: { getFieldDecorator,getFieldsValue },
     } = this.props;
     const { loading } = this.state;
     return (
@@ -82,7 +85,10 @@ class Add extends Component {
                 <Col span="24">
                   <FormItem label="名称:" {...formItemLayout}>
                     {getFieldDecorator('name', {
-                      rules: [{ required: true, message: '名称不能为空' }],
+                      rules: [
+                        { required: true, message: '名称不能为空' },
+                        { validator: (rule, value, callback)=>checkName(rule, value, callback,'') },
+                      ],
                     })(
                       <Input maxLength={100} style={{ maxWidth: 200 }} placeholder="请输入名称" />
                     )}
@@ -91,7 +97,10 @@ class Add extends Component {
                 <Col span="24">
                   <FormItem label="路径:" {...formItemLayout}>
                     {getFieldDecorator('path', {
-                      rules: [{ required: true, message: '路径不能为空' }],
+                      rules: [
+                        { required: true, message: '路径不能为空' },
+                        { validator: (rule, value, callback)=>{checkUrl(rule, value, callback,'',getFieldsValue().requestMethod)} },
+                        ],
                     })(
                       <Input maxLength={200} style={{ maxWidth: 200 }} placeholder="请输入路径" />
                     )}
@@ -101,7 +110,10 @@ class Add extends Component {
                   <FormItem label="请求方法:" {...formItemLayout}>
                     {getFieldDecorator('requestMethod', {
                       initialValue: '',
-                      rules: [{ required: true, message: '请求方法不能为空' }],
+                      rules: [
+                        { required: true, message: '请求方法不能为空' },
+                        { validator: (rule, value, callback)=>{checkMethod(rule, value, callback,'',getFieldsValue().path)} },
+                      ],
                     })(
                       <Select
                         style={{ maxWidth: 200 }}

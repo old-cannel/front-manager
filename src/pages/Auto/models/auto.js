@@ -45,6 +45,7 @@ export default {
 
   effects: {
     *fetch({payload={}}, {call, put}) {
+      payload.current = payload.page ? payload.page : 1;
       const response = yield call(queryList, payload);
       if (response.code !== 10000) {
         return;
