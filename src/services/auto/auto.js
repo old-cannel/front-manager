@@ -3,7 +3,8 @@ import { API_PREFIX } from '@/services/api';
 
 // 列表
 export async function queryList(payload) {
-  return request(`${API_PREFIX}/auto/completeList`, {
+  const url=`${API_PREFIX}/auto/completeList?current=${payload.current}`
+  return request(url, {
     method: 'POST',
     data: payload,
   });

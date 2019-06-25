@@ -45,9 +45,9 @@ class Detail extends Component {
               <Description term="操作人">{current.operationPerson}</Description>
               <Description term="操作描述">{current.name}</Description>
               <Description term="路径">{current.path}</Description>
-              <Description term="requestMethod">{current.path}</Description>
+              <Description term="请求方法">{current.requestMethod}</Description>
               <Description term="请求数据">{current.requestData}</Description>
-              <Description term="responseData">{current.path}</Description>
+              <Description term="响应数据">{current.responseData}</Description>
             </DescriptionList>
           </Spin>
           <div className="drawerFooter">
