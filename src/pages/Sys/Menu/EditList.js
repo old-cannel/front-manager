@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button , Form, Input, Popconfirm, Table,Select } from 'antd';
+import { Button, Form, Input, Popconfirm, Table, Select, Tooltip, Icon } from 'antd';
 import { connect } from 'dva';
 
 const FormItem = Form.Item;
@@ -94,6 +94,7 @@ class EditList extends Component {
       {
         title: '名称',
         dataIndex:'name',
+          width:300,
         key: 'name',
         render:(text,record)=>{
           const operation =
@@ -108,9 +109,10 @@ class EditList extends Component {
           return  operation
         }
       }, {
-        title: '编码',
+        title:<div>编码  <Tooltip placement="topLeft" title="编码对应页面权限组件<Authorize>中code的值"> <Icon type="question-circle" />  </Tooltip> </div>,
         dataIndex:'code',
         key: 'code',
+          width:300,
         render:(text,record)=>{
           const operation =
             <FormItem>
@@ -128,6 +130,7 @@ class EditList extends Component {
         title: 'API',
         dataIndex:'sysApis',
         key: 'sysApis',
+          width:300,
         render:(text,record)=>{
           const operation =
             <FormItem>
@@ -164,7 +167,7 @@ class EditList extends Component {
               okText="确认"
               cancelText="取消"
             >
-              <a href="javascript:void(0)">删除</a>
+              <a style={{marginTop: -24,position: "absolute"}} href="javascript:void(0)">删除</a>
             </Popconfirm>
           return  operation
         }

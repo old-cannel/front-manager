@@ -393,6 +393,7 @@ class TableList extends PureComponent {
             </div>
             <StandardTable
               rowKey="id"
+              rowSelection={null}
               selectedRows={selectedRows}
               loading={loading}
               data={data}

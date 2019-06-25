@@ -112,6 +112,17 @@ class List extends Component {
     });
   };
 
+  expandedRowKeys=()=>{
+    const {list } = this.props;
+    let ids=[];
+    list.forEach(item=>{
+      if(item.type==="0" || item.type==="1"){
+        ids.push(item.id)
+      }
+    })
+    return ids
+  }
+
 
 
   render() {
@@ -187,6 +198,7 @@ class List extends Component {
           
         </div>
         <Table
+          defaultExpandedRowKeys={this.expandedRowKeys()}
           key={JSON.stringify(loading)}
           onChange={this.tableChange}
           loading={loading}

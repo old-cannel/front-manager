@@ -7,7 +7,6 @@ const initState = {
   pageKey: Math.random(),
   list: [],// table list
   current: {},
-  pagination: {},// 分页
   filterKey: Math.random(),
   allList:[],
   optionsArea:[],
@@ -45,12 +44,7 @@ export default {
       let param = { ...page, ...payload };
       const { code, result } = yield call(queryList, param);
       if (result && code === 10000) {
-        const pagination = {
-          current: param ? Number(param.current) : 1,
-          pageSize: param ? Number(param.size) : 10,
-          total: result.total,
-        };
-        yield put({ type: 'updateState', payload: { list: result.records, pagination } });
+        yield put({ type: 'updateState', payload: { list: result } });
       }
     },
 

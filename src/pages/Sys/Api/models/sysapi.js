@@ -1,4 +1,4 @@
-import { queryList, save, update, get, del } from '@/services/sys/api/service';
+import { queryList, save, update, get, del,checkName,checkUrl } from '@/services/sys/api/service';
 import { message } from 'antd';
 
 const initState = {
@@ -69,6 +69,16 @@ export default {
         yield put({ type: 'updateState', payload: { current: result } });
       }
     },
+
+    // checkName
+    *checkName({ payload = {} }, { call }) {
+      return  yield call(checkName, payload);
+    },
+    // checkUrl
+    *checkUrl({ payload = {} }, { call }) {
+      return  yield call(checkUrl, payload);
+    },
+
   },
 
   reducers: {

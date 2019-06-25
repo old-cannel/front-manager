@@ -61,7 +61,10 @@ class Edit extends Component {
     const {
       visible,
       current,
-      form: { getFieldDecorator },
+      checkName,
+      checkUrl,
+      checkMethod,
+      form: { getFieldDecorator,getFieldsValue },
     } = this.props;
     const { loading } = this.state;
 
@@ -102,7 +105,10 @@ class Edit extends Component {
                   <FormItem label="名称:" {...formItemLayout}>
                     {getFieldDecorator('name', {
                       initialValue: current.name,
-                      rules: [{ required: true, message: '名称不能为空' }],
+                      rules: [
+                        { required: true, message: '名称不能为空' },
+                        { validator: (rule, value, callback)=>checkName(rule, value, callback,current.id) },
+                      ],
                     })(
                       <Input maxLength={100} style={{ maxWidth: 200 }} placeholder="请输入名称" />
                     )}
@@ -112,7 +118,10 @@ class Edit extends Component {
                   <FormItem label="路径:" {...formItemLayout}>
                     {getFieldDecorator('path', {
                       initialValue: current.path,
-                      rules: [{ required: true, message: '路径不能为空' }],
+                      rules: [
+                        { required: true, message: '路径不能为空' },
+                        { validator: (rule, value, callback)=>{checkUrl(rule, value, callback,current.id,getFieldsValue().requestMethod)} },
+                      ],
                     })(
                       <Input maxLength={200} style={{ maxWidth: 200 }} placeholder="请输入路径" />
                     )}
@@ -122,7 +131,10 @@ class Edit extends Component {
                   <FormItem label="请求方法:" {...formItemLayout}>
                     {getFieldDecorator('requestMethod', {
                       initialValue: current.requestMethod ? current.requestMethod : '',
-                      rules: [{ required: true, message: '请求方法不能为空' }],
+                      rules: [
+                        { required: true, message: '请求方法不能为空' },
+                        { validator: (rule, value, callback)=>{checkMethod(rule, value, callback,current.id,getFieldsValue().path)} },
+                      ],
                     })(
                       <Select
                         style={{ maxWidth: 200 }}

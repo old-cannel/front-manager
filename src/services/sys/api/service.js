@@ -43,4 +43,17 @@ export async function get(params) {
   return request(url);
 }
 
+// checkName
+export async function checkName(params) {
+  const url = `${API_PREFIX}/sys/api/checkName?id=${params.id}&name=${params.name}`;
+  return request(url);
+}
+
+// checkUrl
+export async function checkUrl(params) {
+  const url = `${API_PREFIX}/sys/api/checkUrl?id=${params.id}&path=${params.path}&requestMethod=${params.requestMethod}`;
+  return request(url);
+}
+
+
 

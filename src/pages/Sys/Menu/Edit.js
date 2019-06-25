@@ -99,7 +99,7 @@ class Edit extends Component {
       <div>
         <Drawer
           maskClosable={false}
-          width={980}
+          width={1060}
           title={title === '1' ? '新增' : '修改'}
           placement="right"
           onClose={this.cancel}
