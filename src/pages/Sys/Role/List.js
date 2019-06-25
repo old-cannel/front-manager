@@ -71,7 +71,6 @@ class List extends Component {
         dispatch({ type: 'sysrole/queryList' });
       } else {
         callback();
-        message.error(result.msg);
       }
     });
   };
@@ -87,7 +86,6 @@ class List extends Component {
         dispatch({ type: 'sysrole/queryList' });
       } else {
         callback();
-        message.error(result.msg);
       }
     });
   };

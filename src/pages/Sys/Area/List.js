@@ -91,7 +91,6 @@ class List extends Component {
         dispatch({ type: 'sysarea/queryList' });
       } else {
         callback();
-        message.error(result.msg);
       }
     });
   };
@@ -107,7 +106,6 @@ class List extends Component {
         dispatch({ type: 'sysarea/queryList' });
       } else {
         callback();
-        message.error(result.msg);
       }
     });
   };

@@ -83,7 +83,6 @@ class List extends Component {
         dispatch({ type: '#{NAMESPACE}/queryList' });
       } else {
         callback();
-        message.error(result.msg);
       }
     });
   };
@@ -99,7 +98,6 @@ class List extends Component {
         dispatch({ type: '#{NAMESPACE}/queryList' });
       } else {
         callback();
-        message.error(result.msg);
       }
     });
   };

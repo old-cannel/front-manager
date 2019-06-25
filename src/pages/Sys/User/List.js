@@ -100,7 +100,6 @@ class List extends Component {
         dispatch({ type: 'sysuser/queryList' });
       } else {
         callback();
-        message.error(result.msg);
       }
     });
   };
@@ -116,7 +115,6 @@ class List extends Component {
         dispatch({ type: 'sysuser/queryList' });
       } else {
         callback();
-        message.error(result.msg);
       }
     });
   };

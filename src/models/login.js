@@ -42,8 +42,6 @@ export default {
             })
           );
           message.success(msg);
-        } else {
-          message.error(msg);
         }
       } else {
         localStorage.setItem('authorization', '');

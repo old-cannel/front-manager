@@ -52,6 +52,15 @@ export const request = extend({
       : '',
   },
   errorHandler,
+})
+
+request.interceptors.response.use((response) => {
+  response.clone().json().then(({code,msg})=>{
+    if(code!==10000){
+      message.error(msg)
+    }
+  });
+  return response;
 });
 
 /**

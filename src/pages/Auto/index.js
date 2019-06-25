@@ -194,16 +194,15 @@ class TableList extends PureComponent {
       payload: {
         ...fields,
       },
-      success: () => {
+      success: ({msg}) => {
         this.changeModalLoadingStatus(false);
-        message.success('添加成功');
+        message.success(msg);
         this.handleSearch();
         // this.changeModalLoadingStatus(false);
         this.handleModalVisible(false);
       },
       fail: () => {
         this.changeModalLoadingStatus(false);
-        message.error('添加失败');
         // this.changeModalLoadingStatus(false);
       },
     });
@@ -220,9 +219,8 @@ class TableList extends PureComponent {
         this.handleAdd(fields);
         this.addFramePage(fields);
       },
-      fail: res => {
+      fail: () => {
         this.changeModalLoadingStatus(false);
-        message.error(res.result);
         // this.changeModalLoadingStatus(false);
       },
     });
@@ -256,12 +254,9 @@ class TableList extends PureComponent {
           payload: {
             ...fields,
           },
-          success: () => {
-            message.success('删除成功');
+          success: ({msg}) => {
+            message.success(msg);
             this.handleSearch();
-          },
-          fail: res => {
-            message.error(res.result);
           },
         });
       },
