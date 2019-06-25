@@ -132,8 +132,6 @@ class HeaderView extends Component {
             });
           },
         });
-      } else {
-        message.error(msg);
       }
     });
   };

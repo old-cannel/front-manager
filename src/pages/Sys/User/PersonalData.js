@@ -61,8 +61,6 @@ class PersonalData extends Component {
               this.setState({loading:false})
               this.setState({current:result})
             })
-          }else{
-            message.error(msg)
           }
         })
       }
