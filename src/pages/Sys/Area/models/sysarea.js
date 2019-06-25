@@ -69,8 +69,6 @@ export default {
         message.success(result.msg);
         yield put({ type: 'updateState', payload: { filterKey: Math.random() } });
         yield put({ type: 'queryList' });
-      }else{
-        message.success(result.msg);
       }
       return result
     },

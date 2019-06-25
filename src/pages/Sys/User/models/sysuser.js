@@ -79,8 +79,6 @@ export default {
         message.success(result.msg);
         yield put({ type: 'updateState', payload: { filterKey: Math.random() } });
         yield put({ type: 'queryList' });
-      }else{
-        message.success(result.msg);
       }
       return result
     },
@@ -121,16 +119,12 @@ export default {
        if(code===10000){
          message.info(msg)
          yield put({type:'queryList'})
-       }else{
-         message.error(msg)
        }
     },
     * resetPassword ({ payload = {} }, { call,put }) {
        const {code,msg}=yield call(resetPassword, payload);
        if(code===10000){
          message.info(msg)
-       }else{
-         message.error(msg)
        }
     },
     * getUserInfo (_, { call }) {

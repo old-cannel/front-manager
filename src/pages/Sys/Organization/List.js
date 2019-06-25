@@ -97,7 +97,6 @@ class List extends Component {
         dispatch({ type: 'sysorganization/queryList' });
       } else {
         callback();
-        message.error(result.msg);
       }
     });
   };
@@ -113,7 +112,6 @@ class List extends Component {
         dispatch({ type: 'sysorganization/queryList' });
       } else {
         callback();
-        message.error(result.msg);
       }
     });
   };

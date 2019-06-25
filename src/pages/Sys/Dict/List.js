@@ -79,7 +79,6 @@ class List extends Component {
         dispatch({ type: 'sysdict/getAllDict' });
       } else {
         callback();
-        message.error(result.msg);
       }
     });
   };
@@ -96,7 +95,6 @@ class List extends Component {
         dispatch({ type: 'sysdict/getAllDict' });
       } else {
         callback();
-        message.error(result.msg);
       }
     });
   };

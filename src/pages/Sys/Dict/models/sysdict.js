@@ -68,8 +68,6 @@ export default {
         yield put({ type: 'getAllDict'});
         yield put({ type: 'updateState', payload: { filterKey: Math.random() } });
         yield put({ type: 'queryList' });
-      }else{
-        message.success(result.msg);
       }
       return result
     },
