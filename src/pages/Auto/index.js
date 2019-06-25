@@ -195,12 +195,14 @@ class TableList extends PureComponent {
         ...fields,
       },
       success: () => {
+        this.changeModalLoadingStatus(false);
         message.success('添加成功');
         this.handleSearch();
         // this.changeModalLoadingStatus(false);
         this.handleModalVisible(false);
       },
       fail: () => {
+        this.changeModalLoadingStatus(false);
         message.error('添加失败');
         // this.changeModalLoadingStatus(false);
       },
@@ -219,6 +221,7 @@ class TableList extends PureComponent {
         this.addFramePage(fields);
       },
       fail: res => {
+        this.changeModalLoadingStatus(false);
         message.error(res.result);
         // this.changeModalLoadingStatus(false);
       },
@@ -231,6 +234,12 @@ class TableList extends PureComponent {
       type: 'auto/addFrame',
       payload: {
         ...fields,
+      },
+      success: () => {
+        this.changeModalLoadingStatus(false);
+      },
+      fail: res => {
+        this.changeModalLoadingStatus(false);
       },
     });
   };
@@ -262,7 +271,7 @@ class TableList extends PureComponent {
   // 更改抽屉保存按钮加载状态
   changeModalLoadingStatus = flag => {
     this.setState({
-      modalLoading: !!flag,
+      modalLoading: flag,
     });
   };
 
@@ -362,6 +371,11 @@ class TableList extends PureComponent {
       },
       onFramePage:value=>{
         this.addFramePage(value);
+      },
+      changeModalLoadingStatus :flag => {
+        this.setState({
+          modalLoading: flag,
+        });
       }
     };
 
