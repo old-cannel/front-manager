@@ -72,3 +72,16 @@ request.interceptors.response.use((response) => {
 export const requestNoAuthorize = extend({
   errorHandler,
 });
+
+
+/**
+ * @type {RequestMethod}
+ */
+export const requestExtend = extend({
+  headers: {
+    Authorization: localStorage.getItem('authorization')
+      ? localStorage.getItem('authorization')
+      : '',
+  },
+  errorHandler,
+});

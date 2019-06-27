@@ -1,4 +1,4 @@
-import { request, requestNoAuthorize } from '@/utils/request';
+import { request, requestNoAuthorize,requestExtend } from '@/utils/request';
 
 // 接口请求前缀
 export const API_PREFIX = `/api/demo`;
@@ -21,7 +21,7 @@ export async function loginJwt(params) {
  * 退出登录
  */
 export async function logoutJwt() {
-  return requestNoAuthorize(`${API_PREFIX}/logoutjwt`, {
+  return requestExtend(`${API_PREFIX}/logoutjwt`, {
     method: 'post',
   });
 }
