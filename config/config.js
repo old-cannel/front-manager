@@ -85,7 +85,7 @@ export default {
   },
   proxy: {
     /**单工程服务代理配置 start**/
-    /* '/api/demo': {
+    '/api/demo': {
        target: 'http://localhost:67',
        changeOrigin: true,
        pathRewrite: { '^/api': '' },
@@ -99,10 +99,10 @@ export default {
        target: 'http://localhost:69',
        changeOrigin: true,
        pathRewrite: { '^/api': '' },
-     },*/
+     },
     /**单工程服务代理配置 end**/
     /**微服务代理配置 start**/
-    '/api/demo': {
+     /*'/api/demo': {
       target: 'http://localhost:80',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
@@ -116,7 +116,7 @@ export default {
       target: 'http://localhost:80',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
-    },
+    },*/
 
     /**微服务代理配置 end**/
     //代码生成代理
