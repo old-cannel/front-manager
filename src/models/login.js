@@ -16,7 +16,7 @@ export default {
       if (code === 10000) {
         localStorage.setItem('authorization', result);
         setTimeout(() => {}, 1000);
-        window.location.href = '/';
+        window.location.reload();
       } else {
         localStorage.setItem('authorization', '');
       }
