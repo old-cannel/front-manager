@@ -5,7 +5,7 @@ export const API_PREFIX = `/api/demo`;
 // 上传文件地址
 export const UPLOAD_URL = `/api/upload/files`;
 // 文件回显前缀
-export const FILE_DISPLAY_PREFIX = `/api/upload/files`;
+export const FILE_DISPLAY_PREFIX = `/uploads`;
 
 /**
  * 登录
