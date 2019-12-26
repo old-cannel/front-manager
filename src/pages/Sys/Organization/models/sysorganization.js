@@ -1,5 +1,5 @@
 import {queryList,save,update,get,del,checkCode,treeList} from '@/services/sys/organization/service';
-import {listTreeHasCounty} from '@/services/sys/area/service';
+import {listTreeHasCounty,getAreaFullIdById} from '@/services/sys/area/service';
 import {getUserAllList} from '@/services/sys/user/service';
 import { message } from 'antd';
 
@@ -50,9 +50,14 @@ export default {
 
     // 修改
     * edit({ payload = {} }, { call, put }) {
-      const { code, result } = yield call(get, payload);
+      let { code, result } = yield call(get, payload);
       if (code === 10000 && result) {
-        yield put({ type: 'updateState', payload: { current: result,editLoading:false } });
+        payload.areaId = result.srcAreaId
+        const areaResult = yield call(getAreaFullIdById, payload)
+        if(areaResult.code === 10000 && areaResult.result){
+          result.srcAreaId = areaResult.result
+          yield put({ type: 'updateState', payload: { current: result,editLoading:false } });
+        }
       }
     },
 

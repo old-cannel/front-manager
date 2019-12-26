@@ -202,7 +202,7 @@ class Edit extends Component {
                 <Col span="24">
                   <FormItem label="归属区域:" {...formItemLayout}>
                     {getFieldDecorator('srcAreaId', {
-                      initialValue: current.srcAreaId? current.srcAreaId.split(","):[],
+                      initialValue: current.srcAreaId? current.srcAreaId:[],
                     })(<Cascader
                       options={optionsArea}
                       changeOnSelect

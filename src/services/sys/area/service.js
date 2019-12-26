@@ -66,3 +66,9 @@ export async function getAreaByType(params) {
   const url =`${API_PREFIX}/sys/area/getAreaByType?type=${params.type}&code=${params.code}`;
   return request(url);
 }
+
+// 根据区域id 获取对于上级所有id
+export async function getAreaFullIdById(params) {
+  const url =`${API_PREFIX}/sys/areaCommon/getFullId?areaId=${params.areaId}`;
+  return request(url);
+}
