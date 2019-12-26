@@ -44,10 +44,10 @@ class Add extends Component {
       let data = values;
       if (!err) {
         if (onOk) {
-          if(data.srcAreaCode &&  data.srcAreaCode.length>0){
-            data.srcAreaCode=data.srcAreaCode[data.srcAreaCode.length-1]
+          if(data.srcAreaId &&  data.srcAreaId.length>0){
+            data.srcAreaId=data.srcAreaId[data.srcAreaId.length-1]
           }else{
-            data.srcAreaCode=""
+            data.srcAreaId=""
           }
           onOk(data, () => {
             this.setState({ loading: false });
@@ -196,11 +196,11 @@ class Add extends Component {
                 </Col>
                 <Col span="24">
                   <FormItem label="归属区域:" {...formItemLayout}>
-                    {getFieldDecorator('srcAreaCode', {
+                    {getFieldDecorator('srcAreaId', {
                     })(<Cascader
                       options={optionsArea}
                       changeOnSelect
-                      fieldNames={{ label: 'name', value: 'code', children: 'children' }}
+                      fieldNames={{ label: 'name', value: 'id', children: 'children' }}
                       style={{  width: 250 }}
                       placeholder='请选择归属区域' />)}
                   </FormItem>

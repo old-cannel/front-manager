@@ -50,9 +50,10 @@ export default {
 
     // 修改
     * edit({ payload = {} }, { call, put }) {
-      const { code, result } = yield call(get, payload);
+      let { code, result } = yield call(get, payload);
       if (code === 10000 && result) {
         yield put({ type: 'updateState', payload: { current: result,editLoading:false } });
+        payload.areaId = result.srcAreaId
       }
     },
 

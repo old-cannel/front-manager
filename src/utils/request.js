@@ -25,7 +25,7 @@ const errorHandler = error => {
     });
     return error.data;
   }
-  message.info(error.data.msg)
+  message.info((error.data.msg || '服务异常'))
   // environment should not be used
   if (status === 403) {
     router.push('/exception/403');
@@ -55,11 +55,13 @@ export const request = extend({
 })
 
 request.interceptors.response.use((response) => {
-  response.clone().json().then(({code,msg})=>{
-    if(code!==10000){
-      message.error(msg)
-    }
-  });
+  if (response.status === 200) {
+    response.clone().json().then(({ code, msg }) => {
+      if (code !== 10000) {
+        message.error(msg);
+      }
+    });
+  }
   return response;
 });
 
@@ -68,5 +70,18 @@ request.interceptors.response.use((response) => {
  * @type {RequestMethod}
  */
 export const requestNoAuthorize = extend({
+  errorHandler,
+});
+
+
+/**
+ * @type {RequestMethod}
+ */
+export const requestExtend = extend({
+  headers: {
+    Authorization: localStorage.getItem('authorization')
+      ? localStorage.getItem('authorization')
+      : '',
+  },
   errorHandler,
 });
